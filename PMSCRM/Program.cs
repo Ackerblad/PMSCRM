@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
+using PMSCRM.Services;
 
 namespace PMSCRM
 {
@@ -14,6 +15,8 @@ namespace PMSCRM
 
             builder.Services.AddDbContext<PmscrmContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<UserService>();
 
             var app = builder.Build();
 
