@@ -19,7 +19,25 @@ public partial class Task
 
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
-    public virtual Company Company { get; set; } = null!;
+    // Ändrade Company till Nullable för att få postman att funka.
+    public virtual Company? Company { get; set; }
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
+
+    public Task()
+    {
+        
+    }
+
+    public Task(Guid taskId, Guid companyId, string name, string? description, byte duration, DateTime? timestamp, ICollection<CommunicationLog> communicationLogs, ICollection<TaskProcessArea> taskProcessAreas)
+    {
+        TaskId = taskId;
+        CompanyId = companyId;
+        Name = name;
+        Description = description;
+        Duration = duration;
+        Timestamp = timestamp;
+        CommunicationLogs = communicationLogs;
+        TaskProcessAreas = taskProcessAreas;
+    }
 }

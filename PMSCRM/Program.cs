@@ -16,7 +16,10 @@ namespace PMSCRM
             builder.Services.AddDbContext<PmscrmContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddScoped<UserService>();
+            builder.Services.AddTransient<UserService>();
+            builder.Services.AddTransient<TaskService>();
+            builder.Services.AddTransient<ProcessService>();
+
 
             var app = builder.Build();
 
