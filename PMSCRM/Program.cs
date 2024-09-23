@@ -19,6 +19,8 @@ namespace PMSCRM
             builder.Services.AddTransient<UserService>();
             builder.Services.AddTransient<TaskService>();
             builder.Services.AddTransient<ProcessService>();
+            builder.Services.AddTransient<AreaService>();
+
 
 
             var app = builder.Build();

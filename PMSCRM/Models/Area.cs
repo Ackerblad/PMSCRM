@@ -15,7 +15,7 @@ public partial class Area
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company Company { get; set; } = null!;
+    public virtual Company? Company { get; set; } = null!;
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
 }
