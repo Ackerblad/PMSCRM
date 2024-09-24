@@ -11,16 +11,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Company> GetCompanies()
+        public List<Company> GetAll()
         {
             return _db.Companies.ToList();
         }
 
-        public bool AddCompany(Company company)
+        public bool Add(Company company)
         {
-            bool companyExists = _db.Companies.Contains(company);
+            bool exists = _db.Companies.Contains(company);
 
-            if (companyExists)
+            if (exists)
             {
                 return false;
             }
@@ -30,31 +30,31 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateCompany(Guid companyId, Company updatedCompany)
+        public bool Update(Guid guid, Company updated)
         {
-            var existingCompany = _db.Companies.FirstOrDefault(x => x.CompanyId == companyId);
+            var existing = _db.Companies.FirstOrDefault(x => x.CompanyId == guid);
 
-            if (existingCompany == null || existingCompany.CompanyId == Guid.Empty)
+            if (existing == null || existing.CompanyId == Guid.Empty)
             {
                 return false;
             }
 
-            existingCompany.Name = updatedCompany.Name;
+            existing.Name = updated.Name;
 
             _db.SaveChanges();
             return true;
         }
 
-        public bool DeleteCompany(Guid companyId)
+        public bool Delete(Guid guid)
         {
-            var companyToDelete = _db.Companies.Find(companyId);
+            var toDelete = _db.Companies.Find(guid);
 
-            if (companyToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             }
 
-            _db.Companies.Remove(companyToDelete);
+            _db.Companies.Remove(toDelete);
             _db.SaveChanges();
             return true;
         }

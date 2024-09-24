@@ -11,16 +11,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Area> GetAreas()
+        public List<Area> GetAll()
         {
             return _db.Areas.ToList();
         }
 
-        public bool AddArea(Area area)
+        public bool Add(Area area)
         {
-            bool areaExists = _db.Areas.Contains(area);
+            bool exists = _db.Areas.Contains(area);
 
-            if (areaExists)
+            if (exists)
             {
                 return false;
             }
@@ -30,32 +30,32 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateArea(Guid areaId, Area updatedArea)
+        public bool Update(Guid guid, Area updated)
         {
-            var existingArea = _db.Areas.FirstOrDefault(a => a.AreaId == areaId);
+            var existing = _db.Areas.FirstOrDefault(a => a.AreaId == guid);
 
-            if(existingArea == null || existingArea.CompanyId == Guid.Empty)
+            if(existing == null || existing.CompanyId == Guid.Empty)
             {
                 return false;
             }
 
-            existingArea.CompanyId = updatedArea.CompanyId;
-            existingArea.Name = updatedArea.Name;
-            existingArea.Description = updatedArea.Description;
+            existing.CompanyId = updated.CompanyId;
+            existing.Name = updated.Name;
+            existing.Description = updated.Description;
 
             _db.SaveChanges();
             return true;
         }
 
-        public bool DeleteArea(Guid areaId)
+        public bool Delete(Guid guid)
         {
-            var areaToDelete = _db.Areas.Find(areaId);
+            var toDelete = _db.Areas.Find(guid);
 
-            if (areaToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             }
-            _db.Areas.Remove(areaToDelete);
+            _db.Areas.Remove(toDelete);
             _db.SaveChanges();
             return true;
         }

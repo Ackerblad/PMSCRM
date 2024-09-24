@@ -14,10 +14,10 @@ namespace PMSCRM.Controllers
             _taskService = taskService;
         }
 
-        [HttpGet("GetTasks")]
-        public ActionResult<List<Models.Task>> GetTasks()
+        [HttpGet("GetAll")]
+        public ActionResult<List<Models.Task>> GetAll()
         {
-            var tasks = _taskService.GetTasks();
+            var tasks = _taskService.GetAll();
             if (tasks == null || !tasks.Any())
             {
                 return NotFound("No tasks found");
@@ -27,15 +27,15 @@ namespace PMSCRM.Controllers
 
         }
 
-        [HttpPost("AddTask")] 
-        public ActionResult AddTask([FromBody] Models.Task task)
+        [HttpPost("Add")] 
+        public ActionResult Add([FromBody] Models.Task task)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskService.AddTask(task);
+            bool success = _taskService.Add(task);
             if (success)
             {
                 return Ok("Task was added");
@@ -44,14 +44,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")] 
-        public ActionResult UpdateTask (Guid id, [FromBody] Models.Task task)
+        public ActionResult Update (Guid guid, [FromBody] Models.Task task)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskService.UpdateTask(id, task);
+            bool success = _taskService.Update(guid, task);
             if (success)
             {
                 return Ok();
@@ -61,14 +61,14 @@ namespace PMSCRM.Controllers
 
         [HttpDelete("{id}")]
 
-        public ActionResult DeleteTask(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskService.DeleteTask(id);
+            bool success = _taskService.Delete(guid);
             if (success)
             {
                 return Ok();

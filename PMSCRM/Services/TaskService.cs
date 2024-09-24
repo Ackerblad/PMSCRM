@@ -11,16 +11,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Models.Task> GetTasks()
+        public List<Models.Task> GetAll()
         {
             return _db.Tasks.ToList();
         }
 
-        public bool AddTask(Models.Task task)
+        public bool Add(Models.Task task)
         {
-            bool taskExist = _db.Tasks.Contains(task);
+            bool exists = _db.Tasks.Contains(task);
 
-            if (taskExist)
+            if (exists)
             {
                 return false;
             }
@@ -30,33 +30,33 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateTask(Guid taskId, Models.Task updatedTask)
+        public bool Update(Guid guid, Models.Task updated)
         {
-            var existingTask = _db.Tasks.FirstOrDefault(u => u.TaskId == taskId); 
+            var existing = _db.Tasks.FirstOrDefault(u => u.TaskId == guid); 
 
-            if (existingTask == null || updatedTask.CompanyId == Guid.Empty)
+            if (existing == null || updated.CompanyId == Guid.Empty)
             {
                 return false;
             }
 
-            existingTask.CompanyId = updatedTask.CompanyId;
-            existingTask.Name = updatedTask.Name;
-            existingTask.Description = updatedTask.Description;
-            existingTask.Duration = updatedTask.Duration;
+            existing.CompanyId = updated.CompanyId;
+            existing.Name = updated.Name;
+            existing.Description = updated.Description;
+            existing.Duration = updated.Duration;
 
             _db.SaveChanges();
             return true;
         } 
 
-        public bool DeleteTask(Guid taskId)
+        public bool Delete(Guid guid)
         {
-            var taskToDelete = _db.Tasks.Find(taskId);
+            var toDelete = _db.Tasks.Find(guid);
 
-            if (taskToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             }
-            _db.Tasks.Remove(taskToDelete);
+            _db.Tasks.Remove(toDelete);
             _db.SaveChanges();
             return true;
         }

@@ -15,10 +15,10 @@ namespace PMSCRM.Controllers
             _taskProcessAreaService = taskProcessAreaService;
         }
 
-        [HttpGet("GetTaskProcessAreas")]
-        public ActionResult<List<TaskProcessArea>> GetTaskProcessAreas()
+        [HttpGet("GetAll")]
+        public ActionResult<List<TaskProcessArea>> GetAll()
         {
-            var taskProcessArea = _taskProcessAreaService.GetTaskProcessAreas();
+            var taskProcessArea = _taskProcessAreaService.GetAll();
             if (taskProcessArea == null || !taskProcessArea.Any())
             {
                 return NotFound("No taskProcessAreas found");
@@ -26,15 +26,15 @@ namespace PMSCRM.Controllers
             return Ok(taskProcessArea);
         }
 
-        [HttpPost("AddTaskProcessArea")]
-        public ActionResult AddTaskProcessArea([FromBody] TaskProcessArea taskProcessArea)
+        [HttpPost("Add")]
+        public ActionResult Add([FromBody] TaskProcessArea taskProcessArea)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = _taskProcessAreaService.AddTaskProcessArea(taskProcessArea);
+            var success = _taskProcessAreaService.Add(taskProcessArea);
             if (success)
             {
                 return Ok("taskProcessArea was added");
@@ -43,14 +43,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateTaskProcessArea(Guid id, [FromBody] TaskProcessArea taskProcessArea)
+        public ActionResult Update(Guid guid, [FromBody] TaskProcessArea taskProcessArea)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskProcessAreaService.UpdateTaskProcessArea(id, taskProcessArea);
+            bool success = _taskProcessAreaService.Update(guid, taskProcessArea);
             if (success)
             {
                 return Ok();
@@ -60,14 +60,14 @@ namespace PMSCRM.Controllers
 
         [HttpDelete("{id}")]
 
-        public ActionResult DeleteTaskProcessArea(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskProcessAreaService.DeleteTaskProcessArea(id);
+            bool success = _taskProcessAreaService.Delete(guid);
             if (success)
             {
                 return Ok();
