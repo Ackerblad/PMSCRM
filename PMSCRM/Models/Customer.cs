@@ -29,7 +29,7 @@ public partial class Customer
 
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
-    public virtual Company? Company { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<Email> Emails { get; set; } = new List<Email>();
 

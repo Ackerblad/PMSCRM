@@ -26,4 +26,19 @@ public partial class TaskProcessArea
     public virtual Task Task { get; set; } = null!;
 
     public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
+
+    public TaskProcessArea()
+    {
+    }
+
+    public TaskProcessArea(Guid taskProcessAreaId, Guid companyId, Guid taskId, Guid processId, Guid areaId, DateTime? timestamp, ICollection<TaskProcessAreaUserCustomer> taskProcessAreaUserCustomers)
+    {
+        TaskProcessAreaId = taskProcessAreaId;
+        CompanyId = companyId;
+        TaskId = taskId;
+        ProcessId = processId;
+        AreaId = areaId;
+        Timestamp = timestamp;
+        TaskProcessAreaUserCustomers = taskProcessAreaUserCustomers;
+    }
 }

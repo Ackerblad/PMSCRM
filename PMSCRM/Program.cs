@@ -23,6 +23,10 @@ namespace PMSCRM
             builder.Services.AddTransient<CompanyService>();
             builder.Services.AddTransient<CustomerService>();
             builder.Services.AddTransient<RoleService>();
+            builder.Services.AddTransient<TaskProcessAreaService>();
+            builder.Services.AddTransient<TaskProcessAreaUserCustomerService>();
+
+
 
 
 

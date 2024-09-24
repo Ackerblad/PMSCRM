@@ -16,7 +16,7 @@ namespace PMSCRM.Controllers
             _processService = processService;
         }
 
-        [HttpGet]
+        [HttpGet("GetProcesses")]
         public ActionResult<List<Process>> GetProcesses()
         {
             var process = _processService.GetProcesses();

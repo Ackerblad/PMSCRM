@@ -20,7 +20,7 @@ public partial class Task
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
     // Ändrade Company till Nullable för att få postman att funka.
-    public virtual Company? Company { get; set; }
+    public virtual Company Company { get; set; }
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
 

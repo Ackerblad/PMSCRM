@@ -13,7 +13,7 @@ public partial class Role
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company? Company { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 
