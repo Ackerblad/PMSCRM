@@ -59,7 +59,6 @@ namespace PMSCRM.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)

@@ -8,7 +8,6 @@ namespace PMSCRM.Controllers
     [ApiController]
     public class ProcessController : Controller
     {
-
         ProcessService _processService;
 
         public ProcessController(ProcessService processService)
@@ -26,7 +25,6 @@ namespace PMSCRM.Controllers
             }
 
             return Ok(process);
-
         }
 
         [HttpPost("Add")]
@@ -62,7 +60,6 @@ namespace PMSCRM.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)

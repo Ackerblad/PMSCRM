@@ -50,7 +50,7 @@ namespace PMSCRM.Services
             return true;
         }
 
-        //public bool UpdateUser(Guid userId, User updatedUser)
+        //public bool UpdateUser(Guid userId, UserUpdate updatedUser)
         //{
         //    var existingUser = _db.Users.FirstOrDefault(u => u.UserId == userId);
 
@@ -65,12 +65,10 @@ namespace PMSCRM.Services
         //    }
 
         //    existingUser.Username = updatedUser.Username;
-        //    existingUser.Password = updatedUser.Password;
         //    existingUser.FirstName = updatedUser.FirstName;
         //    existingUser.LastName = updatedUser.LastName;
         //    existingUser.PhoneNumber = updatedUser.PhoneNumber;
         //    existingUser.EmailAddress = updatedUser.EmailAddress;
-
         //    existingUser.CompanyId = updatedUser.CompanyId;
         //    existingUser.RoleId = updatedUser.RoleId;
 
