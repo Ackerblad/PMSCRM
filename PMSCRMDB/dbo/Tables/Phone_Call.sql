@@ -14,6 +14,6 @@
     PRIMARY KEY CLUSTERED ([phone_call_id] ASC),
     FOREIGN KEY ([company_id]) REFERENCES [dbo].[Company] ([company_id]),
     FOREIGN KEY ([customer_id]) REFERENCES [dbo].[Customer] ([customer_id]),
-    FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id])
+    CONSTRAINT [FK__Phone_Cal__user___03F0984C] FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id])
 );
 

@@ -12,6 +12,6 @@
     FOREIGN KEY ([company_id]) REFERENCES [dbo].[Company] ([company_id]),
     FOREIGN KEY ([customer_id]) REFERENCES [dbo].[Customer] ([customer_id]),
     FOREIGN KEY ([task_process_area_id]) REFERENCES [dbo].[Task_Process_Area] ([task_process_area_id]),
-    FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id])
+    CONSTRAINT [FK__Task_Proc__user___76969D2E] FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id])
 );
 

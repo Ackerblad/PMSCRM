@@ -17,25 +17,7 @@ public partial class Process
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company? Company { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
-
-    public Process()
-    {
-        
-    }
-
-    public Process(Guid processId, Guid companyId, string name, string? description, byte duration, DateTime? timestamp, ICollection<TaskProcessArea> taskProcessAreas)
-    {
-        ProcessId = processId;
-        CompanyId = companyId;
-        Name = name;
-        Description = description;
-        Duration = duration;
-        Timestamp = timestamp;
-        TaskProcessAreas = taskProcessAreas;
-    }
-
-
 }

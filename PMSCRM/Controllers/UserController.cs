@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
+using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
@@ -16,22 +17,34 @@ namespace PMSCRM.Controllers
         {
             this.userService = userService;
         }
-        
-        [HttpPost]
-        public ActionResult AddUser([FromBody] User user)
+
+        [HttpPost("add")]
+        public ActionResult AddUser([FromBody] UserRegistration registration)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
 
             }
-            bool success = userService.AddUser(user);
+            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.Username, registration.FirstName, registration.LastName, registration.PhoneNumber, registration.EmailAddress, registration.Password);
+
             if (success)
             {
                 return Ok("User added successfully");
             }
             return BadRequest("Failed to add user");
+        }
 
+        [HttpPost("login")]
+        public ActionResult Login(string username, string password)
+        {
+            var user = userService.AuthenticateUser(username, password);
+
+            if (user != null)
+            {
+                return Ok("Login successful");
+            }
+            return Unauthorized("Invalid credentials");
         }
 
         [HttpGet]
@@ -45,23 +58,23 @@ namespace PMSCRM.Controllers
             return Ok(users);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult UpdateUser(Guid id, [FromBody] User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
+        //[HttpPut("{id}")]
+        //public ActionResult UpdateUser(Guid id, [FromBody] User user)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
 
-            }
+        //    }
 
-            bool sucess = userService.UpdateUser(id, user);
-            if (sucess)
-            {
-                return Ok();
-            }
+        //    bool sucess = userService.UpdateUser(id, user);
+        //    if (sucess)
+        //    {
+        //        return Ok();
+        //    }
 
-            return BadRequest("Failed to update user");
-        }
+        //    return BadRequest("Failed to update user");
+        //}
 
         [HttpDelete("{id}")]
         public ActionResult DeleteUser(Guid id)

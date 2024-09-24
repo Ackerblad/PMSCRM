@@ -39,6 +39,9 @@ public partial class PmscrmContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Area>(entity =>
@@ -462,9 +465,12 @@ public partial class PmscrmContext : DbContext
             entity.Property(e => e.LastName)
                 .HasMaxLength(100)
                 .HasColumnName("last_name");
-            entity.Property(e => e.Password)
-                .HasMaxLength(100)
-                .HasColumnName("password");
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(64)
+                .HasColumnName("password_hash");
+            entity.Property(e => e.PasswordSalt)
+                .HasMaxLength(64)
+                .HasColumnName("password_salt");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(100)
                 .HasColumnName("phone_number");

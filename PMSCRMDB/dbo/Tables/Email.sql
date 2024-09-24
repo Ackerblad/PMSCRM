@@ -15,6 +15,6 @@
     PRIMARY KEY CLUSTERED ([email_id] ASC),
     FOREIGN KEY ([company_id]) REFERENCES [dbo].[Company] ([company_id]),
     FOREIGN KEY ([customer_id]) REFERENCES [dbo].[Customer] ([customer_id]),
-    FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id])
+    CONSTRAINT [FK__Email__user_id__7D439ABD] FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id])
 );
 
