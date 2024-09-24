@@ -30,4 +30,21 @@ public partial class TaskProcessAreaUserCustomer
     public virtual TaskProcessArea TaskProcessArea { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public TaskProcessAreaUserCustomer()
+    {
+    }
+
+    public TaskProcessAreaUserCustomer(Guid taskProcessAreaUserCustomerId, Guid companyId, Guid taskProcessAreaId, Guid userId, Guid customerId, DateTime startDate, DateTime endDate, byte status, DateTime? timestamp)
+    {
+        TaskProcessAreaUserCustomerId = taskProcessAreaUserCustomerId;
+        CompanyId = companyId;
+        TaskProcessAreaId = taskProcessAreaId;
+        UserId = userId;
+        CustomerId = customerId;
+        StartDate = startDate;
+        EndDate = endDate;
+        Status = status;
+        Timestamp = timestamp;
+    }
 }
