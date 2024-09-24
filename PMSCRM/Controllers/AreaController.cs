@@ -15,10 +15,10 @@ namespace PMSCRM.Controllers
             _areaService = areaService;
         }
 
-        [HttpGet("GetAreas")]
-        public ActionResult<List<Area>> GetAreas()
+        [HttpGet("GetAll")]
+        public ActionResult<List<Area>> GetAll()
         {
-            var areas = _areaService.GetAreas();
+            var areas = _areaService.GetAll();
             if (areas == null || !areas.Any())
             {
                 return NotFound("No areas found");
@@ -26,15 +26,15 @@ namespace PMSCRM.Controllers
             return Ok(areas);
         }
 
-        [HttpPost("AddArea")] 
-        public ActionResult AddArea([FromBody]Area area)
+        [HttpPost("Add")] 
+        public ActionResult Add([FromBody]Area area)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = _areaService.AddArea(area);
+            var success = _areaService.Add(area);
             if (success)
             {
                 return Ok("Area was added");
@@ -43,14 +43,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateArea(Guid id, [FromBody] Area area)
+        public ActionResult Update(Guid guid, [FromBody] Area area)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _areaService.UpdateArea(id, area);
+            bool success = _areaService.Update(guid, area);
             if (success)
             {
                 return Ok();
@@ -59,14 +59,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteArea(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _areaService.DeleteArea(id);
+            bool success = _areaService.Delete(guid);
             if (success)
             {
                 return Ok();

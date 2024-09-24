@@ -15,10 +15,10 @@ namespace PMSCRM.Controllers
             _companyService = companyService;
         }
 
-        [HttpGet("GetCompanies")]
-        public ActionResult<List<Company>> GetCompanies()
+        [HttpGet("GetAll")]
+        public ActionResult<List<Company>> GetAll()
         {
-            var companies = _companyService.GetCompanies();
+            var companies = _companyService.GetAll();
             if (companies == null || !companies.Any())
             {
                 return NotFound("No companies found");
@@ -26,15 +26,15 @@ namespace PMSCRM.Controllers
             return Ok(companies);
         }
 
-        [HttpPost("AddCompany")]
-        public ActionResult AddCompany([FromBody] Company company)
+        [HttpPost("Add")]
+        public ActionResult Add([FromBody] Company company)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = _companyService.AddCompany(company);
+            var success = _companyService.Add(company);
             if (success)
             {
                 return Ok("Company was added");
@@ -43,14 +43,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateCompany(Guid id, [FromBody] Company company)
+        public ActionResult Update(Guid guid, [FromBody] Company company)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _companyService.UpdateCompany(id, company);
+            bool success = _companyService.Update(guid, company);
             if (success)
             {
                 return Ok("Company was updated");
@@ -59,14 +59,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteCompany(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _companyService.DeleteCompany(id);
+            bool success = _companyService.Delete(guid);
             if (success)
             {
                 return Ok();

@@ -16,15 +16,15 @@ namespace PMSCRM.Services
             return _db.TaskProcessAreaUserCustomers.ToList();
         }
 
-        public bool Add(TaskProcessAreaUserCustomer customer)
+        public bool Add(TaskProcessAreaUserCustomer tpauc)
         {
-            bool exists = _db.TaskProcessAreaUserCustomers.Contains(customer);
+            bool exists = _db.TaskProcessAreaUserCustomers.Contains(tpauc);
 
             if (exists)
             {
                 return false;
             }
-            _db.Add(customer);
+            _db.Add(tpauc);
             _db.SaveChanges();
             return true;
         } 

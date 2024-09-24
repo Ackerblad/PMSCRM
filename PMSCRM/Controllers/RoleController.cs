@@ -16,10 +16,10 @@ namespace PMSCRM.Controllers
             _roleService = roleService;
         }
 
-        [HttpGet("GetRoles")]
-        public ActionResult<List<Role>> GetRoles()
+        [HttpGet("GetAll")]
+        public ActionResult<List<Role>> GetAll()
         {
-            var roles = _roleService.GetRoles();
+            var roles = _roleService.GetAll();
             if (roles == null || !roles.Any())
             {
                 return NotFound("No roles found");
@@ -27,15 +27,15 @@ namespace PMSCRM.Controllers
             return Ok(roles);
         }
 
-        [HttpPost("AddRole")]
-        public ActionResult AddRole([FromBody] Role role)
+        [HttpPost("Add")]
+        public ActionResult Add([FromBody] Role role)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = _roleService.AddRole(role);
+            var success = _roleService.Add(role);
             if (success)
             {
                 return Ok("Role was added");
@@ -44,14 +44,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateRole(Guid id, [FromBody] Role role)
+        public ActionResult Update(Guid guid, [FromBody] Role role)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _roleService.UpdateRole(id, role);
+            bool success = _roleService.Update(guid, role);
             if (success)
             {
                 return Ok();
@@ -61,14 +61,14 @@ namespace PMSCRM.Controllers
 
         [HttpDelete("{id}")]
 
-        public ActionResult DeleteRole(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _roleService.DeleteRole(id);
+            bool success = _roleService.Delete(guid);
             if (success)
             {
                 return Ok();

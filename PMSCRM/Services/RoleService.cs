@@ -11,16 +11,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Role> GetRoles()
+        public List<Role> GetAll()
         {
             return _db.Roles.ToList();
         }
 
-        public bool AddRole(Role role)
+        public bool Add(Role role)
         {
-            bool roleExists = _db.Roles.Contains(role);
+            bool exists = _db.Roles.Contains(role);
 
-            if (roleExists)
+            if (exists)
             {
                 return false;
             }
@@ -30,33 +30,32 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateRole(Guid roleId, Role updatedRole)
+        public bool Update(Guid guid, Role updated)
         {
-            var existingRole = _db.Roles.FirstOrDefault(r => r.RoleId == roleId);
+            var existing = _db.Roles.FirstOrDefault(r => r.RoleId == guid);
 
-            if (existingRole == null)
+            if (existing == null)
             {
                 return false;
             }
 
-            existingRole.CompanyId = updatedRole.CompanyId;
-            existingRole.Name = updatedRole.Name;
-
+            existing.CompanyId = updated.CompanyId;
+            existing.Name = updated.Name;
 
             _db.SaveChanges();
             return true;
         }
 
-        public bool DeleteRole(Guid roleId)
+        public bool Delete(Guid guid)
         {
-            var roleToDelete = _db.Roles.Find(roleId);
+            var toDelete = _db.Roles.Find(guid);
 
-            if (roleToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             } 
 
-            _db.Roles.Remove(roleToDelete);
+            _db.Roles.Remove(toDelete);
             _db.SaveChanges();
             return true;
         }

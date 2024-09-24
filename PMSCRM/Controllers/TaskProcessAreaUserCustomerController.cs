@@ -15,64 +15,65 @@ namespace PMSCRM.Controllers
             _taskProcessAreaUserCustomerService = taskProcessAreaUserCustomerService;
         }
 
-        [HttpGet("Get")]
-        public ActionResult<List<TaskProcessAreaUserCustomer>> Get()
+        [HttpGet("GetAll")]
+        public ActionResult<List<TaskProcessAreaUserCustomer>> GetAll()
         {
-            var taskProcessAreaUserCustomer = _taskProcessAreaUserCustomerService.GetAll();
-            if (taskProcessAreaUserCustomer == null || !taskProcessAreaUserCustomer.Any())
+            var tpauc = _taskProcessAreaUserCustomerService.GetAll();
+            if (tpauc == null || !tpauc.Any())
             {
-                return NotFound("No taskProcessAreaUserCustomer found");
+                return NotFound("Nothing found");
             }
-            return Ok(taskProcessAreaUserCustomer);
+            return Ok(tpauc);
         }
 
         [HttpPost("Add")]
-        public ActionResult Add([FromBody] TaskProcessAreaUserCustomer taskProcessAreaUserCustomer)
+        public ActionResult Add([FromBody] TaskProcessAreaUserCustomer tpauc)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = _taskProcessAreaUserCustomerService.Add(taskProcessAreaUserCustomer);
+            var success = _taskProcessAreaUserCustomerService.Add(tpauc);
             if (success)
             {
-                return Ok("taskProcessAreaUserCustomer was added");
+                return Ok("It was added");
             }
-            return BadRequest("Failed to add taskProcessAreaUserCustomer");
+            return BadRequest("Failed to add it");
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(Guid id, [FromBody] TaskProcessAreaUserCustomer taskProcessAreaUserCustomer)
+        public ActionResult Update(Guid guid, [FromBody] TaskProcessAreaUserCustomer tpauc)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskProcessAreaUserCustomerService.Update(id, taskProcessAreaUserCustomer);
+            bool success = _taskProcessAreaUserCustomerService.Update(guid, tpauc);
             if (success)
             {
                 return Ok();
             }
-            return BadRequest("Failed to update taskProcessAreaUserCustomer");
+            return BadRequest("Failed to update");
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(Guid id)
+
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _taskProcessAreaUserCustomerService.Delete(id);
+            bool success = _taskProcessAreaUserCustomerService.Delete(guid);
             if (success)
             {
                 return Ok();
             }
 
-            return BadRequest("Failed to delete taskProcessAreaUserCustomer");
+            return BadRequest("Failed to delete");
         }
 
         public IActionResult Index()

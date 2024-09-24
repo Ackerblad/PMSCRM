@@ -12,16 +12,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Process> GetProcesses()
+        public List<Process> GetAll()
         {
             return _db.Processes.ToList();
         }
 
-        public bool AddProcess(Process process)
+        public bool Add(Process process)
         {
-            bool processExist = _db.Processes.Contains(process);
+            bool exist = _db.Processes.Contains(process);
 
-            if (processExist)
+            if (exist)
             {
                 return false;
             }
@@ -31,34 +31,33 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateProcess(Guid processId, Process updatedProcess)
+        public bool Update(Guid guid, Process updated)
         {
-            var existingProcess = _db.Processes.FirstOrDefault(p => p.ProcessId == processId);
+            var existing = _db.Processes.FirstOrDefault(p => p.ProcessId == guid);
 
-            if (existingProcess == null || existingProcess.CompanyId == Guid.Empty)
+            if (existing == null || existing.CompanyId == Guid.Empty)
             {
                 return false;
             }
 
-            existingProcess.CompanyId = updatedProcess.CompanyId;
-            existingProcess.Name = updatedProcess.Name;
-            existingProcess.Description = updatedProcess.Description;
-            existingProcess.Duration = updatedProcess.Duration;
-
+            existing.CompanyId = updated.CompanyId;
+            existing.Name = updated.Name;
+            existing.Description = updated.Description;
+            existing.Duration = updated.Duration;
 
             _db.SaveChanges();
             return true;
         }
 
-        public bool DeleteProcess(Guid processId)
+        public bool Delete(Guid guid)
         {
-            var processToDelete = _db.Processes.Find(processId);
+            var toDelete = _db.Processes.Find(guid);
 
-            if (processToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             }
-            _db.Processes.Remove(processToDelete);
+            _db.Processes.Remove(toDelete);
             _db.SaveChanges();
             return true;
         }

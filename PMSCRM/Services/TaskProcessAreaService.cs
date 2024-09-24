@@ -12,16 +12,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<TaskProcessArea> GetTaskProcessAreas()
+        public List<TaskProcessArea> GetAll()
         {
             return _db.TaskProcessAreas.ToList();
         }
 
-        public bool AddTaskProcessArea(TaskProcessArea taskProcessArea)
+        public bool Add(TaskProcessArea taskProcessArea)
         {
-            bool taskProcessAreaExist = _db.TaskProcessAreas.Contains(taskProcessArea);
+            bool exists = _db.TaskProcessAreas.Contains(taskProcessArea);
 
-            if (taskProcessAreaExist)
+            if (exists)
             {
                 return false;
             }
@@ -30,34 +30,34 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateTaskProcessArea(Guid taskProcessAreaId, TaskProcessArea updatedTaskProcessArea)
+        public bool Update(Guid guid, TaskProcessArea updated)
         {
-            var existingTaskProcessArea = _db.TaskProcessAreas.FirstOrDefault(t => t.TaskProcessAreaId == taskProcessAreaId);
+            var existing = _db.TaskProcessAreas.FirstOrDefault(t => t.TaskProcessAreaId == guid);
             
-            if (existingTaskProcessArea == null)
+            if (existing == null)
             {
                 return false;
             }
 
-            existingTaskProcessArea.CompanyId = updatedTaskProcessArea.CompanyId;
-            existingTaskProcessArea.TaskId = updatedTaskProcessArea.TaskId;
-            existingTaskProcessArea.ProcessId = updatedTaskProcessArea.ProcessId;
-            existingTaskProcessArea.AreaId = updatedTaskProcessArea.AreaId;
+            existing.CompanyId = updated.CompanyId;
+            existing.TaskId = updated.TaskId;
+            existing.ProcessId = updated.ProcessId;
+            existing.AreaId = updated.AreaId;
 
             _db.SaveChanges();
             return true;
         }
 
-        public bool DeleteTaskProcessArea(Guid taskProcessAreaId)
+        public bool Delete(Guid guid)
         {
-            var taskProcessAreaToDelete = _db.TaskProcessAreas.Find(taskProcessAreaId);
+            var toDelete = _db.TaskProcessAreas.Find(guid);
 
-            if (taskProcessAreaToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             }
 
-            _db.TaskProcessAreas.Remove(taskProcessAreaToDelete);
+            _db.TaskProcessAreas.Remove(toDelete);
             _db.SaveChanges();
             return true;
 

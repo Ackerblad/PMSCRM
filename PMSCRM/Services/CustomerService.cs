@@ -12,16 +12,16 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Customer> GetCustomers()
+        public List<Customer> GetAll()
         {
             return _db.Customers.ToList();
         }
 
-        public bool AddCustomer(Customer customer)
+        public bool Add(Customer customer)
         {
-            bool customerExists = _db.Customers.Contains(customer);
+            bool exists = _db.Customers.Contains(customer);
 
-            if (customerExists)
+            if (exists)
             {
                 return false;
             }
@@ -31,37 +31,37 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateCustomer(Guid id, Customer updatedCustomer)
+        public bool Update(Guid guid, Customer updated)
         {
-            var existingCustomer = _db.Customers.FirstOrDefault(c => c.CustomerId == id);
+            var existing = _db.Customers.FirstOrDefault(c => c.CustomerId == guid);
 
-            if (existingCustomer == null || updatedCustomer.CompanyId == Guid.Empty)
+            if (existing == null || updated.CompanyId == Guid.Empty)
             {
                 return false;
             }
 
-            existingCustomer.CompanyId = updatedCustomer.CompanyId;
-            existingCustomer.Name = updatedCustomer.Name;
-            existingCustomer.PhoneNumber = updatedCustomer.PhoneNumber;
-            existingCustomer.EmailAddress = updatedCustomer.EmailAddress;
-            existingCustomer.StreetAddress = updatedCustomer.StreetAddress;
-            existingCustomer.City = updatedCustomer.City;
-            existingCustomer.Country = updatedCustomer.Country;
+            existing.CompanyId = updated.CompanyId;
+            existing.Name = updated.Name;
+            existing.PhoneNumber = updated.PhoneNumber;
+            existing.EmailAddress = updated.EmailAddress;
+            existing.StreetAddress = updated.StreetAddress;
+            existing.City = updated.City;
+            existing.Country = updated.Country;
 
             _db.SaveChanges();
             return true;
         }
 
-        public bool DeleteCustomer(Guid customerId)
+        public bool Delete(Guid guid)
         {
-            var customerToDelete = _db.Customers.Find(customerId);
+            var toDelete = _db.Customers.Find(guid);
 
-            if (customerToDelete == null)
+            if (toDelete == null)
             {
                 return false;
             }
 
-            _db.Customers.Remove(customerToDelete);
+            _db.Customers.Remove(toDelete);
             _db.SaveChanges();
             return true;
         }

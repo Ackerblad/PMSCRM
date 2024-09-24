@@ -15,10 +15,10 @@ namespace PMSCRM.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet("GetCustomers")]
-        public ActionResult<List<Customer>> GetCustomers()
+        [HttpGet("GetAll")]
+        public ActionResult<List<Customer>> GetAll()
         {
-            var customers = _customerService.GetCustomers();
+            var customers = _customerService.GetAll();
             if (customers == null || !customers.Any())
             {
                 return NotFound("No customers found");
@@ -26,15 +26,15 @@ namespace PMSCRM.Controllers
             return Ok(customers);
         }
 
-        [HttpPost("AddCustomer")]
-        public ActionResult AddCustomer([FromBody] Customer customer)
+        [HttpPost("Add")]
+        public ActionResult Add([FromBody] Customer customer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = _customerService.AddCustomer(customer);
+            var success = _customerService.Add(customer);
             if (success)
             {
                 return Ok("Customer was added");
@@ -43,14 +43,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateCustomer(Guid id, [FromBody] Customer customer)
+        public ActionResult Update(Guid guid, [FromBody] Customer customer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _customerService.UpdateCustomer(id, customer);
+            bool success = _customerService.Update(guid, customer);
             if (success)
             {
                 return Ok("Customer was updated");
@@ -59,14 +59,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteCustomer(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _customerService.DeleteCustomer(id);
+            bool success = _customerService.Delete(guid);
             if(success)
             {
                 return Ok("Customer was deleted");

@@ -16,10 +16,10 @@ namespace PMSCRM.Controllers
             _processService = processService;
         }
 
-        [HttpGet("GetProcesses")]
-        public ActionResult<List<Process>> GetProcesses()
+        [HttpGet("GetAll")]
+        public ActionResult<List<Process>> GetAll()
         {
-            var process = _processService.GetProcesses();
+            var process = _processService.GetAll();
             if (process == null || !process.Any())
             {
                 return NotFound("No process found");
@@ -29,15 +29,15 @@ namespace PMSCRM.Controllers
 
         }
 
-        [HttpPost("AddProcess")]
-        public ActionResult AddProcess([FromBody] Process process)
+        [HttpPost("Add")]
+        public ActionResult Add([FromBody] Process process)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _processService.AddProcess(process);
+            bool success = _processService.Add(process);
             if (success)
             {
                 return Ok("Process was added");
@@ -46,14 +46,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateProcess(Guid id, [FromBody] Process process)
+        public ActionResult Update(Guid guid, [FromBody] Process process)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _processService.UpdateProcess(id, process);
+            bool success = _processService.Update(guid, process);
             if (success)
             {
                 return Ok();
@@ -63,14 +63,14 @@ namespace PMSCRM.Controllers
 
         [HttpDelete("{id}")]
 
-        public ActionResult DeleteProcess(Guid id)
+        public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool success = _processService.DeleteProcess(id);
+            bool success = _processService.Delete(guid);
             if (success)
             {
                 return Ok();
