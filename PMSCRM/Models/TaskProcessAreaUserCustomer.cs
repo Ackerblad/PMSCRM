@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
-
 public partial class TaskProcessAreaUserCustomer
 {
     public Guid TaskProcessAreaUserCustomerId { get; set; }
@@ -33,18 +32,5 @@ public partial class TaskProcessAreaUserCustomer
 
     public TaskProcessAreaUserCustomer()
     {
-    }
-
-    public TaskProcessAreaUserCustomer(Guid taskProcessAreaUserCustomerId, Guid companyId, Guid taskProcessAreaId, Guid userId, Guid customerId, DateTime startDate, DateTime endDate, byte status, DateTime? timestamp)
-    {
-        TaskProcessAreaUserCustomerId = taskProcessAreaUserCustomerId;
-        CompanyId = companyId;
-        TaskProcessAreaId = taskProcessAreaId;
-        UserId = userId;
-        CustomerId = customerId;
-        StartDate = startDate;
-        EndDate = endDate;
-        Status = status;
-        Timestamp = timestamp;
     }
 }

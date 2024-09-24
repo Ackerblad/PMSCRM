@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
-
 public partial class PhoneCall
 {
     public Guid PhoneCallId { get; set; }
@@ -36,4 +35,8 @@ public partial class PhoneCall
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public PhoneCall()
+    {
+    }
 }

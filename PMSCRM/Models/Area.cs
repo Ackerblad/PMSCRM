@@ -18,4 +18,8 @@ public partial class Area
     public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
+
+    public Area()
+    {
+    }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
-
 public partial class Customer
 {
     public Guid CustomerId { get; set; }
@@ -36,4 +35,8 @@ public partial class Customer
     public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = new List<PhoneCall>();
 
     public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
+
+    public Customer()
+    {
+    }
 }

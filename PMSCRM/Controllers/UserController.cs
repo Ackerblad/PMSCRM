@@ -5,8 +5,6 @@ using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
-
-
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
@@ -26,7 +24,8 @@ namespace PMSCRM.Controllers
                 return BadRequest(ModelState);
 
             }
-            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.Username, registration.FirstName, registration.LastName, registration.PhoneNumber, registration.EmailAddress, registration.Password);
+            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.Username, registration.FirstName, registration.LastName,
+                                               registration.PhoneNumber, registration.EmailAddress, registration.Password);
 
             if (success)
             {

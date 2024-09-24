@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace PMSCRM.Models;
-
 public partial class PmscrmContext : DbContext
 {
     public PmscrmContext()

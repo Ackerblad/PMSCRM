@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
-
 public partial class Process
 {
     public Guid ProcessId { get; set; }
@@ -20,4 +19,8 @@ public partial class Process
     public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
+
+    public Process()
+    {
+    }
 }

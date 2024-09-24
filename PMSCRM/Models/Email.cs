@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
-
 public partial class Email
 {
     public Guid EmailId { get; set; }
@@ -38,4 +37,8 @@ public partial class Email
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public Email()
+    {
+    }
 }
