@@ -33,11 +33,11 @@ public partial class Email
 
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
-    public virtual Company Company { get; set; } = null!;
+    public virtual Company? Company { get; set; } = null!;
 
-    public virtual Customer Customer { get; set; } = null!;
+    public virtual Customer? Customer { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; } = null!;
 
     public Email()
     {

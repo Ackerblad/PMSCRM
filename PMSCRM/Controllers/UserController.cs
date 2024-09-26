@@ -93,23 +93,23 @@ namespace PMSCRM.Controllers
             return Ok(users);
         }
 
-        //[HttpPut]
-        //public ActionResult UpdateUser(Guid id, [FromBody] UserUpdate updatedUser)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
+        [HttpPut("{id}")]
+        public ActionResult UpdateUser(Guid id, [FromBody] UserUpdate updatedUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
 
-        //    }
+            }
 
-        //    bool sucess = userService.UpdateUser(id, updatedUser);
-        //    if (sucess)
-        //    {
-        //        return Ok("User updated successfully");
-        //    }
+            bool sucess = userService.UpdateUser(id, updatedUser);
+            if (sucess)
+            {
+                return Ok("User updated successfully");
+            }
 
-        //    return BadRequest("Failed to update user");
-        //}
+            return BadRequest("Failed to update user");
+        }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteUser(Guid id)

@@ -23,15 +23,15 @@ public partial class CommunicationLog
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company Company { get; set; } = null!;
+    public virtual Company? Company { get; set; } = null!;
 
-    public virtual Customer Customer { get; set; } = null!;
+    public virtual Customer? Customer { get; set; } = null!;
 
     public virtual Email? Email { get; set; }
 
     public virtual PhoneCall? PhoneCall { get; set; }
 
-    public virtual Task Task { get; set; } = null!;
+    public virtual Task? Task { get; set; } = null!;
 
     public CommunicationLog()
     {

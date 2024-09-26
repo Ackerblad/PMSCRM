@@ -52,31 +52,31 @@ namespace PMSCRM.Services
             return true;
         }
 
-        //public bool UpdateUser(Guid userId, UserUpdate updatedUser)
-        //{
-        //    var existingUser = _db.Users.FirstOrDefault(u => u.UserId == userId);
+        public bool UpdateUser(Guid userId, UserUpdate updatedUser)
+        {
+            var existingUser = _db.Users.FirstOrDefault(u => u.UserId == userId);
 
-        //    if (existingUser == null)
-        //    {
-        //        return false;
-        //    }
+            if (existingUser == null)
+            {
+                return false;
+            }
 
-        //    if (updatedUser.CompanyId == Guid.Empty || updatedUser.RoleId == Guid.Empty)
-        //    {
-        //        return false;
-        //    }
+            if (updatedUser.CompanyId == Guid.Empty || updatedUser.RoleId == Guid.Empty)
+            {
+                return false;
+            }
 
-        //    existingUser.Username = updatedUser.Username;
-        //    existingUser.FirstName = updatedUser.FirstName;
-        //    existingUser.LastName = updatedUser.LastName;
-        //    existingUser.PhoneNumber = updatedUser.PhoneNumber;
-        //    existingUser.EmailAddress = updatedUser.EmailAddress;
-        //    existingUser.CompanyId = updatedUser.CompanyId;
-        //    existingUser.RoleId = updatedUser.RoleId;
+            existingUser.Username = updatedUser.Username;
+            existingUser.FirstName = updatedUser.FirstName;
+            existingUser.LastName = updatedUser.LastName;
+            existingUser.PhoneNumber = updatedUser.PhoneNumber;
+            existingUser.EmailAddress = updatedUser.EmailAddress;
+            existingUser.CompanyId = updatedUser.CompanyId;
+            existingUser.RoleId = updatedUser.RoleId;
 
-        //    _db.SaveChanges();
-        //    return true;
-        //}
+            _db.SaveChanges();
+            return true;
+        }
 
         public bool DeleteUser(Guid userId)
         {

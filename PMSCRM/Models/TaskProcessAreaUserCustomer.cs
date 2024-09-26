@@ -23,13 +23,13 @@ public partial class TaskProcessAreaUserCustomer
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company Company { get; set; } = null!;
+    public virtual Company? Company { get; set; } = null!;
 
-    public virtual Customer Customer { get; set; } = null!;
+    public virtual Customer? Customer { get; set; } = null!;
 
-    public virtual TaskProcessArea TaskProcessArea { get; set; } = null!;
+    public virtual TaskProcessArea? TaskProcessArea { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; } = null!;
 
     public TaskProcessAreaUserCustomer()
     {
