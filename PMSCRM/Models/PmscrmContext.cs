@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace PMSCRM.Models;
+
 public partial class PmscrmContext : DbContext
 {
     public PmscrmContext()
@@ -470,6 +471,9 @@ public partial class PmscrmContext : DbContext
             entity.Property(e => e.PasswordSalt)
                 .HasMaxLength(64)
                 .HasColumnName("password_salt");
+            entity.Property(e => e.PasswordToken)
+                .HasMaxLength(255)
+                .HasColumnName("password_token");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(100)
                 .HasColumnName("phone_number");
@@ -478,6 +482,9 @@ public partial class PmscrmContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("smalldatetime")
                 .HasColumnName("timestamp");
+            entity.Property(e => e.TokenExpiry)
+                .HasColumnType("datetime")
+                .HasColumnName("token_expiry");
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
                 .HasColumnName("username");

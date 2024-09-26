@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
+
 public partial class User
 {
     public Guid UserId { get; set; }
@@ -15,6 +16,10 @@ public partial class User
     public string PasswordHash { get; set; } = null!;
 
     public string PasswordSalt { get; set; } = null!;
+
+    public string? PasswordToken { get; set; }
+
+    public DateTime? TokenExpiry { get; set; }
 
     public string FirstName { get; set; } = null!;
 

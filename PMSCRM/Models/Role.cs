@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
+
 public partial class Role
 {
     public Guid RoleId { get; set; }

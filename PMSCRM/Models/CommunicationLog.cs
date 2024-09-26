@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
+
 public partial class CommunicationLog
 {
     public Guid CommunicationLogId { get; set; }
@@ -22,9 +23,9 @@ public partial class CommunicationLog
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company? Company { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
-    public virtual Customer? Customer { get; set; } = null!;
+    public virtual Customer Customer { get; set; } = null!;
 
     public virtual Email? Email { get; set; }
 

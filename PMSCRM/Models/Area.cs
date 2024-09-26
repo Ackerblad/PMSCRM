@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
+
 public partial class Area
 {
     public Guid AreaId { get; set; }

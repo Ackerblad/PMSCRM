@@ -46,6 +46,42 @@ namespace PMSCRM.Controllers
             return Unauthorized("Invalid credentials");
         }
 
+        [HttpPost("request-password-reset")]
+        public ActionResult RequestPasswordReset([FromBody] PasswordResetRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool success = userService.GeneratePasswordToken(request.EmailAddress);
+
+            if (success)
+            {
+                return Ok("Password reset link sent to your email.");
+            }
+
+            return BadRequest("Email not found");
+        }
+
+        [HttpPost("reset-password")]
+        public ActionResult ResetPassword([FromBody] PasswordReset passwordReset)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool success = userService.ResetPassword(passwordReset.Token, passwordReset.NewPassword);
+
+            if (success)
+            {
+                return Ok("Password has been reset successfully.");
+            }
+
+            return BadRequest("Invalid or expired token.");
+        }
+
         [HttpGet]
         public ActionResult<List<User>> GetUsers() 
         {

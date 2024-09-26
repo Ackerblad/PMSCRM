@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace PMSCRM.Models;
+
 public partial class TaskProcessArea
 {
     public Guid TaskProcessAreaId { get; set; }
