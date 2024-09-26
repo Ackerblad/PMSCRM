@@ -26,14 +26,7 @@ namespace PMSCRM
             builder.Services.AddTransient<TaskProcessAreaService>();
             builder.Services.AddTransient<TaskProcessAreaUserCustomerService>();
             builder.Services.AddTransient<CommunicationLogService>();
-
-
-
-
-
-
-
-
+            builder.Services.AddTransient<EmailService>();
 
             var app = builder.Build();
 

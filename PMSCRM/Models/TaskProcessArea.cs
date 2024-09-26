@@ -30,15 +30,4 @@ public partial class TaskProcessArea
     public TaskProcessArea()
     {
     }
-
-    public TaskProcessArea(Guid taskProcessAreaId, Guid companyId, Guid taskId, Guid processId, Guid areaId, DateTime? timestamp, ICollection<TaskProcessAreaUserCustomer> taskProcessAreaUserCustomers)
-    {
-        TaskProcessAreaId = taskProcessAreaId;
-        CompanyId = companyId;
-        TaskId = taskId;
-        ProcessId = processId;
-        AreaId = areaId;
-        Timestamp = timestamp;
-        TaskProcessAreaUserCustomers = taskProcessAreaUserCustomers;
-    }
 }

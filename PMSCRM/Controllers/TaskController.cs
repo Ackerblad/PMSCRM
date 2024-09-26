@@ -24,7 +24,6 @@ namespace PMSCRM.Controllers
             }
 
             return Ok(tasks);
-
         }
 
         [HttpPost("Add")] 
@@ -60,7 +59,6 @@ namespace PMSCRM.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public ActionResult Delete(Guid guid)
         {
             if (!ModelState.IsValid)

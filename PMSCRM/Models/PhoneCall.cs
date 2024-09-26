@@ -36,4 +36,8 @@ public partial class PhoneCall
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public PhoneCall()
+    {
+    }
 }

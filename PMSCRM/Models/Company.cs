@@ -32,4 +32,8 @@ public partial class Company
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
+
+    public Company()
+    {
+    }
 }

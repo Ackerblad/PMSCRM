@@ -5,8 +5,6 @@ using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
-
-
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
@@ -26,7 +24,8 @@ namespace PMSCRM.Controllers
                 return BadRequest(ModelState);
 
             }
-            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.Username, registration.FirstName, registration.LastName, registration.PhoneNumber, registration.EmailAddress, registration.Password);
+            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.Username, registration.FirstName, registration.LastName,
+                                               registration.PhoneNumber, registration.EmailAddress, registration.Password);
 
             if (success)
             {
@@ -47,6 +46,42 @@ namespace PMSCRM.Controllers
             return Unauthorized("Invalid credentials");
         }
 
+        [HttpPost("request-password-reset")]
+        public ActionResult RequestPasswordReset([FromBody] PasswordResetRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool success = userService.GeneratePasswordToken(request.EmailAddress);
+
+            if (success)
+            {
+                return Ok("Password reset link sent to your email.");
+            }
+
+            return BadRequest("Email not found");
+        }
+
+        [HttpPost("reset-password")]
+        public ActionResult ResetPassword([FromBody] PasswordReset passwordReset)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool success = userService.ResetPassword(passwordReset.Token, passwordReset.NewPassword);
+
+            if (success)
+            {
+                return Ok("Password has been reset successfully.");
+            }
+
+            return BadRequest("Invalid or expired token.");
+        }
+
         [HttpGet]
         public ActionResult<List<User>> GetUsers() 
         {
@@ -58,8 +93,8 @@ namespace PMSCRM.Controllers
             return Ok(users);
         }
 
-        //[HttpPut("{id}")]
-        //public ActionResult UpdateUser(Guid id, [FromBody] User user)
+        //[HttpPut]
+        //public ActionResult UpdateUser(Guid id, [FromBody] UserUpdate updatedUser)
         //{
         //    if (!ModelState.IsValid)
         //    {
@@ -67,10 +102,10 @@ namespace PMSCRM.Controllers
 
         //    }
 
-        //    bool sucess = userService.UpdateUser(id, user);
+        //    bool sucess = userService.UpdateUser(id, updatedUser);
         //    if (sucess)
         //    {
-        //        return Ok();
+        //        return Ok("User updated successfully");
         //    }
 
         //    return BadRequest("Failed to update user");

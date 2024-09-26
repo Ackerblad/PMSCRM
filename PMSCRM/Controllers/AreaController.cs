@@ -75,7 +75,6 @@ namespace PMSCRM.Controllers
             return BadRequest("Failed to delete area");
         }
 
-
         public IActionResult Index()
         {
             return View();

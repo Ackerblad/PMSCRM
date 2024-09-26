@@ -17,6 +17,10 @@ public partial class User
 
     public string PasswordSalt { get; set; } = null!;
 
+    public string? PasswordToken { get; set; }
+
+    public DateTime? TokenExpiry { get; set; }
+
     public string FirstName { get; set; } = null!;
 
     public string LastName { get; set; } = null!;
