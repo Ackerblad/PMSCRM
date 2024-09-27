@@ -34,7 +34,7 @@ namespace PMSCRM.Services
         {
             var existing = _db.Areas.FirstOrDefault(a => a.AreaId == guid);
 
-            if(existing == null || existing.CompanyId == Guid.Empty)
+            if(existing == null)
             {
                 return false;
             }

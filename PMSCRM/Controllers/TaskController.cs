@@ -26,7 +26,7 @@ namespace PMSCRM.Controllers
             return Ok(tasks);
         }
 
-        [HttpPost("Add")] 
+        [HttpPost("Add")]
         public ActionResult Add([FromBody] Models.Task task)
         {
             if (!ModelState.IsValid)

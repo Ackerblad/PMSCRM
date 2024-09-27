@@ -31,13 +31,13 @@ public partial class User
 
     public DateTime? Timestamp { get; set; }
 
-    public virtual Company Company { get; set; } = null!;
+    public virtual Company? Company { get; set; } = null!;
 
     public virtual ICollection<Email> Emails { get; set; } = new List<Email>();
 
     public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = new List<PhoneCall>();
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual Role? Role { get; set; } = null!;
 
     public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
 

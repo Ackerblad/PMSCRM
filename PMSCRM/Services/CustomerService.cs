@@ -35,7 +35,7 @@ namespace PMSCRM.Services
         {
             var existing = _db.Customers.FirstOrDefault(c => c.CustomerId == guid);
 
-            if (existing == null || updated.CompanyId == Guid.Empty)
+            if (existing == null)
             {
                 return false;
             }

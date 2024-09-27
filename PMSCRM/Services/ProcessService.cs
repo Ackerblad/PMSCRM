@@ -35,7 +35,7 @@ namespace PMSCRM.Services
         {
             var existing = _db.Processes.FirstOrDefault(p => p.ProcessId == guid);
 
-            if (existing == null || existing.CompanyId == Guid.Empty)
+            if (existing == null)
             {
                 return false;
             }
