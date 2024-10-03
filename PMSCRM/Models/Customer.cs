@@ -19,13 +19,13 @@ public partial class Customer
 
     public string City { get; set; } = null!;
 
-    public string? StateOrProvince { get; set; }
+    public string StateOrProvince { get; set; } = null!;
 
-    public string? PostalCode { get; set; }
+    public string PostalCode { get; set; } = null!;
 
     public string Country { get; set; } = null!;
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
@@ -36,8 +36,4 @@ public partial class Customer
     public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = new List<PhoneCall>();
 
     public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
-
-    public Customer()
-    {
-    }
 }

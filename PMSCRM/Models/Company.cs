@@ -9,7 +9,7 @@ public partial class Company
 
     public string Name { get; set; } = null!;
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual ICollection<Area> Areas { get; set; } = new List<Area>();
 
@@ -32,8 +32,4 @@ public partial class Company
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
-
-    public Company()
-    {
-    }
 }

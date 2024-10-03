@@ -2,7 +2,7 @@
 {
     public class PasswordReset
     {
-        public string Token { get; set; } = null!;
+        public Guid Token { get; set; }
         public string NewPassword { get; set; } = null!;
     }
 }

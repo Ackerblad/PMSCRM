@@ -27,7 +27,7 @@ public partial class PhoneCall
 
     public byte Status { get; set; }
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
@@ -36,8 +36,4 @@ public partial class PhoneCall
     public virtual Customer? Customer { get; set; } = null!;
 
     public virtual User? User { get; set; } = null!;
-
-    public PhoneCall()
-    {
-    }
 }

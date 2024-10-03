@@ -17,15 +17,11 @@ public partial class Task
     [Required]
     public byte Duration { get; set; }
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
     public virtual Company? Company { get; set; } = null!;
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
-
-    public Task()
-    {
-    }
 }

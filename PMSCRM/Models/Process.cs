@@ -15,13 +15,9 @@ public partial class Process
 
     public byte Duration { get; set; }
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual Company? Company { get; set; } = null!;
 
     public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
-
-    public Process()
-    {
-    }
 }
