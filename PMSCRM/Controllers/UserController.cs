@@ -22,7 +22,7 @@ namespace PMSCRM.Controllers
 
             if (user != null)
             {
-                return Ok("Login successful");
+                return RedirectToAction("Index", "Home");
             }
             return Unauthorized("Invalid credentials");
         }
