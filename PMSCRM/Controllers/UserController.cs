@@ -5,8 +5,7 @@ using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("[controller]")]
     public class UserController : Controller
     {
         UserService userService;
@@ -14,6 +13,18 @@ namespace PMSCRM.Controllers
         public UserController(UserService userService)
         {
             this.userService = userService;
+        }
+
+        [HttpPost("login")]
+        public ActionResult Login(LoginRequest loginRequest)
+        {
+            var user = userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
+
+            if (user != null)
+            {
+                return Ok("Login successful");
+            }
+            return Unauthorized("Invalid credentials");
         }
 
         [HttpPost("add")]
@@ -24,26 +35,14 @@ namespace PMSCRM.Controllers
                 return BadRequest(ModelState);
 
             }
-            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.Username, registration.FirstName, registration.LastName,
-                                               registration.PhoneNumber, registration.EmailAddress, registration.Password);
+            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
+                                               registration.PhoneNumber, registration.Password);
 
             if (success)
             {
                 return Ok("User added successfully");
             }
             return BadRequest("Failed to add user");
-        }
-
-        [HttpPost("login")]
-        public ActionResult Login(string username, string password)
-        {
-            var user = userService.AuthenticateUser(username, password);
-
-            if (user != null)
-            {
-                return Ok("Login successful");
-            }
-            return Unauthorized("Invalid credentials");
         }
 
         [HttpPost("request-password-reset")]
@@ -126,11 +125,6 @@ namespace PMSCRM.Controllers
             }
 
             return BadRequest("Failed to delete user");
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }

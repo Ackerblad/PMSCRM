@@ -21,9 +21,9 @@ namespace PMSCRM.Services
             return _db.Users.ToList();
         }
 
-        public bool AddUser(Guid companyId, Guid roleId, string username, string firstName, string lastName, string phoneNumber, string emailAddress, string plainPassword)
+        public bool AddUser(Guid companyId, Guid roleId, string emailAddress, string firstName, string lastName, string phoneNumber, string plainPassword)
         {
-            bool userExists = _db.Users.Any(u => u.Username == username);
+            bool userExists = _db.Users.Any(u => u.EmailAddress == emailAddress);
 
             if (userExists)
             {
@@ -34,18 +34,12 @@ namespace PMSCRM.Services
             {
                 CompanyId = companyId,
                 RoleId = roleId,
-                Username = username,
+                EmailAddress = emailAddress,
                 FirstName = firstName,
                 LastName = lastName,
                 PhoneNumber = phoneNumber,
-                EmailAddress = emailAddress
+                Password = PasswordSecurity.HashPassword(plainPassword)
             };
-
-            var salt = PasswordSecurity.GenerateSalt();
-            var hashedPassword = PasswordSecurity.HashPassword(plainPassword, salt);
-
-            user.PasswordHash = hashedPassword;
-            user.PasswordSalt = salt;
 
             _db.Users.Add(user);
             _db.SaveChanges();
@@ -66,11 +60,10 @@ namespace PMSCRM.Services
                 return false;
             }
 
-            existingUser.Username = updatedUser.Username;
+            existingUser.EmailAddress = updatedUser.EmailAddress;
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
             existingUser.PhoneNumber = updatedUser.PhoneNumber;
-            existingUser.EmailAddress = updatedUser.EmailAddress;
             existingUser.CompanyId = updatedUser.CompanyId;
             existingUser.RoleId = updatedUser.RoleId;
 
@@ -91,14 +84,16 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public User AuthenticateUser(string username, string plainPassword)
+        public User AuthenticateUser(string emailAddress, string plainPassword)
         {
-            var user = _db.Users.FirstOrDefault(u => u.Username == username);
+            var user = _db.Users.FirstOrDefault(u => u.EmailAddress == emailAddress);
 
-            if (user != null && PasswordSecurity.VerifyPassword(plainPassword, user.PasswordHash, user.PasswordSalt))
+            if (user != null && PasswordSecurity.VerifyPassword(plainPassword, user.Password))
             {
+                Console.WriteLine("User authenticated successfully.");
                 return user;
             }
+            Console.WriteLine("Authentication failed. Invalid credentials.");
             return null;
         }
 
@@ -111,35 +106,31 @@ namespace PMSCRM.Services
                 return false;
             }
 
-            var token = Guid.NewGuid().ToString();
-
-            user.PasswordToken = token;
-            user.TokenExpiry = DateTime.UtcNow.AddHours(24);
+            user.ResetToken = Guid.NewGuid();
+            user.ResetTokenExpiryDate = DateTime.UtcNow.AddHours(24);
             _db.SaveChanges();
 
-            var resetLink = $"https://pmscrm.com/reset-password?token={token}";
+            var resetLink = $"https://pmscrm.com/reset-password?token={user.ResetToken}";
             var message = $"Use the following link to reset your password: {resetLink}";
 
             _emailService.SendEmail(user.EmailAddress, "Password Reset", message);
             return true;
         }
 
-        public bool ResetPassword(string token, string newPassword)
+        public bool ResetPassword(Guid token, string newPassword)
         {
-            var user = _db.Users.FirstOrDefault(u => u.PasswordToken == token && u.TokenExpiry > DateTime.UtcNow);
+            var user = _db.Users.FirstOrDefault(u => u.ResetToken == token && u.ResetTokenExpiryDate > DateTime.UtcNow);
 
             if (user == null)
             {
                 return false; 
             }
 
-            var salt = PasswordSecurity.GenerateSalt();
-            var hashedPassword = PasswordSecurity.HashPassword(newPassword, salt);
+            var hashedPassword = PasswordSecurity.HashPassword(newPassword);
 
-            user.PasswordHash = hashedPassword;
-            user.PasswordSalt = salt;
-            user.PasswordToken = null;
-            user.TokenExpiry = null;
+            user.Password = hashedPassword;
+            user.ResetToken = Guid.Empty;
+            user.ResetTokenExpiryDate = DateTime.UtcNow.AddHours(-24);
 
             _db.SaveChanges();
 

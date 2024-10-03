@@ -5,30 +5,21 @@ namespace PMSCRM.Utilities
 {
     public class PasswordSecurity
     {
-        public static string GenerateSalt()
-        {
-            var randomNumber = new byte[32];
+        public static readonly string AppSalt = "bUp/bLcb+mYu8GD1JHSQ14ej4BNyweH6Cx6sthXD4Nc=";
 
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-            }
-            return Convert.ToBase64String(randomNumber);
-        }
-
-        public static string HashPassword(string password, string salt)
+        public static string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
-                var saltedPassword = Encoding.UTF8.GetBytes(password + salt);
+                var saltedPassword = Encoding.UTF8.GetBytes(password + AppSalt);
                 var hash = sha256.ComputeHash(saltedPassword);
                 return Convert.ToBase64String(hash);
             }
         }
 
-        public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
+        public static bool VerifyPassword(string enteredPassword, string storedHash)
         {
-            var hash = HashPassword(enteredPassword, storedSalt);
+            var hash = HashPassword(enteredPassword);
             return hash == storedHash;
         }
     }

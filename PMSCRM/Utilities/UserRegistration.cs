@@ -12,7 +12,8 @@ namespace PMSCRM.Utilities
         public Guid RoleId { get; set; }
 
         [Required]
-        public string Username { get; set; } = null!;
+        [EmailAddress]
+        public string EmailAddress { get; set; } = null!;
 
         [Required]
         public string FirstName { get; set; } = null!;
@@ -22,10 +23,6 @@ namespace PMSCRM.Utilities
 
         [Required]
         public string PhoneNumber { get; set; } = null!;
-
-        [Required]
-        [EmailAddress]
-        public string EmailAddress { get; set; } = null!;
 
         [Required]
         public string Password { get; set; } = null!;

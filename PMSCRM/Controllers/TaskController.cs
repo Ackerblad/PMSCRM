@@ -3,8 +3,7 @@ using PMSCRM.Services;
 
 namespace PMSCRM.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("[controller]")]
     public class TaskController : Controller
     {
         TaskService _taskService;

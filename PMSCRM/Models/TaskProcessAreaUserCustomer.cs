@@ -21,7 +21,7 @@ public partial class TaskProcessAreaUserCustomer
 
     public byte Status { get; set; }
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual Company? Company { get; set; } = null!;
 
@@ -30,8 +30,4 @@ public partial class TaskProcessAreaUserCustomer
     public virtual TaskProcessArea? TaskProcessArea { get; set; } = null!;
 
     public virtual User? User { get; set; } = null!;
-
-    public TaskProcessAreaUserCustomer()
-    {
-    }
 }

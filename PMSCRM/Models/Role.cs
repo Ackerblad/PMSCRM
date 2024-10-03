@@ -11,13 +11,9 @@ public partial class Role
 
     public string Name { get; set; } = null!;
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual Company? Company { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
-
-    public Role()
-    {
-    }
 }

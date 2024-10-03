@@ -4,8 +4,7 @@ using PMSCRM.Services;
 
 namespace PMSCRM.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("[controller]")]
     public class AreaController : Controller
     {
         AreaService _areaService;

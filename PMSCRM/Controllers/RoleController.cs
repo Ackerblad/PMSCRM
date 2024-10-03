@@ -5,8 +5,7 @@ using System.Data;
 
 namespace PMSCRM.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("[controller]")]
     public class RoleController : Controller
     {
         RoleService _roleService;

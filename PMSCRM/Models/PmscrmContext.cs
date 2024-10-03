@@ -465,29 +465,24 @@ public partial class PmscrmContext : DbContext
             entity.Property(e => e.LastName)
                 .HasMaxLength(100)
                 .HasColumnName("last_name");
-            entity.Property(e => e.PasswordHash)
+            entity.Property(e => e.Password)
                 .HasMaxLength(64)
-                .HasColumnName("password_hash");
-            entity.Property(e => e.PasswordSalt)
-                .HasMaxLength(64)
-                .HasColumnName("password_salt");
-            entity.Property(e => e.PasswordToken)
-                .HasMaxLength(255)
-                .HasColumnName("password_token");
+                .HasColumnName("password");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(100)
                 .HasColumnName("phone_number");
+            entity.Property(e => e.ResetToken)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("reset_token");
+            entity.Property(e => e.ResetTokenExpiryDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("reset_token_expiry_date");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.Timestamp)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("smalldatetime")
                 .HasColumnName("timestamp");
-            entity.Property(e => e.TokenExpiry)
-                .HasColumnType("datetime")
-                .HasColumnName("token_expiry");
-            entity.Property(e => e.Username)
-                .HasMaxLength(100)
-                .HasColumnName("username");
 
             entity.HasOne(d => d.Company).WithMany(p => p.Users)
                 .HasForeignKey(d => d.CompanyId)

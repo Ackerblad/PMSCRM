@@ -11,15 +11,13 @@ public partial class User
 
     public Guid RoleId { get; set; }
 
-    public string Username { get; set; } = null!;
+    public string EmailAddress { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
-    public string PasswordSalt { get; set; } = null!;
+    public Guid ResetToken { get; set; }
 
-    public string? PasswordToken { get; set; }
-
-    public DateTime? TokenExpiry { get; set; }
+    public DateTime ResetTokenExpiryDate { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -27,21 +25,15 @@ public partial class User
 
     public string PhoneNumber { get; set; } = null!;
 
-    public string EmailAddress { get; set; } = null!;
+    public DateTime Timestamp { get; set; }
 
-    public DateTime? Timestamp { get; set; }
-
-    public virtual Company Company { get; set; } = null!;
+    public virtual Company? Company { get; set; } = null!;
 
     public virtual ICollection<Email> Emails { get; set; } = new List<Email>();
 
     public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = new List<PhoneCall>();
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual Role? Role { get; set; } = null!;
 
     public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
-
-    public User()
-    {
-    }
 }

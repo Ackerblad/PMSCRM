@@ -21,7 +21,7 @@ public partial class CommunicationLog
 
     public string? Notes { get; set; }
 
-    public DateTime? Timestamp { get; set; }
+    public DateTime Timestamp { get; set; }
 
     public virtual Company? Company { get; set; } = null!;
 
@@ -32,8 +32,4 @@ public partial class CommunicationLog
     public virtual PhoneCall? PhoneCall { get; set; }
 
     public virtual Task? Task { get; set; } = null!;
-
-    public CommunicationLog()
-    {
-    }
 }
