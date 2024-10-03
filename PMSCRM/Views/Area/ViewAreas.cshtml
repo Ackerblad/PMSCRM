@@ -1,0 +1,43 @@
+﻿@model List<PMSCRM.Models.Area>
+
+@{
+    ViewData["Title"] = "View Areas";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<h3 class="fw-bold fs-4 mb-3">Area List</h3>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Area ID</th>
+                <th>Company ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var area in Model)
+            {
+                <tr>
+                    <td>@area.AreaId</td>
+                    <td>@area.CompanyId</td>
+                    <td>@area.Name</td>
+                    <td>@area.Description</td>
+                    <td>
+                        <a href="/Area/EditArea/@area.AreaId" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/Area/DeleteArea/@area.AreaId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No areas found.</p>
+}
+

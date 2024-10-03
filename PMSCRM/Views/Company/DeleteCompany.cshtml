@@ -1,0 +1,19 @@
+﻿@model PMSCRM.Models.Company
+
+@{
+    ViewData["Title"] = "Delete Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3 text-danger">Delete Company</h3>
+
+<div class="alert alert-danger">
+    <h4>Are you sure you want to delete this company?</h4>
+    <p><strong>Company Name:</strong> @Model.Name</p>
+    <p><strong>Company ID:</strong> @Model.CompanyId</p>
+</div>
+
+<form asp-action="DeleteConfirmed" asp-route-id="@Model.CompanyId" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="/Company/ViewCompanies" class="btn btn-secondary">Cancel</a>
+</form>

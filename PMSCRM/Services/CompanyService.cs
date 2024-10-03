@@ -16,6 +16,11 @@ namespace PMSCRM.Services
             return _db.Companies.ToList();
         }
 
+        public Company? GetById(Guid id)
+        {
+            return _db.Companies.Find(id);
+        }
+
         public bool Add(Company company)
         {
             bool exists = _db.Companies.Contains(company);

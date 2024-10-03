@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Edit Task";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Edit Task</h3>
+
+<form asp-action="EditTask" asp-route-id="@Model.TaskId" method="post" class="was-validated">
+    <div class="mb-3">
+        <label for="CompanyId" class="form-label">Company ID</label>
+        <input type="text" class="form-control" id="CompanyId" name="CompanyId" value="@Model.CompanyId" required>
+        <div class="invalid-feedback">Please enter the Company ID.</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Task Name</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" maxlength="50" required>
+        <div class="invalid-feedback">Please enter a task name (max 50 characters).</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <textarea class="form-control" id="Description" name="Description" rows="4" maxlength="255">@Model.Description</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="Duration" class="form-label">Duration (in hours)</label>
+        <input type="number" class="form-control" id="Duration" name="Duration" value="@Model.Duration" required>
+        <div class="invalid-feedback">Please enter a valid duration.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    <a href="/Task/ViewTasks" class="btn btn-secondary mt-3">Cancel</a>
+</form>
+
+

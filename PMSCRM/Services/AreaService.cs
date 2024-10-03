@@ -16,6 +16,11 @@ namespace PMSCRM.Services
             return _db.Areas.ToList();
         }
 
+        public Area? GetById(Guid id)
+        {
+            return _db.Areas.Find(id);
+        }
+
         public bool Add(Area area)
         {
             bool exists = _db.Areas.Contains(area);

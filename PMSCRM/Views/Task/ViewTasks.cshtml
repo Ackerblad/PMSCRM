@@ -1,0 +1,45 @@
+﻿@model List<PMSCRM.Models.Task>
+
+@{
+    ViewData["Title"] = "View Tasks";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Include layout if applicable
+}
+
+<h3 class="fw-bold fs-4 mb-3">Tasks List</h3>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Task ID</th>
+                <th>Company ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.TaskId</td>
+                    <td>@task.CompanyId</td>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>@task.Duration</td>
+                    <td>
+                        <a href="/Task/EditTask/@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/Task/DeleteTask/@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No tasks found.</p>
+}
+

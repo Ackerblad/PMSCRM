@@ -1,0 +1,38 @@
+﻿@model List<PMSCRM.Models.Company>
+
+@{
+    ViewData["Title"] = "View Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Company List</h3>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var company in Model)
+            {
+                <tr>
+                    <td>@company.CompanyId</td>
+                    <td>@company.Name</td>
+                    <td>
+                        <a href="/Company/EditCompany/@company.CompanyId" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/Company/DeleteCompany/@company.CompanyId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No companies found.</p>
+}
+

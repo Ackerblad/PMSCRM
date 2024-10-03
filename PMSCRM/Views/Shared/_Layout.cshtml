@@ -4,50 +4,293 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PMSCRM</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Lineicons and Bootstrap CSS -->
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Custom styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PMSCRM.styles.css" asp-append-version="true" />
+@*     <link rel="stylesheet" href="~/css/site.css" /> <!-- Your custom CSS --> *@
+    @RenderSection("styles", required: false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PMSCRM</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    <!-- Wrapper around sidebar and main content -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="lni lni-grid-alt"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div class="sidebar-logo">
+                    <a href="#">PMSCRM</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Navigation Links -->
+            <ul class="sidebar-nav">
+                <!-- Profile -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+
+                <!-- Task Menu -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#task" aria-expanded="false" aria-controls="task">
+                        <i class="lni lni-agenda"></i>
+                        <span>Task</span>
+                    </a>
+                    <ul id="task" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Task" asp-action="AddTask" class="sidebar-link">Add</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Task" asp-action="ViewTasks" class="sidebar-link">View</a>
+                        </li>
+                        @* <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Task" asp-action="EditTask" class="sidebar-link">Update</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Task" asp-action="DeleteTask" class="sidebar-link">Delete</a>
+                        </li> *@
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#area" aria-expanded="false" aria-controls="area">
+                        <i class="lni lni-network"></i>
+                        <span>Area</span>
+                    </a>
+                    <ul id="area" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Area" asp-action="AddArea" class="sidebar-link">Add</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Area" asp-action="ViewAreas" class="sidebar-link">View</a>
+                        </li>
+                        @* <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Update</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Delete</a>
+                        </li> *@
+                    </ul>
+                </li>
+
+
+                <!--Customers-->
+                <li class="sidebar-item">
+                    <a href="customers.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                       data-bs-target="#customer" aria-expanded="false" aria-controls="customer">
+                        <i class="lni lni-customer"></i>
+                        <span>Customers</span>
+                    </a>
+                    <ul id="customer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Customer" asp-action="AddCustomer" class="sidebar-link">Add</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Customer" asp-action="ViewCustomers" class="sidebar-link">View</a>
+                        </li>
+                        @* <li class="sidebar-item">
+                             <a href="#" class="sidebar-link">Update</a>
+                        </li>
+                        <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Delete</a>
+                        </li> *@
+                    </ul>
+
+                </li>
+            
+            
+
+
+            <!--Roles-->
+            <li class="sidebar-item">
+                <a href="Role/roles.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                   data-bs-target="#role" aria-expanded="false" aria-controls="role">
+                    <i class="lni lni-users"></i>
+                    <span>Roles</span>
+                </a>
+                <ul id="role" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a asp-area="" asp-controller="Role" asp-action="AddRole" class="sidebar-link">Add</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a asp-area="" asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View</a>
+                    </li>
+                    @* <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Update</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Delete</a>
+                    </li> *@
+                </ul>
+            </li>
+            
+            
+            
+
+
+            <!--Companies-->
+            <li class="sidebar-item">
+                <a href="Company/company.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                   data-bs-target="#company" aria-expanded="false" aria-controls="company">
+                    <i class="lni lni-briefcase"></i>
+                    <span>Companies</span>
+                </a>
+                <ul id="company" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a asp-area="" asp-controller="Company" asp-action="AddCompany" class="sidebar-link">Add</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a asp-area="" asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View</a>
+                    </li>
+                    @* <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Update</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Delete</a>
+                    </li> *@
+                </ul>
+            </li>
+            
+            
+            
+
+            <!--Process-->
+            <li class="sidebar-item">
+                <a href="Process/process.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                   data-bs-target="#process" aria-expanded="false" aria-controls="process">
+                    <i class="lni lni-spinner-solid"></i>
+                    <span>Process</span>
+                </a>
+                <ul id="process" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Process" asp-action="AddProcess" class="sidebar-link">Add</a>
+                    </li>
+                    <li class="sidebar-item">
+                            <a asp-area="" asp-controller="Process" asp-action="ViewProcesses" class="sidebar-link">View</a>
+                    </li>
+                    @* <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Update</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Delete</a>
+                    </li> *@
+                </ul>
+            </li>
+
+            <!--User-->
+            <li class="sidebar-item">
+                <a href="User/user.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                   data-bs-target="#user" aria-expanded="false" aria-controls="user">
+                    <i class="lni lni-users"></i>
+                    <span>Users</span>
+                </a>
+                <ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                            <a asp-area="" asp-controller="User" asp-action="AddUser" class="sidebar-link">Add</a>
+                    </li>
+                    <li class="sidebar-item">
+                            <a asp-area="" asp-controller="User" asp-action="ViewUsers" class="sidebar-link">View</a>
+                    </li>
+                    @* <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Update</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">Delete</a>
+                    </li> *@
+                </ul>
+            </li>
+            
+
+
+                <!-- Settings -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Footer (Logout) -->
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-link">
+                    <i class="lni lni-exit"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <div class="main">
+            <!-- Navbar/Header -->
+            <nav class="navbar navbar-expand px-4 py-3">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">John John</a>
                         </li>
                     </ul>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
+            </nav>
 
-        <main role="main" class="pb-3">
+            <!-- Main page content from views -->
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    
+                    <!--Buttons-->
+                    <main class="content px-3 py-4">
+                        <div class="container-fluid">
+                            <div class="mb-3">
+                                <ul id="nav-itemss" class="nav nav-justified">
+                                    <li class="nav-item">
+                                        <a href="@Url.Content("~/Task/AddTask")" type="button" class="btn btn-custom rounded-pill">
+                                            Tasks <span class="badge bg-danger">4</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="team.html" class="btn btn-custom rounded-pill" href="#">Team</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="btn btn-custom rounded-pill" aria-current="page" href="#">Calendar</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="btn btn-custom rounded-pill" aria-current="page" href="#">settings</button>
+                                    </li>
+                                </ul>
 
-        
-            @RenderBody()
-            
-        </main>
+
+                                <!--Main content-->
+                                @RenderBody()
+
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </main>
+        </div>
     </div>
 
-    @* <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - PMSCRM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer> *@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @* <script src="~/js/site.js"></script> *@
+
+    <!-- Optional Scripts Section -->
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

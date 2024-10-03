@@ -16,6 +16,11 @@ namespace PMSCRM.Services
             return _db.Tasks.ToList();
         }
 
+        public Models.Task? GetById(Guid id)
+        {
+            return _db.Tasks.Find(id);
+        }
+
         public bool Add(Models.Task task)
         {
             bool exists = _db.Tasks.Contains(task);
@@ -32,17 +37,17 @@ namespace PMSCRM.Services
 
         public bool Update(Guid guid, Models.Task updated)
         {
-            var existing = _db.Tasks.FirstOrDefault(u => u.TaskId == guid); 
+            var task = _db.Tasks.Find(guid);
 
-            if (existing == null)
+            if (task == null)
             {
                 return false;
             }
 
-            existing.CompanyId = updated.CompanyId;
-            existing.Name = updated.Name;
-            existing.Description = updated.Description;
-            existing.Duration = updated.Duration;
+            task.CompanyId = updated.CompanyId;
+            task.Name = updated.Name;
+            task.Description = updated.Description;
+            task.Duration = updated.Duration;
 
             _db.SaveChanges();
             return true;

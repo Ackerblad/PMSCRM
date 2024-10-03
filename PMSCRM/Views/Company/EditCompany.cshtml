@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Edit Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Edit Company</h3>
+
+<form asp-action="EditCompany" asp-route-id="@Model.CompanyId" method="post" class="was-validated">
+    <div class="mb-3">
+        <label for="CompanyId" class="form-label">Company ID</label>
+        <input type="text" class="form-control" id="CompanyId" name="CompanyId" value="@Model.CompanyId" required>
+        <div class="invalid-feedback">Please enter the Company ID.</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Company Name</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" maxlength="50" required>
+        <div class="invalid-feedback">Please enter a company name (max 50 characters).</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    <a href="/Company/ViewCompanies" class="btn btn-secondary mt-3">Cancel</a>
+</form>
+
+

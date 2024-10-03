@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Add Task";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Tasks</h3>
+
+<form class="was-validated" asp-controller="Task" asp-action="AddTask" method="post">
+    <div class="mb-3 mt-3">
+        <input type="text" class="form-control" id="companyId" placeholder="Company ID" name="CompanyId" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <div class="mb-3">
+        <input type="text" class="form-control" id="taskName" placeholder="Task Name" name="Name" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <div class="mb-3">
+        <input type="number" class="form-control" placeholder="Duration in hours" name="Duration" id="taskDuration" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <textarea name="Description" id="taskDescription" placeholder="Description" class="form-control" maxlength="255" rows="5"></textarea>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
