@@ -15,6 +15,8 @@ public partial class PmscrmContext : DbContext
     {
     }
 
+    public virtual DbSet<Application> Applications { get; set; }
+
     public virtual DbSet<Area> Areas { get; set; }
 
     public virtual DbSet<CommunicationLog> CommunicationLogs { get; set; }
@@ -44,6 +46,18 @@ public partial class PmscrmContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Application>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("Application");
+
+            entity.Property(e => e.ApplicationId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("application_id");
+            entity.Property(e => e.Data).HasColumnName("data");
+        });
+
         modelBuilder.Entity<Area>(entity =>
         {
             entity.HasKey(e => e.AreaId).HasName("PK__Area__985D6D6BE6F5CCBB");

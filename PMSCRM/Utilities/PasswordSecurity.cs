@@ -1,23 +1,46 @@
-﻿using System.Security.Cryptography;
+﻿using Newtonsoft.Json;
+using PMSCRM.Models;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace PMSCRM.Utilities
 {
     public class PasswordSecurity
     {
-        public static readonly string AppSalt = "bUp/bLcb+mYu8GD1JHSQ14ej4BNyweH6Cx6sthXD4Nc=";
+        private readonly PmscrmContext _db;
 
-        public static string HashPassword(string password)
+        public PasswordSecurity(PmscrmContext db)
         {
+            _db = db;
+        }
+
+        public string HashPassword(string password)
+        {
+            string salt = GetSalt();
+            Console.WriteLine($"Retrieved Salt: {salt}");
+
             using (var sha256 = SHA256.Create())
             {
-                var saltedPassword = Encoding.UTF8.GetBytes(password + AppSalt);
+                var saltedPassword = Encoding.UTF8.GetBytes(password + salt);
+                Console.WriteLine($"Salted Password: {password + salt}");
                 var hash = sha256.ComputeHash(saltedPassword);
                 return Convert.ToBase64String(hash);
             }
         }
 
-        public static bool VerifyPassword(string enteredPassword, string storedHash)
+        public string GetSalt()
+        {
+            var application = _db.Applications.FirstOrDefault();
+
+            if (application != null)
+            {
+                var salt = JsonConvert.DeserializeObject<Dictionary<string, string>>(application.Data);
+                return salt["Salt"];
+            }
+            throw new Exception("Salt not found in the database.");
+        }
+
+        public bool VerifyPassword(string enteredPassword, string storedHash)
         {
             var hash = HashPassword(enteredPassword);
             return hash == storedHash;
