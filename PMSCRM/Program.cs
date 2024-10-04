@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
 using PMSCRM.Services;
+using PMSCRM.Utilities;
 
 namespace PMSCRM
 {
@@ -27,6 +29,7 @@ namespace PMSCRM
             builder.Services.AddTransient<TaskProcessAreaUserCustomerService>();
             builder.Services.AddTransient<CommunicationLogService>();
             builder.Services.AddTransient<EmailService>();
+            builder.Services.AddTransient<PasswordSecurity>();
 
             var app = builder.Build();
 

@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
+using System.Security.Claims;
 
 namespace PMSCRM.Controllers
 {
@@ -16,15 +19,32 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult Login(LoginRequest loginRequest)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             var user = userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
 
             if (user != null)
             {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, user.EmailAddress),
+                    new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = loginRequest.RememberMe,
+                    ExpiresUtc = loginRequest.RememberMe ? DateTime.UtcNow.AddDays(30) : DateTime.UtcNow.AddHours(1)
+                };
+
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
                 return RedirectToAction("Index", "Home");
             }
-            return Unauthorized("Invalid credentials");
+            ViewBag.Message = "Invalid credentials";
+            return View();
         }
 
         [HttpPost("add")]

@@ -8,11 +8,13 @@ namespace PMSCRM.Services
     {
         private readonly PmscrmContext _db;
         private readonly EmailService _emailService;
+        private readonly PasswordSecurity _passwordSecurity;
 
-        public UserService(PmscrmContext db, EmailService emailService)
+        public UserService(PmscrmContext db, EmailService emailService, PasswordSecurity passwordSecurity)
         {
             _db = db;
             _emailService = emailService;
+            _passwordSecurity = passwordSecurity;
         }
 
         public List<User> GetUsers()
@@ -38,7 +40,7 @@ namespace PMSCRM.Services
                 FirstName = firstName,
                 LastName = lastName,
                 PhoneNumber = phoneNumber,
-                Password = PasswordSecurity.HashPassword(plainPassword)
+                Password = _passwordSecurity.HashPassword(plainPassword)
             };
 
             _db.Users.Add(user);
@@ -88,12 +90,10 @@ namespace PMSCRM.Services
         {
             var user = _db.Users.FirstOrDefault(u => u.EmailAddress == emailAddress);
 
-            if (user != null && PasswordSecurity.VerifyPassword(plainPassword, user.Password))
+            if (user != null && _passwordSecurity.VerifyPassword(plainPassword, user.Password))
             {
-                Console.WriteLine("User authenticated successfully.");
                 return user;
             }
-            Console.WriteLine("Authentication failed. Invalid credentials.");
             return null;
         }
 
@@ -126,7 +126,7 @@ namespace PMSCRM.Services
                 return false; 
             }
 
-            var hashedPassword = PasswordSecurity.HashPassword(newPassword);
+            var hashedPassword = _passwordSecurity.HashPassword(newPassword);
 
             user.Password = hashedPassword;
             user.ResetToken = Guid.Empty;
