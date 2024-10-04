@@ -16,6 +16,10 @@ namespace PMSCRM.Services
         {
             return _db.Customers.ToList();
         }
+        public Customer? GetById(Guid id)
+        {
+            return _db.Customers.Find(id);
+        }
 
         public bool Add(Customer customer)
         {

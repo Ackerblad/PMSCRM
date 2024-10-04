@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace PMSCRM.Controllers
 {
     [Route("[controller]")]
     //[ApiController]
+    
     public class AreaController : Controller
     {
         AreaService _areaService;
