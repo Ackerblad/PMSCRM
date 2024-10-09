@@ -26,6 +26,14 @@ namespace PMSCRM.Controllers
             return Ok(companies);
         }
 
+        [HttpGet("GetCompanyNames")]
+        public async Task<IActionResult> GetCompanyNames(string term)
+        {
+            var companyNames = _companyService.GetCompanyNames(term); // Fetch matching names from DB
+            return Ok(companyNames);
+        }
+
+
         //[HttpPost("Add")]
         //public ActionResult Add([FromBody] Company company)
         //{

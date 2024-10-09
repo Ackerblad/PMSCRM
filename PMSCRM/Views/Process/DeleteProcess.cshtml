@@ -12,7 +12,7 @@
     <p><strong>Process Name:</strong> @Model.Name</p>
     <p><strong>Company ID:</strong> @Model.CompanyId</p>
     <p><strong>Duration:</strong> @Model.Duration hours</p>
-    <p><strong>Description:</strong> @Model.Description ?? "No description"</p>
+    <p><strong>Description:</strong> @Model.Description</p>
 </div>
 
 <form asp-action="DeleteConfirmed" asp-route-id="@Model.ProcessId" method="post">

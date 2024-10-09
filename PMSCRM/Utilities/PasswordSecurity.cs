@@ -17,12 +17,10 @@ namespace PMSCRM.Utilities
         public string HashPassword(string password)
         {
             string salt = GetSalt();
-            Console.WriteLine($"Retrieved Salt: {salt}");
 
             using (var sha256 = SHA256.Create())
             {
                 var saltedPassword = Encoding.UTF8.GetBytes(password + salt);
-                Console.WriteLine($"Salted Password: {password + salt}");
                 var hash = sha256.ComputeHash(saltedPassword);
                 return Convert.ToBase64String(hash);
             }

@@ -12,10 +12,12 @@ namespace PMSCRM.Controllers
     public class AreaController : Controller
     {
         AreaService _areaService;
+        private readonly CompanyService _companyService;
 
-        public AreaController(AreaService areaService)
+        public AreaController(AreaService areaService, CompanyService companyService)
         {
             _areaService = areaService;
+            _companyService = companyService;
         }
 
         [HttpGet("GetAll")]
@@ -28,6 +30,7 @@ namespace PMSCRM.Controllers
             } 
             return Ok(areas);
         }
+
 
         //[HttpPost("Add")] 
         //public ActionResult Add([FromBody]Area area)
@@ -45,12 +48,21 @@ namespace PMSCRM.Controllers
         //    return BadRequest("Failed to add adrea");
         //}
         [HttpPost]
-        public ActionResult AddArea(Area area)
+        public ActionResult AddArea(Area area, string companyName)
         {
             if(!ModelState.IsValid)
             {
                 return View(area);
             }
+
+            var company = _companyService.GetCompanyByName(companyName);
+            if (company == null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid company selected.");
+                return View(area);
+            }
+
+            area.CompanyId = company.CompanyId;
 
             bool success = _areaService.Add(area);
             if (success)

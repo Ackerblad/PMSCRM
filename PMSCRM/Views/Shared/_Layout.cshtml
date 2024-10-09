@@ -34,7 +34,7 @@
             <ul class="sidebar-nav">
                 <!-- Profile -->
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a asp-area="" asp-controller="Profile" asp-action="Index" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
@@ -49,10 +49,10 @@
                     </a>
                     <ul id="task" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Task" asp-action="AddTask" class="sidebar-link">Add</a>
+                            <a asp-area="" asp-controller="Task" asp-action="AddTask" class="sidebar-link">Add Task</a>
                         </li>
                         <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Task" asp-action="ViewTasks" class="sidebar-link">View</a>
+                            <a asp-area="" asp-controller="Task" asp-action="ViewTasks" class="sidebar-link">View Tasks</a>
                         </li>
                         @* <li class="sidebar-item">
                             <a asp-area="" asp-controller="Task" asp-action="EditTask" class="sidebar-link">Update</a>
@@ -71,10 +71,10 @@
                     </a>
                     <ul id="area" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Area" asp-action="AddArea" class="sidebar-link">Add</a>
+                            <a asp-area="" asp-controller="Area" asp-action="AddArea" class="sidebar-link">Add Area</a>
                         </li>
                         <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Area" asp-action="ViewAreas" class="sidebar-link">View</a>
+                            <a asp-area="" asp-controller="Area" asp-action="ViewAreas" class="sidebar-link">View Areas</a>
                         </li>
                         @* <li class="sidebar-item">
                             <a href="#" class="sidebar-link">Update</a>
@@ -95,10 +95,10 @@
                     </a>
                     <ul id="customer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Customer" asp-action="AddCustomer" class="sidebar-link">Add</a>
+                            <a asp-area="" asp-controller="Customer" asp-action="AddCustomer" class="sidebar-link">Add Customer</a>
                         </li>
                         <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Customer" asp-action="ViewCustomers" class="sidebar-link">View</a>
+                            <a asp-area="" asp-controller="Customer" asp-action="ViewCustomers" class="sidebar-link">View Customers</a>
                         </li>
                         @* <li class="sidebar-item">
                              <a href="#" class="sidebar-link">Update</a>
@@ -122,10 +122,10 @@
                 </a>
                 <ul id="role" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Role" asp-action="AddRole" class="sidebar-link">Add</a>
+                        <a asp-area="" asp-controller="Role" asp-action="AddRole" class="sidebar-link">Add Role</a>
                     </li>
                     <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View</a>
+                        <a asp-area="" asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View Roles</a>
                     </li>
                     @* <li class="sidebar-item">
                         <a href="#" class="sidebar-link">Update</a>
@@ -149,10 +149,10 @@
                 </a>
                 <ul id="company" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Company" asp-action="AddCompany" class="sidebar-link">Add</a>
+                        <a asp-area="" asp-controller="Company" asp-action="AddCompany" class="sidebar-link">Add Company</a>
                     </li>
                     <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View</a>
+                        <a asp-area="" asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View Companies</a>
                     </li>
                     @* <li class="sidebar-item">
                         <a href="#" class="sidebar-link">Update</a>
@@ -175,10 +175,10 @@
                 </a>
                 <ul id="process" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Process" asp-action="AddProcess" class="sidebar-link">Add</a>
+                            <a asp-area="" asp-controller="Process" asp-action="AddProcess" class="sidebar-link">Add Process</a>
                     </li>
                     <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Process" asp-action="ViewProcesses" class="sidebar-link">View</a>
+                            <a asp-area="" asp-controller="Process" asp-action="ViewProcesses" class="sidebar-link">View Processes</a>
                     </li>
                     @* <li class="sidebar-item">
                         <a href="#" class="sidebar-link">Update</a>
@@ -198,10 +198,10 @@
                 </a>
                 <ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                     <li class="sidebar-item">
-                            <a asp-area="" asp-controller="User" asp-action="AddUser" class="sidebar-link">Add</a>
+                            <a asp-area="" asp-controller="User" asp-action="AddUser" class="sidebar-link">Add User</a>
                     </li>
                     <li class="sidebar-item">
-                            <a asp-area="" asp-controller="User" asp-action="ViewUsers" class="sidebar-link">View</a>
+                            <a asp-area="" asp-controller="User" asp-action="ViewUsers" class="sidebar-link">View Users</a>
                     </li>
                     @* <li class="sidebar-item">
                         <a href="#" class="sidebar-link">Update</a>
@@ -219,6 +219,7 @@
                     <a asp-area="" asp-controller="Login" asp-action="" class="sidebar-link">
                         <i class="lni lni-cog"></i>
                         <span>Settings</span>
+                        
                     </a>
                 </li>
             </ul>
@@ -255,18 +256,18 @@
                             <div class="mb-3">
                                 <ul id="nav-itemss" class="nav nav-justified">
                                     <li class="nav-item">
-                                        <a href="@Url.Content("~/Task/AddTask")" type="button" class="btn btn-custom rounded-pill">
+                                        <a href="Task/addTask.html" type="button" class="btn btn-custom btn-lg rounded-pill">
                                             Tasks <span class="badge bg-danger">4</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="team.html" class="btn btn-custom rounded-pill" href="#">Team</a>
+                                        <a href="team.html" class="btn btn-custom btn-lg rounded-pill" href="#">Team</a>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="btn btn-custom rounded-pill" aria-current="page" href="#">Calendar</button>
+                                        <button class="btn btn-custom btn-lg rounded-pill" aria-current="page" href="#">Calendar</button>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="btn btn-custom rounded-pill" aria-current="page" href="#">settings</button>
+                                        <button class="btn btn-custom btn-lg rounded-pill" aria-current="page" href="#">settings</button>
                                     </li>
                                 </ul>
 

@@ -1,4 +1,5 @@
-﻿using PMSCRM.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PMSCRM.Models;
 
 namespace PMSCRM.Services
 {
@@ -19,6 +20,21 @@ namespace PMSCRM.Services
         public Company? GetById(Guid id)
         {
             return _db.Companies.Find(id);
+        }
+
+        public List<string> GetCompanyNames(string term)
+        {
+            // Query to find company names containing the search term
+            return _db.Companies
+                           .Where(c => c.Name.Contains(term))
+                           .Select(c => c.Name)
+                           .ToList();
+        }
+
+        public Company GetCompanyByName(string companyName)
+        {
+            // Find the company by name
+            return _db.Companies.FirstOrDefault(c => c.Name == companyName);
         }
 
         public bool Add(Company company)
