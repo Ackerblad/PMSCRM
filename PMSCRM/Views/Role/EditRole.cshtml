@@ -1,0 +1,28 @@
+﻿@model PMSCRM.Models.Role
+
+@{
+    ViewData["Title"] = "Edit Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Edit Role</h3>
+
+<!-- Form for editing a process -->
+<form class="was-validated" asp-action="EditRole" asp-route-id="@Model.RoleId" method="post">
+    <div class="mb-3 mt-3">
+        <label for="companyId" class="form-label">Company ID</label>
+        <input type="text" class="form-control" id="companyId" name="CompanyId" value="@Model.CompanyId" readonly>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="roleName" class="form-label">Role Name</label>
+        <input type="text" class="form-control" id="roleName" name="Name" value="@Model.Name" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    <a href="/Role/ViewRoles" class="btn btn-secondary mt-3">Cancel</a>
+</form>

@@ -17,6 +17,11 @@ namespace PMSCRM.Services
             return _db.Processes.ToList();
         }
 
+        public Process? GetById(Guid id)
+        {
+            return _db.Processes.Find(id);
+        }
+
         public bool Add(Process process)
         {
             bool exist = _db.Processes.Contains(process);

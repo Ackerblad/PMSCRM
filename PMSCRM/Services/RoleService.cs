@@ -15,6 +15,10 @@ namespace PMSCRM.Services
         {
             return _db.Roles.ToList();
         }
+        public Role? GetById(Guid id)
+        {
+            return _db.Roles.Find(id);
+        }
 
         public bool Add(Role role)
         {

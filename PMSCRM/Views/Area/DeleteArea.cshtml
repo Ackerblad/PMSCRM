@@ -11,7 +11,7 @@
     <h4>Are you sure you want to delete this task?</h4>
     <p><strong>Area Name:</strong> @Model.Name</p>
     <p><strong>Company ID:</strong> @Model.CompanyId</p>
-    <p><strong>Description:</strong> @Model.Description ?? "No description"</p>
+    <p><strong>Description:</strong> @Model.Description</p>
 </div>
 
 <form asp-action="DeleteConfirmed" asp-route-id="@Model.AreaId" method="post">

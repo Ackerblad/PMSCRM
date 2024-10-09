@@ -1,0 +1,44 @@
+﻿@model List<PMSCRM.Models.Process>
+
+@{
+    ViewData["Title"] = "View Processes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Process List</h3>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Process ID</th>
+                <th>Process Name</th>
+                <th>Duration (hours)</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var process in Model)
+            {
+                <tr>
+                    <td>@process.ProcessId</td>
+                    <td>@process.Name</td>
+                    <td>@process.Duration</td>
+                    <td>@process.Description</td>
+                    <td>
+                        <a href="/Process/EditProcess/@process.ProcessId" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/Process/DeleteProcess/@process.ProcessId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No processes found.</p>
+}
+
+<a href="/Process/AddProcess" class="btn btn-success mt-3">Add New Process</a>

@@ -1,0 +1,38 @@
+﻿@model List<PMSCRM.Models.Role>
+
+@{
+    ViewData["Title"] = "View Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">Role List</h3>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@role.CompanyId</td>
+                    <td>@role.Name</td>
+                    <td>
+                        <a href="/Role/EditRole/@role.RoleId" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/Role/DeleteRole/@role.RoleId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No roles found.</p>
+}
+
