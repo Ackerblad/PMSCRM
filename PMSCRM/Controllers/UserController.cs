@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
 namespace PMSCRM.Controllers
@@ -22,29 +24,39 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             var user = userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
-
             if (user != null)
-            {
+            {        
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, user.EmailAddress),
-                    new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
+               
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = loginRequest.RememberMe,
-                    ExpiresUtc = loginRequest.RememberMe ? DateTime.UtcNow.AddDays(30) : DateTime.UtcNow.AddHours(1)
+                    IsPersistent = loginRequest.RememberMe, 
                 };
 
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                if (loginRequest.RememberMe)
+                {
+                    authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(20);
+                }
+                else
+                {
+                    authProperties.ExpiresUtc = DateTime.UtcNow.AddMinutes(20);
+                }
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
 
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Message = "Invalid credentials";
-            return View();
+            return View("~/Views/Login/Login.cshtml");
         }
 
         [HttpPost("add")]

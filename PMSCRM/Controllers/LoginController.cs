@@ -5,9 +5,9 @@ namespace PMSCRM.Controllers
     public class LoginController : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Login()
         {
-            return View("Login");
+            return View();
         }
     }
 }

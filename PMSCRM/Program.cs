@@ -18,6 +18,13 @@ namespace PMSCRM
             builder.Services.AddDbContext<PmscrmContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => 
+            {
+                options.LoginPath = "/User/Login"; 
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
+                options.SlidingExpiration = true; 
+            });
+
             builder.Services.AddTransient<UserService>();
             builder.Services.AddTransient<TaskService>();
             builder.Services.AddTransient<ProcessService>();
@@ -46,11 +53,12 @@ namespace PMSCRM
 
             app.UseRouting();
 
+            app.UseAuthentication(); 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-            pattern: "{controller=Login}/{action=Index}/{id?}");
+            pattern: "{controller=Login}/{action=Login}/{id?}");
 
             app.Run();
         }

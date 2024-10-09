@@ -13,7 +13,6 @@
 <body>
     <div class="login-container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <form class="login-form text-center" method="post" action="/User/Login" style="width: 300px;">
-            @* Error message*@
             @if (ViewBag.Message != null)
             {
                 <div class="alert alert-danger">@ViewBag.Message</div>
@@ -27,7 +26,7 @@
             </div>
             <div class="forgot-link d-flex align-items-center justify-content-between mt-3">
                 <div class="form-check d-flex align-items-center">
-                    <input type="checkbox" class="form-check-input" name="RememberMe" id="remember">
+                    <input type="checkbox" class="form-check-input" name="RememberMe" id="remember" value="true">
                     <label for="remember" class="ms-2">Remember Me</label>
                 </div>
                 <a href="#">Forgot Password</a>
