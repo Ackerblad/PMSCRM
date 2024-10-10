@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Add User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="fw-bold fs-4 mb-3">User</h3>
+
+<form class="was-validated" asp-controller="User" asp-action="AddUser" method="post">
+    <div class="mb-3 mt-3">
+        <input type="text" class="form-control" id="companyId" placeholder="Company ID" name="CompanyId" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <div class="mb-3">
+        <input type="text" class="form-control" id="customerName" placeholder="Customer Name" name="Name" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" name="PhoneNumber" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" id="emailAddress" placeholder="Email" name="EmailAddress" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" name="StreetAddress" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" id="city" placeholder="City" name="City" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <div class="mb-3">
+        <input type="text" class="form-control" id="stateOrProvince" placeholder="State Or Province" name="StateOrProvince" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" id="postalCode" placeholder="Postal Code" name="PostalCode" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" id="country" placeholder="Country" name="Country" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+
+

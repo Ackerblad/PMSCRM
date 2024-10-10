@@ -29,9 +29,9 @@ namespace PMSCRM.Services
             return true;
         } 
 
-        public bool Update(Guid guid, TaskProcessAreaUserCustomer updated)
+        public bool Update(Guid id, TaskProcessAreaUserCustomer updated)
         {
-            var existing = _db.TaskProcessAreaUserCustomers.FirstOrDefault(x => x.TaskProcessAreaUserCustomerId == guid);
+            var existing = _db.TaskProcessAreaUserCustomers.FirstOrDefault(x => x.TaskProcessAreaUserCustomerId == id);
             if (existing == null)
             {
                 return false;
@@ -49,9 +49,9 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool Delete(Guid guid)
+        public bool Delete(Guid id)
         {
-            var toDelete = _db.TaskProcessAreaUserCustomers.Find(guid);
+            var toDelete = _db.TaskProcessAreaUserCustomers.Find(id);
 
             if (toDelete == null)
             {

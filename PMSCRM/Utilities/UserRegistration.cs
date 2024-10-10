@@ -6,9 +6,6 @@ namespace PMSCRM.Utilities
     public class UserRegistration
     {
         [Required]
-        public Guid CompanyId { get; set; }
-
-        [Required]
         public Guid RoleId { get; set; }
 
         [Required]

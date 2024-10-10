@@ -38,6 +38,9 @@ namespace PMSCRM
             builder.Services.AddTransient<EmailService>();
             builder.Services.AddTransient<PasswordSecurity>();
 
+            builder.Services.AddHttpContextAccessor();  
+            builder.Services.AddScoped<CompanyDivider>();  
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

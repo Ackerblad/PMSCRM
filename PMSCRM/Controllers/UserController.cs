@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
 namespace PMSCRM.Controllers
@@ -13,22 +11,25 @@ namespace PMSCRM.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        UserService userService;
+        private readonly UserService _userService;
+        private readonly CompanyDivider _companyDivider;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, CompanyDivider companyDivider)
         {
-            this.userService = userService;
+            _userService = userService;
+            _companyDivider = companyDivider;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            var user = userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
+            var user = _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
             if (user != null)
             {        
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, user.EmailAddress),
+                    new Claim("CompanyId", user.CompanyId.ToString())
                
                 };
 
@@ -59,22 +60,32 @@ namespace PMSCRM.Controllers
             return View("~/Views/Login/Login.cshtml");
         }
 
-        [HttpPost("add")]
-        public ActionResult AddUser([FromBody] UserRegistration registration)
+        [HttpPost("AddUser")]
+        public ActionResult AddUser(UserRegistration registration)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View("AddUser");
 
             }
-            bool success = userService.AddUser(registration.CompanyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
-                                               registration.PhoneNumber, registration.Password);
+
+            var tempPassword = _userService.GenerateTemporaryPassword();
+
+            var companyId = _companyDivider.GetCompanyId();
+
+            bool success = _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
+                                               registration.PhoneNumber, tempPassword);
 
             if (success)
             {
-                return Ok("User added successfully");
+                bool tokenGenerated = _userService.GeneratePasswordToken(registration.EmailAddress);
+                if (tokenGenerated)
+                {
+                    return RedirectToAction("ViewUsers");
+                }
             }
-            return BadRequest("Failed to add user");
+            ModelState.AddModelError("", "Failed to add user.");
+            return View("AddUser");
         }
 
         [HttpPost("request-password-reset")]
@@ -85,7 +96,7 @@ namespace PMSCRM.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool success = userService.GeneratePasswordToken(request.EmailAddress);
+            bool success = _userService.GeneratePasswordToken(request.EmailAddress);
 
             if (success)
             {
@@ -103,7 +114,7 @@ namespace PMSCRM.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool success = userService.ResetPassword(passwordReset.Token, passwordReset.NewPassword);
+            bool success = _userService.ResetPassword(passwordReset.Token, passwordReset.NewPassword);
 
             if (success)
             {
@@ -116,7 +127,9 @@ namespace PMSCRM.Controllers
         [HttpGet]
         public ActionResult<List<User>> GetUsers() 
         {
-            var users = userService.GetUsers();
+            var companyId = _companyDivider.GetCompanyId();
+            var users = _userService.GetUsers(companyId);
+
             if (users == null || !users.Any())
             {
                 return NotFound("No users found");
@@ -130,11 +143,12 @@ namespace PMSCRM.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-
             }
 
-            bool sucess = userService.UpdateUser(id, updatedUser);
-            if (sucess)
+            var companyId = _companyDivider.GetCompanyId(); 
+
+            bool success = _userService.UpdateUser(id, updatedUser, companyId);
+            if (success)
             {
                 return Ok("User updated successfully");
             }
@@ -150,13 +164,33 @@ namespace PMSCRM.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool success = userService.DeleteUser(id);
+            var companyId = _companyDivider.GetCompanyId(); 
+
+            bool success = _userService.DeleteUser(id, companyId);
             if (success)
             {
                 return Ok();
             }
 
             return BadRequest("Failed to delete user");
+        }
+
+        [HttpGet("AddUser")]
+        public IActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpGet("EditUser")]
+        public IActionResult EditUser()
+        {
+            return View();
+        }
+
+        [HttpGet("DeleteUser")]
+        public IActionResult DeleteUser()
+        {
+            return View();
         }
     }
 }

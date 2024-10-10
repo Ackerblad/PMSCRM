@@ -1,50 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
+using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
     [Route("[controller]")]
-    //[ApiController]
     public class TaskController : Controller
     {
-        TaskService _taskService;
+        private readonly TaskService _taskService;
+        private readonly CompanyDivider _companyDivider;
 
-        public TaskController(TaskService taskService)
+        public TaskController(TaskService taskService, CompanyDivider companyDivider)
         {
             _taskService = taskService;
+            _companyDivider = companyDivider;
         }
-
-        //[HttpGet("GetAll")]
-        //public ActionResult<List<Models.Task>> GetAll()
-        //{
-        //    var tasks = _taskService.GetAll();
-        //    if (tasks == null || !tasks.Any())
-        //    {
-        //        return NotFound("No tasks found");
-        //    }
-
-        //    return Ok(tasks);
-        //}
-
-        
-        //[HttpPost("Add")]
-        //public ActionResult Add([FromBody] Models.Task task)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _taskService.Add(task);
-        //    if (success)
-        //    {
-
-        //        return Ok("Task was added");
-
-        //    }
-        //    return BadRequest("Failed to add task");
-        //}
 
         [HttpPost]
         public ActionResult AddTask(Models.Task task)
@@ -53,6 +24,8 @@ namespace PMSCRM.Controllers
             {
                 return View(task);
             }
+
+            task.CompanyId = _companyDivider.GetCompanyId();
 
             bool success = _taskService.Add(task);
             if (success)
@@ -64,27 +37,12 @@ namespace PMSCRM.Controllers
             return View(task);
         }
 
-        //[HttpPut("{id}")] 
-        //public ActionResult Update (Guid guid, [FromBody] Models.Task task)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _taskService.Update(guid, task);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-        //    return BadRequest("Failed to update task");
-        //}
-
-        // GET: Task/EditTask/{id}
         [HttpGet("EditTask/{id}")]
         public IActionResult EditTask(Guid id)
         {
-            var task = _taskService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var task = _taskService.GetById(id, companyId);
+
             if (task == null)
             {
                 return NotFound("Task not found");
@@ -92,14 +50,15 @@ namespace PMSCRM.Controllers
             return View(task);
         }
 
-        // POST: Task/EditTask/{id}
         [HttpPost("EditTask/{id}")]
         public IActionResult EditTask(Guid id, Models.Task updatedTask)
         {
             if(!ModelState.IsValid)
             {
                 return View(updatedTask);
-            } 
+            }
+
+            updatedTask.CompanyId = _companyDivider.GetCompanyId();
 
             bool success = _taskService.Update(id, updatedTask);
             if (success)
@@ -111,30 +70,12 @@ namespace PMSCRM.Controllers
             return View("updatedTask");
         }
 
-
-
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(Guid guid)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _taskService.Delete(guid);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-
-        //    return BadRequest("Failed to delete task");
-        //}
-
-        // GET: Task/DeleteTask/{id}
         [HttpGet("DeleteTask/{id}")]
         public IActionResult DeleteTask(Guid id)
         {
-            var task = _taskService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var task = _taskService.GetById(id, companyId);
+
             if (task == null)
             {
                 return NotFound("Task not found");
@@ -146,13 +87,15 @@ namespace PMSCRM.Controllers
         [HttpPost("DeleteConfirmed/{id}")]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            var task = _taskService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var task = _taskService.GetById(id, companyId);
+
             if (task == null)
             {
                 return NotFound("Task not found.");
             }
 
-            bool success = _taskService.Delete(id);
+            bool success = _taskService.Delete(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Task deleted successfully!";
@@ -162,7 +105,6 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to delete task.");
             return View("DeleteTask", task);
         }
-
 
         public IActionResult AddTask()
         {
@@ -178,7 +120,8 @@ namespace PMSCRM.Controllers
         [HttpGet("ViewTasks")]
         public IActionResult ViewTasks()
         {
-            var tasks = _taskService.GetAll();
+            var companyId = _companyDivider.GetCompanyId();
+            var tasks = _taskService.GetAll(companyId);
             return View(tasks);
         }
 
