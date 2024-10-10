@@ -19,34 +19,4 @@
 </form>
 
 <!-- AutoComplete JQuery. Funkar, men täcker nästa fält.-->
-@section Scripts {
-    @* <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-     <style>
-        .ui-autocomplete {
-            z-index: 1050;
-            position: absolute;
-            max-height: 200px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: white;
-            border: 1px solid #ccc;
-        }
-    </style> *@
-@*     <script type="text/javascript">
-        $(function () {
-            $("#companyName").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '/Company/GetCompanyNames',
-                        type: 'GET',
-                        data: { term: request.term },
-                        success: function (data) {
-                            response(data); // Populate autocomplete dropdown
-                        }
-                    });
-                },
-                minLength: 2 // Start searching after 2 characters
-            });
-        });
-    </script> *@
-    }
+ 

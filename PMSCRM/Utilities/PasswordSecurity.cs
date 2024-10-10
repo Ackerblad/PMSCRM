@@ -14,6 +14,11 @@ namespace PMSCRM.Utilities
             _db = db;
         }
 
+        public string GenerateTemporaryPassword()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 8);
+        }
+
         public string HashPassword(string password)
         {
             string salt = GetSalt();

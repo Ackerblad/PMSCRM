@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Utilities;
+using System.ComponentModel.Design;
 
 namespace PMSCRM.Services
 {
@@ -17,15 +18,15 @@ namespace PMSCRM.Services
             _passwordSecurity = passwordSecurity;
         }
 
-        public List<User> GetUsers()
+        public List<User> GetUsers(Guid companyId)
         {
-            
-            return _db.Users.ToList();
+
+            return _db.Users.Where(u => u.CompanyId == companyId).ToList();
         }
 
         public bool AddUser(Guid companyId, Guid roleId, string emailAddress, string firstName, string lastName, string phoneNumber, string plainPassword)
         {
-            bool userExists = _db.Users.Any(u => u.EmailAddress == emailAddress);
+            bool userExists = _db.Users.Any(u => u.EmailAddress == emailAddress && u.CompanyId == companyId);
 
             if (userExists)
             {
@@ -48,16 +49,11 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool UpdateUser(Guid userId, UserUpdate updatedUser)
+        public bool UpdateUser(Guid userId, UserUpdate updatedUser, Guid companyId)
         {
-            var existingUser = _db.Users.FirstOrDefault(u => u.UserId == userId);
+            var existingUser = _db.Users.FirstOrDefault(u => u.UserId == userId && u.CompanyId == companyId);
 
             if (existingUser == null)
-            {
-                return false;
-            }
-
-            if (updatedUser.CompanyId == Guid.Empty || updatedUser.RoleId == Guid.Empty)
             {
                 return false;
             }
@@ -73,9 +69,9 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool DeleteUser(Guid userId)
+        public bool DeleteUser(Guid userId, Guid companyId)
         {
-            var userToDelete = _db.Users.Find(userId);
+            var userToDelete = _db.Users.FirstOrDefault(u => u.UserId == userId && u.CompanyId == companyId);
 
             if (userToDelete == null)
             {
@@ -95,6 +91,11 @@ namespace PMSCRM.Services
                 return user;
             }
             return null;
+        }
+
+        public string GenerateTemporaryPassword()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 8);
         }
 
         public bool GeneratePasswordToken(string emailAddress)
@@ -133,7 +134,6 @@ namespace PMSCRM.Services
             user.ResetTokenExpiryDate = DateTime.UtcNow.AddHours(-24);
 
             _db.SaveChanges();
-
             return true;
         }
     }

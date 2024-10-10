@@ -13,12 +13,11 @@ namespace PMSCRM.Controllers
     public class AreaController : Controller
     {
         AreaService _areaService;
-        private readonly CompanyService _companyService;
 
-        public AreaController(AreaService areaService, CompanyService companyService)
+
+        public AreaController(AreaService areaService)
         {
             _areaService = areaService;
-            _companyService = companyService;
         }
 
         // Helper to retrieve CompanyId from logged-in user's claims

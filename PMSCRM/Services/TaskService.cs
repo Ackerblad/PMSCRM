@@ -11,19 +11,19 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Models.Task> GetAll()
+        public List<Models.Task> GetAll(Guid companyId)
         {
-            return _db.Tasks.ToList();
+            return _db.Tasks.Where(t => t.CompanyId == companyId).ToList();
         }
 
-        public Models.Task? GetById(Guid id)
+        public Models.Task? GetById(Guid id, Guid companyId)
         {
-            return _db.Tasks.Find(id);
+            return _db.Tasks.FirstOrDefault(t => t.TaskId == id && t.CompanyId == companyId);
         }
 
         public bool Add(Models.Task task)
         {
-            bool exists = _db.Tasks.Contains(task);
+            bool exists = _db.Tasks.Any(t => t.Name == task.Name && t.CompanyId == task.CompanyId);
 
             if (exists)
             {
@@ -35,9 +35,9 @@ namespace PMSCRM.Services
             return true;
         }
 
-        public bool Update(Guid guid, Models.Task updated)
+        public bool Update(Guid id, Models.Task updated)
         {
-            var task = _db.Tasks.Find(guid);
+            var task = _db.Tasks.FirstOrDefault(t => t.TaskId == id && t.CompanyId == updated.CompanyId);
 
             if (task == null)
             {
@@ -51,16 +51,17 @@ namespace PMSCRM.Services
 
             _db.SaveChanges();
             return true;
-        } 
+        }
 
-        public bool Delete(Guid guid)
+        public bool Delete(Guid id, Guid companyId)
         {
-            var toDelete = _db.Tasks.Find(guid);
+            var toDelete = _db.Tasks.FirstOrDefault(t => t.TaskId == id && t.CompanyId == companyId);
 
             if (toDelete == null)
             {
                 return false;
             }
+
             _db.Tasks.Remove(toDelete);
             _db.SaveChanges();
             return true;
