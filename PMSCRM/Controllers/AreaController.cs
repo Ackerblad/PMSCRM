@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace PMSCRM.Controllers
 {
     [Route("[controller]")]
-    //[ApiController]
-    
     public class AreaController : Controller
     {
         AreaService _areaService;
@@ -20,10 +21,17 @@ namespace PMSCRM.Controllers
             _companyService = companyService;
         }
 
-        [HttpGet("GetAll")]
-        public ActionResult<List<Area>> GetAll()
+        // Helper to retrieve CompanyId from logged-in user's claims
+        private Guid GetUserCompanyId()
         {
-            var areas = _areaService.GetAll();
+            var claim = User.FindFirst("CompanyId");
+            return claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
+        }
+
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var areas = await _areaService.GetAllAsync();
             if (areas == null || !areas.Any())
             {
                 return NotFound("No areas found");
@@ -31,40 +39,24 @@ namespace PMSCRM.Controllers
             return Ok(areas);
         }
 
-
-        //[HttpPost("Add")] 
-        //public ActionResult Add([FromBody]Area area)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var success = _areaService.Add(area);
-        //    if (success)
-        //    {
-        //        return Ok("Area was added");
-        //    }
-        //    return BadRequest("Failed to add adrea");
-        //}
         [HttpPost]
-        public ActionResult AddArea(Area area, string companyName)
+        public async Task<IActionResult> AddAreaAsync(Area area)
         {
             if(!ModelState.IsValid)
             {
                 return View(area);
             }
 
-            var company = _companyService.GetCompanyByName(companyName);
-            if (company == null)
+            var companyId = GetUserCompanyId(); 
+            if (companyId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Invalid company selected.");
+                ModelState.AddModelError(string.Empty, "Unable to find company information for the logged-in user.");
                 return View(area);
             }
 
-            area.CompanyId = company.CompanyId;
+            area.CompanyId = companyId;
 
-            bool success = _areaService.Add(area);
+            bool success = await _areaService.AddAsync(area);
             if (success)
             {
                 return RedirectToAction("Success");
@@ -74,26 +66,10 @@ namespace PMSCRM.Controllers
             return View(area);
         }
 
-        //[HttpPut("{id}")]
-        //public ActionResult Update(Guid guid, [FromBody] Area area)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _areaService.Update(guid, area);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-        //    return BadRequest("Failed to update area");
-        //}
-
         [HttpGet("EditArea/{id}")]
-        public IActionResult EditArea(Guid id)
+        public async Task<IActionResult> EditAreaAsync(Guid id)
         {
-            var area = _areaService.GetById(id);
+            var area = await _areaService.GetByIdAsync(id);
             if (area == null)
             {
                 return NotFound("Area not found");
@@ -102,14 +78,14 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("EditArea/{id}")]
-        public IActionResult EditArea(Guid id, Area updatedArea)
+        public async Task<IActionResult> EditAreaAsync(Guid id, Area updatedArea)
         {
             if (!ModelState.IsValid)
             {
                 return View(updatedArea);
             }
 
-            bool success = _areaService.Update(id, updatedArea);
+            bool success = await _areaService.UpdateAsync(id, updatedArea);
             if (success)
             {
                 return RedirectToAction("ViewAreas");
@@ -119,28 +95,10 @@ namespace PMSCRM.Controllers
             return View("updatedArea");
         }
 
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(Guid guid)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _areaService.Delete(guid);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-
-        //    return BadRequest("Failed to delete area");
-        //}
-
-        // GET: Task/DeleteTask/{id}
         [HttpGet("DeleteArea/{id}")]
-        public IActionResult DeleteArea(Guid id)
+        public async Task<IActionResult> DeleteAreaAsync(Guid id)
         {
-            var area = _areaService.GetById(id);
+            var area = await _areaService.GetByIdAsync(id);
             if (area == null)
             {
                 return NotFound("Area not found");
@@ -150,15 +108,15 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmedAsync(Guid id)
         {
-            var area = _areaService.GetById(id);
+            var area = await _areaService.GetByIdAsync(id);
             if (area == null)
             {
                 return NotFound("Area not found.");
             }
 
-            bool success = _areaService.Delete(id);
+            bool success = await _areaService.DeleteAsync(id);
             if (success)
             {
                 TempData["SuccessMessage"] = "Area deleted successfully!";
@@ -181,9 +139,9 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewAreas")]
-        public IActionResult ViewAreas()
+        public async Task<IActionResult> ViewAreasAsync()
         {
-            var areas = _areaService.GetAll();
+            var areas = await _areaService.GetAllAsync();
             return View(areas);
         }
         [HttpGet("EditArea")]

@@ -26,9 +26,11 @@ namespace PMSCRM.Controllers
             var user = userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
             if (user != null)
             {        
+                var companyId = user.CompanyId;
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, user.EmailAddress),
+                    new Claim("CompanyId", companyId.ToString())
                
                 };
 

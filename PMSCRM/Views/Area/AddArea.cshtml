@@ -7,12 +7,6 @@
 
 <form class="was-validated" asp-controller="Area" asp-action="AddArea" method="post">
 
-    <div class="mb-3 mt-3">
-        <input type="text" class="form-control" id="companyName" placeholder="Company Name" name="CompanyName" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-
     <div class="mb-3">
         <input type="text" class="form-control" id="areaName" placeholder="Area Name" name="Name" required>
         <div class="valid-feedback">Valid.</div>
@@ -26,8 +20,19 @@
 
 <!-- AutoComplete JQuery. Funkar, men täcker nästa fält.-->
 @section Scripts {
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script type="text/javascript">
+    @* <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+     <style>
+        .ui-autocomplete {
+            z-index: 1050;
+            position: absolute;
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+    </style> *@
+@*     <script type="text/javascript">
         $(function () {
             $("#companyName").autocomplete({
                 source: function (request, response) {
@@ -43,5 +48,5 @@
                 minLength: 2 // Start searching after 2 characters
             });
         });
-    </script>
+    </script> *@
     }

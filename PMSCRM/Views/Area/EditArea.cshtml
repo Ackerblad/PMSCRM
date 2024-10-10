@@ -6,11 +6,6 @@
 <h3 class="fw-bold fs-4 mb-3">Edit Area</h3>
 
 <form asp-action="EditArea" asp-route-id="@Model.AreaId" method="post" class="was-validated">
-    <div class="mb-3">
-        <label for="CompanyId" class="form-label">Company ID</label>
-        <input type="text" class="form-control" id="CompanyId" name="CompanyId" value="@Model.CompanyId" required>
-        <div class="invalid-feedback">Please enter the Company ID.</div>
-    </div>
 
     <div class="mb-3">
         <label for="Name" class="form-label">Area Name</label>
