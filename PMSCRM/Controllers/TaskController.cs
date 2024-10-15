@@ -18,7 +18,7 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddTask(Models.Task task)
+        public async Task<IActionResult> AddTask(Models.Task task)
         {
             if (!ModelState.IsValid)
             {
@@ -27,7 +27,7 @@ namespace PMSCRM.Controllers
 
             task.CompanyId = _companyDivider.GetCompanyId();
 
-            bool success = _taskService.Add(task);
+            bool success = await _taskService.AddAsync(task);
             if (success)
             {
                 return RedirectToAction("Success");
@@ -38,10 +38,10 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("EditTask/{id}")]
-        public IActionResult EditTask(Guid id)
+        public async Task<IActionResult> EditTask(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var task = _taskService.GetById(id, companyId);
+            var task = await _taskService.GetByIdAsync(id, companyId);
 
             if (task == null)
             {
@@ -51,7 +51,7 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("EditTask/{id}")]
-        public IActionResult EditTask(Guid id, Models.Task updatedTask)
+        public async Task<IActionResult> EditTask(Guid id, Models.Task updatedTask)
         {
             if(!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace PMSCRM.Controllers
 
             updatedTask.CompanyId = _companyDivider.GetCompanyId();
 
-            bool success = _taskService.Update(id, updatedTask);
+            bool success = await _taskService.UpdateAsync(id, updatedTask);
             if (success)
             {
                 return RedirectToAction("ViewTasks");
@@ -71,10 +71,10 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("DeleteTask/{id}")]
-        public IActionResult DeleteTask(Guid id)
+        public async Task<IActionResult> DeleteTask(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var task = _taskService.GetById(id, companyId);
+            var task = await _taskService.GetByIdAsync(id, companyId);
 
             if (task == null)
             {
@@ -85,17 +85,17 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var task = _taskService.GetById(id, companyId);
+            var task = await _taskService.GetByIdAsync(id, companyId);
 
             if (task == null)
             {
                 return NotFound("Task not found.");
             }
 
-            bool success = _taskService.Delete(id, companyId);
+            bool success = await _taskService.DeleteAsync(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Task deleted successfully!";
@@ -118,10 +118,10 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewTasks")]
-        public IActionResult ViewTasks()
+        public async Task<IActionResult> ViewTasks()
         {
             var companyId = _companyDivider.GetCompanyId();
-            var tasks = _taskService.GetAll(companyId);
+            var tasks = await _taskService.GetAllAsync(companyId);
             return View(tasks);
         }
 

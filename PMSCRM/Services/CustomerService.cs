@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PMSCRM.Models;
+﻿using PMSCRM.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PMSCRM.Services
 {
-    public class CustomerService : Controller
+    public class CustomerService
     {
         private readonly PmscrmContext _db;
 
@@ -12,53 +16,65 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Customer> GetAll()
+        // Get all customers for the specified company (Async)
+        public async Task<List<Customer>> GetAllAsync(Guid companyId)
         {
-            return _db.Customers.ToList();
-        }
-        public Customer? GetById(Guid id)
-        {
-            return _db.Customers.Find(id);
+            return await _db.Customers
+                .Where(c => c.CompanyId == companyId)
+                .ToListAsync();
         }
 
-        public bool Add(Customer customer)
+        // Get customer by ID and company (Async)
+        public async Task<Customer?> GetByIdAsync(Guid id, Guid companyId)
         {
-            bool exists = _db.Customers.Contains(customer);
+            return await _db.Customers
+                .FirstOrDefaultAsync(c => c.CustomerId == id && c.CompanyId == companyId);
+        }
+
+        // Add a new customer (Async)
+        public async Task<bool> AddAsync(Customer customer)
+        {
+            bool exists = await _db.Customers
+                .AnyAsync(c => c.Name == customer.Name && c.CompanyId == customer.CompanyId);
 
             if (exists)
             {
                 return false;
             }
 
-            _db.Customers.Add(customer);
-            _db.SaveChanges();
+            await _db.Customers.AddAsync(customer);
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Update(Guid guid, Customer updated)
+        // Update an existing customer (Async)
+        public async Task<bool> UpdateAsync(Guid id, Customer updatedCustomer)
         {
-            var existing = _db.Customers.FirstOrDefault(c => c.CustomerId == guid);
+            var existing = await _db.Customers
+                .FirstOrDefaultAsync(c => c.CustomerId == id && c.CompanyId == updatedCustomer.CompanyId);
 
             if (existing == null)
             {
                 return false;
             }
 
-            existing.CompanyId = updated.CompanyId;
-            existing.Name = updated.Name;
-            existing.PhoneNumber = updated.PhoneNumber;
-            existing.EmailAddress = updated.EmailAddress;
-            existing.StreetAddress = updated.StreetAddress;
-            existing.City = updated.City;
-            existing.Country = updated.Country;
+            // Update customer properties
+            existing.Name = updatedCustomer.Name;
+            existing.PhoneNumber = updatedCustomer.PhoneNumber;
+            existing.EmailAddress = updatedCustomer.EmailAddress;
+            existing.StreetAddress = updatedCustomer.StreetAddress;
+            existing.City = updatedCustomer.City;
+            existing.Country = updatedCustomer.Country;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid guid)
+        // Delete a customer (Async)
+        public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = _db.Customers.Find(guid);
+            var toDelete = await _db.Customers
+                .FirstOrDefaultAsync(c => c.CustomerId == id && c.CompanyId == companyId);
 
             if (toDelete == null)
             {
@@ -66,13 +82,8 @@ namespace PMSCRM.Services
             }
 
             _db.Customers.Remove(toDelete);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }

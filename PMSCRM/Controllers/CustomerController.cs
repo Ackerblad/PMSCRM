@@ -1,84 +1,52 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
+using PMSCRM.Utilities;
+using System;
+using System.Threading.Tasks;
 
 namespace PMSCRM.Controllers
 {
     [Route("[controller]")]
     public class CustomerController : Controller
     {
-        CustomerService _customerService;
+        private readonly CustomerService _customerService;
+        private readonly CompanyDivider _companyDivider;
 
-        public CustomerController(CustomerService customerService)
+        public CustomerController(CustomerService customerService, CompanyDivider companyDivider)
         {
             _customerService = customerService;
+            _companyDivider = companyDivider;
         }
 
-        [HttpGet("GetAll")]
-        public ActionResult<List<Customer>> GetAll()
-        {
-            var customers = _customerService.GetAll();
-            if (customers == null || !customers.Any())
-            {
-                return NotFound("No customers found");
-            }
-            return Ok(customers);
-        }
-
-        //[HttpPost("Add")]
-        //public ActionResult Add([FromBody] Customer customer)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var success = _customerService.Add(customer);
-        //    if (success)
-        //    {
-        //        return Ok("Customer was added");
-        //    }
-        //    return BadRequest("Failed to add customer");
-        //}
-
+        // Add Customer (POST)
         [HttpPost]
-        public ActionResult AddCustomer(Customer customer)
+        public async Task<ActionResult> AddCustomer(Customer customer)
         {
             if (!ModelState.IsValid)
             {
                 return View(customer);
             }
 
-            bool success = _customerService.Add(customer);
+            customer.CompanyId = _companyDivider.GetCompanyId();
+
+            bool success = await _customerService.AddAsync(customer);
             if (success)
             {
                 return RedirectToAction("Success");
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to add customer");
+            ModelState.AddModelError(string.Empty, "Failed to add customer.");
             return View(customer);
         }
 
-        //[HttpPut("{id}")]
-        //public ActionResult Update(Guid guid, [FromBody] Customer customer)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _customerService.Update(guid, customer);
-        //    if (success)
-        //    {
-        //        return Ok("Customer was updated");
-        //    }
-        //    return BadRequest("Failed to update customer");
-        //}
-
+        // Edit Customer (GET)
         [HttpGet("EditCustomer/{id}")]
-        public IActionResult EditCustomer(Guid id)
+        public async Task<IActionResult> EditCustomer(Guid id)
         {
-            var customer = _customerService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var customer = await _customerService.GetByIdAsync(id, companyId);
+
             if (customer == null)
             {
                 return NotFound("Customer not found");
@@ -86,45 +54,34 @@ namespace PMSCRM.Controllers
             return View(customer);
         }
 
+        // Edit Customer (POST)
         [HttpPost("EditCustomer/{id}")]
-        public IActionResult EditCustomer(Guid id, Customer updatedCustomer)
+        public async Task<IActionResult> EditCustomer(Guid id, Customer updatedCustomer)
         {
             if (!ModelState.IsValid)
             {
                 return View(updatedCustomer);
             }
 
-            bool success = _customerService.Update(id, updatedCustomer);
+            updatedCustomer.CompanyId = _companyDivider.GetCompanyId();
+
+            bool success = await _customerService.UpdateAsync(id, updatedCustomer);
             if (success)
             {
                 return RedirectToAction("ViewCustomers");
             }
 
             ModelState.AddModelError(string.Empty, "Failed to update customer.");
-            return View("updatedCustomer");
+            return View(updatedCustomer);
         }
 
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(Guid guid)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _customerService.Delete(guid);
-        //    if(success)
-        //    {
-        //        return Ok("Customer was deleted");
-        //    }
-        //    return BadRequest("Customer was not deleted");
-        //}
-
-        // GET: Task/DeleteTask/{id}
+        // Delete Customer (GET)
         [HttpGet("DeleteCustomer/{id}")]
-        public IActionResult DeleteCustomer(Guid id)
+        public async Task<IActionResult> DeleteCustomer(Guid id)
         {
-            var customer = _customerService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var customer = await _customerService.GetByIdAsync(id, companyId);
+
             if (customer == null)
             {
                 return NotFound("Customer not found");
@@ -133,16 +90,19 @@ namespace PMSCRM.Controllers
             return View(customer);
         }
 
+        // Delete Customer (POST)
         [HttpPost("DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var customer = _customerService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var customer = await _customerService.GetByIdAsync(id, companyId);
+
             if (customer == null)
             {
                 return NotFound("Customer not found.");
             }
 
-            bool success = _customerService.Delete(id);
+            bool success = await _customerService.DeleteAsync(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Customer deleted successfully!";
@@ -152,28 +112,35 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to delete customer.");
             return View("DeleteCustomer", customer);
         }
+
         public IActionResult AddCustomer()
         {
             return View();
         }
 
+        // View Customers (GET)
+        [HttpGet("ViewCustomers")]
+        public async Task<IActionResult> ViewCustomers()
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var customers = await _customerService.GetAllAsync(companyId);
+            return View(customers);
+        }
+
+        // Success View (GET)
         [HttpGet("Success")]
         public IActionResult Success()
         {
             return View();
         }
 
-        [HttpGet("ViewCustomers")]
-        public IActionResult ViewCustomers()
-        {
-            var customer = _customerService.GetAll();
-            return View(customer);
-        }
+        // Unused Views
         [HttpGet("EditCustomer")]
         public IActionResult EditCustomer()
         {
             return View();
         }
+
         [HttpGet("DeleteCustomer")]
         public IActionResult DeleteCustomer()
         {

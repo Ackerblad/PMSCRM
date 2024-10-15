@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PMSCRM.Models;
 
@@ -7,6 +8,7 @@ public partial class Company
 {
     public Guid CompanyId { get; set; }
 
+    [StringLength(50)]
     public string Name { get; set; } = null!;
 
     public DateTime Timestamp { get; set; }

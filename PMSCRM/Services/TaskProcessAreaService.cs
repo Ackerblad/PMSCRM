@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
+using PMSCRM.ViewModels;
+using System.Threading.Tasks;
 
 namespace PMSCRM.Services
 {
@@ -12,55 +15,76 @@ namespace PMSCRM.Services
             _db = db;
         }
 
+        public List<TaskProcessArea> GetAllWithDetails()
+        {
+            return _db.TaskProcessAreas
+                      .Include(tpa => tpa.Task)
+                      .Include(tpa => tpa.Process)
+                      .Include(tpa => tpa.Area)
+                      .ToList();
+        }
+
         public List<TaskProcessArea> GetAll()
         {
             return _db.TaskProcessAreas.ToList();
         }
 
-        public bool Add(TaskProcessArea taskProcessArea)
+        public async Task<bool> AddAsync(TaskProcessArea taskProcessArea)
         {
-            bool exists = _db.TaskProcessAreas.Contains(taskProcessArea);
+            bool exists = await _db.TaskProcessAreas
+                .AnyAsync(t => t.TaskId == taskProcessArea.TaskId &&
+                          t.ProcessId == taskProcessArea.ProcessId &&
+                          t.AreaId == taskProcessArea.AreaId &&
+                          t.CompanyId == taskProcessArea.CompanyId);
 
             if (exists)
             {
                 return false;
             }
-            _db.TaskProcessAreas.Add(taskProcessArea);
-            _db.SaveChanges();
+
+            await _db.TaskProcessAreas.AddAsync(taskProcessArea);
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Update(Guid guid, TaskProcessArea updated)
+        public async Task<bool> UpdateAsync(TaskProcessArea taskProcessArea)
         {
-            var existing = _db.TaskProcessAreas.FirstOrDefault(t => t.TaskProcessAreaId == guid);
-            
+            var existing = await _db.TaskProcessAreas.FindAsync(taskProcessArea.TaskProcessAreaId);
             if (existing == null)
             {
                 return false;
             }
 
-            existing.CompanyId = updated.CompanyId;
-            existing.TaskId = updated.TaskId;
-            existing.ProcessId = updated.ProcessId;
-            existing.AreaId = updated.AreaId;
+            existing.TaskId = taskProcessArea.TaskId;
+            existing.ProcessId = taskProcessArea.ProcessId;
+            existing.AreaId = taskProcessArea.AreaId;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid guid)
-        {
-            var toDelete = _db.TaskProcessAreas.Find(guid);
 
-            if (toDelete == null)
+        public async Task<TaskProcessArea?> GetByIdAsync(Guid id, Guid companyId)
+        {
+            return await _db.TaskProcessAreas
+                .Include(t => t.Task)
+                .Include(t => t.Process)
+                .Include(t => t.Area)
+                .FirstOrDefaultAsync(tpa => tpa.TaskProcessAreaId == id && tpa.CompanyId == companyId);
+        }
+
+        public async Task<bool> DeleteAsync(Guid id, Guid companyId)
+        {
+            var taskProcessArea = await _db.TaskProcessAreas.FindAsync(id);
+            if (taskProcessArea == null || taskProcessArea.CompanyId != companyId)
             {
-                return false;
+                return false; 
             }
 
-            _db.TaskProcessAreas.Remove(toDelete);
-            _db.SaveChanges();
+            _db.TaskProcessAreas.Remove(taskProcessArea);
+            await _db.SaveChangesAsync();
             return true;
-
         }
+
     }
 }

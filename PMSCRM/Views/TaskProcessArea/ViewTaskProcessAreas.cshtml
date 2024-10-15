@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PMSCRM.ViewModels.TaskProcessAreaDisplayViewModel>
+
+@{
+    ViewData["Title"] = "View Task Process Areas";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<h3 class="fw-bold fs-4 mb-4">Task Process Areas</h3>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Task Name</th>
+            <th>Process Name</th>
+            <th>Area Name</th>
+            <th>Timestamp</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TaskName</td>
+                    <td>@item.ProcessName</td>
+                    <td>@item.AreaName</td>
+                    <td>@item.Timestamp.ToString("g")</td> 
+                    <td>
+                       
+                        <a href="@Url.Action("EditTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-warning btn-sm">Edit</a>
+
+                       
+                        <a href="@Url.Action("DeleteTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this Task Process Area?');">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No Task Process Areas found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

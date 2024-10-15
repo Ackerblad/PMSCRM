@@ -1,4 +1,5 @@
-﻿using PMSCRM.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PMSCRM.Models;
 
 namespace PMSCRM.Services
 {
@@ -11,48 +12,54 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Role> GetAll()
+        public async Task<List<Role>> GetAllAsync(Guid companyId)
         {
-            return _db.Roles.ToList();
+            return await _db.Roles
+                .Where(r => r.CompanyId == companyId)
+                .ToListAsync();
         }
-        public Role? GetById(Guid id)
+        public async Task<Role?> GetByIdAsync(Guid id, Guid companyId)
         {
-            return _db.Roles.Find(id);
+            return await _db.Roles
+                .FirstOrDefaultAsync(r => r.RoleId == id && r.CompanyId == companyId);
         }
 
-        public bool Add(Role role)
+        public async Task<bool> AddAsync(Role role)
         {
-            bool exists = _db.Roles.Contains(role);
+            bool exists = await _db.Roles
+                .AnyAsync(r => r.Name == role.Name && r.CompanyId == role.CompanyId);
 
             if (exists)
             {
                 return false;
             }
 
-            _db.Roles.Add(role);
-            _db.SaveChanges();
+            await _db.Roles.AddAsync(role);
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Update(Guid guid, Role updated)
+        public async Task<bool> UpdateAsync(Guid id, Role updatedRole)
         {
-            var existing = _db.Roles.FirstOrDefault(r => r.RoleId == guid);
+            var existing = await _db.Roles
+                .FirstOrDefaultAsync(r => r.RoleId == id && r.CompanyId == updatedRole.CompanyId);
 
             if (existing == null)
             {
                 return false;
             }
 
-            existing.CompanyId = updated.CompanyId;
-            existing.Name = updated.Name;
+            
+            existing.Name = updatedRole.Name;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid guid)
+        public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = _db.Roles.Find(guid);
+            var toDelete = await _db.Roles
+                .FirstOrDefaultAsync(r => r.RoleId == id && r.CompanyId == companyId);
 
             if (toDelete == null)
             {
@@ -60,7 +67,7 @@ namespace PMSCRM.Services
             } 
 
             _db.Roles.Remove(toDelete);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
     }

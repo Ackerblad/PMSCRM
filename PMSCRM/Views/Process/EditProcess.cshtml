@@ -9,12 +9,6 @@
 
 <!-- Form for editing a process -->
 <form class="was-validated" asp-action="EditProcess" asp-route-id="@Model.ProcessId" method="post">
-    <div class="mb-3 mt-3">
-        <label for="companyId" class="form-label">Company ID</label>
-        <input type="text" class="form-control" id="companyId" name="CompanyId" value="@Model.CompanyId" readonly>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
 
     <div class="mb-3">
         <label for="processName" class="form-label">Process Name</label>

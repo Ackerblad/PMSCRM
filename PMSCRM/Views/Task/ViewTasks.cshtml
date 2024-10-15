@@ -13,7 +13,6 @@
         <thead>
             <tr>
                 <th>Task ID</th>
-                <th>Company ID</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Duration</th>
@@ -25,7 +24,6 @@
             {
                 <tr>
                     <td>@task.TaskId</td>
-                    <td>@task.CompanyId</td>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
                     <td>@task.Duration</td>
@@ -42,4 +40,8 @@ else
 {
     <p>No tasks found.</p>
 }
+
+<a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-success">Add new Task</a>
+
+
 

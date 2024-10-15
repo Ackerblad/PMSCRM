@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
@@ -13,30 +14,14 @@ namespace PMSCRM.Controllers
     public class AreaController : Controller
     {
         AreaService _areaService;
+        private readonly CompanyDivider _companyDivider;
 
-
-        public AreaController(AreaService areaService)
+        public AreaController(AreaService areaService, CompanyDivider companyDivider)
         {
             _areaService = areaService;
+            _companyDivider = companyDivider;
         }
 
-        // Helper to retrieve CompanyId from logged-in user's claims
-        private Guid GetUserCompanyId()
-        {
-            var claim = User.FindFirst("CompanyId");
-            return claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
-        }
-
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            var areas = await _areaService.GetAllAsync();
-            if (areas == null || !areas.Any())
-            {
-                return NotFound("No areas found");
-            } 
-            return Ok(areas);
-        }
 
         [HttpPost]
         public async Task<IActionResult> AddAreaAsync(Area area)
@@ -46,14 +31,13 @@ namespace PMSCRM.Controllers
                 return View(area);
             }
 
-            var companyId = GetUserCompanyId(); 
-            if (companyId == Guid.Empty)
+            area.CompanyId = _companyDivider.GetCompanyId();
+
+            if (area.CompanyId == Guid.Empty)
             {
                 ModelState.AddModelError(string.Empty, "Unable to find company information for the logged-in user.");
                 return View(area);
             }
-
-            area.CompanyId = companyId;
 
             bool success = await _areaService.AddAsync(area);
             if (success)
@@ -66,9 +50,10 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("EditArea/{id}")]
-        public async Task<IActionResult> EditAreaAsync(Guid id)
+        public async Task<ActionResult> EditArea(Guid id)
         {
-            var area = await _areaService.GetByIdAsync(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var area = await _areaService.GetByIdAsync(id, companyId);
             if (area == null)
             {
                 return NotFound("Area not found");
@@ -84,6 +69,8 @@ namespace PMSCRM.Controllers
                 return View(updatedArea);
             }
 
+            updatedArea.CompanyId = _companyDivider.GetCompanyId();
+
             bool success = await _areaService.UpdateAsync(id, updatedArea);
             if (success)
             {
@@ -95,9 +82,11 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("DeleteArea/{id}")]
-        public async Task<IActionResult> DeleteAreaAsync(Guid id)
+        public async Task<IActionResult> DeleteArea(Guid id)
         {
-            var area = await _areaService.GetByIdAsync(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var area = await _areaService.GetByIdAsync(id, companyId);
+
             if (area == null)
             {
                 return NotFound("Area not found");
@@ -109,13 +98,14 @@ namespace PMSCRM.Controllers
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmedAsync(Guid id)
         {
-            var area = await _areaService.GetByIdAsync(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var area = await _areaService.GetByIdAsync(id, companyId);
             if (area == null)
             {
                 return NotFound("Area not found.");
             }
 
-            bool success = await _areaService.DeleteAsync(id);
+            bool success = await _areaService.DeleteAsync(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Area deleted successfully!";
@@ -140,7 +130,8 @@ namespace PMSCRM.Controllers
         [HttpGet("ViewAreas")]
         public async Task<IActionResult> ViewAreasAsync()
         {
-            var areas = await _areaService.GetAllAsync();
+            var companyId = _companyDivider.GetCompanyId();
+            var areas = await _areaService.GetAllAsync(companyId);
             return View(areas);
         }
         [HttpGet("EditArea")]

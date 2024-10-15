@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PMSCRM.Models;
 
 public partial class CommunicationLog
 {
     public Guid CommunicationLogId { get; set; }
+
 
     public Guid CompanyId { get; set; }
 
@@ -19,6 +22,7 @@ public partial class CommunicationLog
 
     public DateTime? LogDate { get; set; }
 
+    [StringLength(255)]
     public string? Notes { get; set; }
 
     public DateTime Timestamp { get; set; }
