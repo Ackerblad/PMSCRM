@@ -12,7 +12,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Company ID</th>
                 <th>Name</th>
             </tr>
         </thead>
@@ -20,7 +19,6 @@
             @foreach (var role in Model)
             {
                 <tr>
-                    <td>@role.CompanyId</td>
                     <td>@role.Name</td>
                     <td>
                         <a href="/Role/EditRole/@role.RoleId" class="btn btn-primary btn-sm">Edit</a>
@@ -35,4 +33,7 @@ else
 {
     <p>No roles found.</p>
 }
+
+<a asp-area="" asp-controller="Role" asp-action="AddRole" class="btn btn-success">Add new Role</a>
+
 

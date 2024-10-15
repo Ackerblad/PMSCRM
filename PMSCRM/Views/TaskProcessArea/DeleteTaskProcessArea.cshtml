@@ -1,0 +1,29 @@
+﻿@model PMSCRM.ViewModels.TaskProcessAreaDisplayViewModel
+
+@{
+    ViewData["Title"] = "Delete Task Process Area";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<h3 class="fw-bold fs-4 mb-3">Delete Task Process Area</h3>
+
+<div class="alert alert-warning">
+    <strong>Warning!</strong> Are you sure you want to delete this Task Process Area?
+</div>
+
+<div>
+    <p><strong>Task Name:</strong> @Model.TaskName</p>
+    <p><strong>Process Name:</strong> @Model.ProcessName</p>
+    <p><strong>Area Name:</strong> @Model.AreaName</p>
+    <p><strong>Timestamp:</strong> @Model.Timestamp.ToString("g")</p>
+</div>
+
+<form asp-action="DeleteConfirmed" asp-route-id="@Model.TaskProcessAreaId" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("ViewTaskProcessAreas", "TaskProcessArea")" class="btn btn-secondary">Cancel</a>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+}

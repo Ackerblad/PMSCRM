@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.Design;
 
 namespace PMSCRM.Services
 {
@@ -16,21 +17,21 @@ namespace PMSCRM.Services
         }
 
         // Get all areas asynchronously
-        public async Task<List<Area>> GetAllAsync()
+        public async Task<List<Area>> GetAllAsync(Guid companyId)
         {
-            return await _db.Areas.ToListAsync();
+            return await _db.Areas.Where(a => a.CompanyId == companyId).ToListAsync();
         }
 
         // Get an area by Id asynchronously
-        public async Task<Area?> GetByIdAsync(Guid id)
+        public async Task<Area?> GetByIdAsync(Guid id, Guid companyId)
         {
-            return await _db.Areas.FindAsync(id);
+            return await _db.Areas.FirstOrDefaultAsync(a => a.AreaId == id && a.CompanyId == companyId);
         }
 
         public async Task<bool> AddAsync(Area area)
         {
             // Check if the area already exists (asynchronously)
-            bool exists = await _db.Areas.AnyAsync(a => a.AreaId == area.AreaId);
+            bool exists = await _db.Areas.AnyAsync(a => a.AreaId == area.AreaId && a.CompanyId == area.CompanyId);
 
             if (exists)
             {
@@ -43,28 +44,28 @@ namespace PMSCRM.Services
         }
 
         // Update an area asynchronously
-        public async Task<bool> UpdateAsync(Guid guid, Area updated)
+        public async Task<bool> UpdateAsync(Guid id, Area updated)
         {
-            var existing = await _db.Areas.FirstOrDefaultAsync(a => a.AreaId == guid);  // Find the area asynchronously
+            var area = await _db.Areas.FirstOrDefaultAsync(a => a.AreaId == id && a.CompanyId == updated.CompanyId);  // Find the area asynchronously
 
-            if (existing == null)
+            if (area == null)
             {
                 return false;
             }
 
             // Update fields
             
-            existing.Name = updated.Name;
-            existing.Description = updated.Description;
+            area.Name = updated.Name;
+            area.Description = updated.Description;
 
             await _db.SaveChangesAsync();   // Save changes asynchronously
             return true;
         }
 
         // Delete an area asynchronously
-        public async Task<bool> DeleteAsync(Guid guid)
+        public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = await _db.Areas.FindAsync(guid);  // Find the area asynchronously
+            var toDelete = await  _db.Areas.FirstOrDefaultAsync(a => a.AreaId == id && a.CompanyId == companyId);  // Find the area asynchronously
 
             if (toDelete == null)
             {

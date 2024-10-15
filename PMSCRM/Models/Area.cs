@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PMSCRM.Models;
 
 public partial class Area
 {
     public Guid AreaId { get; set; }
-
+    [Required]
     public Guid CompanyId { get; set; }
 
     [Required] 
@@ -16,7 +17,7 @@ public partial class Area
 
     [StringLength(255)]
     public string? Description { get; set; }
-
+    [Required]
     public DateTime Timestamp { get; set; }
 
     public virtual Company? Company { get; set; } = null!;

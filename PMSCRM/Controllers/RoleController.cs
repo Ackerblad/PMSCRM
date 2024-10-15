@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
+using PMSCRM.Utilities;
 using System.Data;
 
 namespace PMSCRM.Controllers
@@ -9,48 +10,24 @@ namespace PMSCRM.Controllers
     public class RoleController : Controller
     {
         RoleService _roleService;
+        private readonly CompanyDivider _companyDivider;
 
-        public RoleController(RoleService roleService)
+        public RoleController(RoleService roleService, CompanyDivider companyDivider)
         {
             _roleService = roleService;
+            _companyDivider = companyDivider;
         }
 
-        [HttpGet("GetAll")]
-        public ActionResult<List<Role>> GetAll()
-        {
-            var roles = _roleService.GetAll();
-            if (roles == null || !roles.Any())
-            {
-                return NotFound("No roles found");
-            }
-            return Ok(roles);
-        }
-
-        //[HttpPost("Add")]
-        //public ActionResult Add([FromBody] Role role)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var success = _roleService.Add(role);
-        //    if (success)
-        //    {
-        //        return Ok("Role was added");
-        //    }
-        //    return BadRequest("Failed to add role");
-        //}
-
-        [HttpPost("AddRole")]
-        public IActionResult AddRole(Role role)
+        [HttpPost]
+        public async Task<IActionResult> AddRole(Role role)
         {
             if (!ModelState.IsValid)
             {
                 return View(role);
             }
+            role.CompanyId = _companyDivider.GetCompanyId();
 
-            bool success = _roleService.Add(role);
+            bool success = await _roleService.AddAsync(role);
             if (success)
             {
                 return RedirectToAction("ViewRoles");
@@ -60,26 +37,11 @@ namespace PMSCRM.Controllers
             return View(role);
         }
 
-        //[HttpPut("{id}")]
-        //public ActionResult Update(Guid guid, [FromBody] Role role)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _roleService.Update(guid, role);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-        //    return BadRequest("Failed to update role");
-        //}
-
         [HttpGet("EditRole/{id}")]
-        public IActionResult EditRole(Guid id)
+        public async Task<IActionResult> EditRole(Guid id)
         {
-            var role = _roleService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var role = await _roleService.GetByIdAsync(id, companyId);
             if (role == null)
             {
                 return NotFound("Role not found.");
@@ -89,14 +51,16 @@ namespace PMSCRM.Controllers
 
         // POST: /Process/EditProcess/{id}
         [HttpPost("EditRole/{id}")]
-        public IActionResult EditRole(Guid id, Role updatedRole)
+        public async Task<IActionResult> EditRole(Guid id, Role updatedRole)
         {
             if (!ModelState.IsValid)
             {
                 return View(updatedRole);
             }
 
-            bool success = _roleService.Update(id, updatedRole);
+            updatedRole.CompanyId = _companyDivider.GetCompanyId();
+
+            bool success = await _roleService.UpdateAsync(id, updatedRole);
             if (success)
             {
                 return RedirectToAction("ViewRoles");
@@ -106,28 +70,11 @@ namespace PMSCRM.Controllers
             return View(updatedRole);
         }
 
-        //[HttpDelete("{id}")]
-
-        //public ActionResult Delete(Guid guid)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _roleService.Delete(guid);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-
-        //    return BadRequest("Failed to delete role");
-        //}
-
         [HttpGet("DeleteRole/{id}")]
-        public IActionResult DeleteRole(Guid id)
+        public async Task<IActionResult> DeleteRole(Guid id)
         {
-            var role = _roleService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var role = await _roleService.GetByIdAsync(id, companyId);
             if (role == null)
             {
                 return NotFound("Role not found.");
@@ -138,15 +85,16 @@ namespace PMSCRM.Controllers
 
         // POST: /Process/DeleteConfirmed/{id}
         [HttpPost("DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var role = _roleService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var role = await _roleService.GetByIdAsync(id, companyId);
             if (role == null)
             {
                 return NotFound("Role not found.");
             }
 
-            bool success = _roleService.Delete(id);
+            bool success = await _roleService.DeleteAsync(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Role deleted successfully!";
@@ -158,17 +106,13 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewRoles")]
-        public IActionResult ViewRoles()
+        public async Task<IActionResult> ViewRoles()
         {
-            var roles = _roleService.GetAll();
-            if (roles == null || roles.Count == 0)
-            {
-                TempData["InfoMessage"] = "No roles available.";
-            }
+            var companyId = _companyDivider.GetCompanyId();
+            var roles = await _roleService.GetAllAsync(companyId);
             return View(roles);
         }
 
-        [HttpGet("AddRole")]
         public IActionResult AddRole()
         {
             return View();

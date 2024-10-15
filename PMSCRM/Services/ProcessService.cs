@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
 
 namespace PMSCRM.Services
@@ -12,63 +13,64 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Process> GetAll()
+        public async Task<List<Process>> GetAllAsync(Guid companyId)
         {
-            return _db.Processes.ToList();
+            return await _db.Processes
+                .Where(p => p.CompanyId == companyId)
+                .ToListAsync();
         }
 
-        public Process? GetById(Guid id)
+        public async Task<Process?> GetByIdAsync(Guid id, Guid companyId)
         {
-            return _db.Processes.Find(id);
+            return await _db.Processes
+                 .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == companyId);
         }
 
-        public bool Add(Process process)
+        public async Task<bool> AddAsync(Process process)
         {
-            bool exist = _db.Processes.Contains(process);
+            bool exist = await _db.Customers
+                .AnyAsync(p => p.Name == process.Name && p.CompanyId == process.CompanyId);
 
             if (exist)
             {
                 return false;
             }
 
-            _db.Processes.Add(process);
-            _db.SaveChanges();
+            await _db.Processes.AddAsync(process);
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Update(Guid guid, Process updated)
+        public async Task<bool> UpdateAsync(Guid id, Process updatedProcess)
         {
-            var existing = _db.Processes.FirstOrDefault(p => p.ProcessId == guid);
+            var existing = await _db.Processes
+                .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == updatedProcess.CompanyId);
 
             if (existing == null)
             {
                 return false;
             }
 
-            existing.CompanyId = updated.CompanyId;
-            existing.Name = updated.Name;
-            existing.Description = updated.Description;
-            existing.Duration = updated.Duration;
+            existing.Name = updatedProcess.Name;
+            existing.Description = updatedProcess.Description;
+            existing.Duration = updatedProcess.Duration;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid guid)
+        public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = _db.Processes.Find(guid);
+            var toDelete = await _db.Processes
+                .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == companyId);
 
             if (toDelete == null)
             {
                 return false;
             }
             _db.Processes.Remove(toDelete);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
-        }
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }

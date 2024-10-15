@@ -1,4 +1,5 @@
-﻿using PMSCRM.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PMSCRM.Models;
 
 namespace PMSCRM.Services
 {
@@ -11,51 +12,56 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<Models.Task> GetAll(Guid companyId)
+        public async Task<List<Models.Task>> GetAllAsync(Guid companyId)
         {
-            return _db.Tasks.Where(t => t.CompanyId == companyId).ToList();
+            return await _db.Tasks.
+                Where(t => t.CompanyId == companyId)
+                .ToListAsync();
         }
 
-        public Models.Task? GetById(Guid id, Guid companyId)
+        public async Task<Models.Task?> GetByIdAsync(Guid id, Guid companyId)
         {
-            return _db.Tasks.FirstOrDefault(t => t.TaskId == id && t.CompanyId == companyId);
+            return await _db.Tasks
+                .FirstOrDefaultAsync(t => t.TaskId == id && t.CompanyId == companyId);
         }
 
-        public bool Add(Models.Task task)
+        public async Task<bool> AddAsync(Models.Task task)
         {
-            bool exists = _db.Tasks.Any(t => t.Name == task.Name && t.CompanyId == task.CompanyId);
+            bool exists = await _db.Tasks
+                .AnyAsync(t => t.Name == task.Name && t.CompanyId == task.CompanyId);
 
             if (exists)
             {
                 return false;
             }
 
-            _db.Tasks.Add(task);
-            _db.SaveChanges();
+            await _db.Tasks.AddAsync(task);
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Update(Guid id, Models.Task updated)
+        public async Task<bool> UpdateAsync(Guid id, Models.Task updated)
         {
-            var task = _db.Tasks.FirstOrDefault(t => t.TaskId == id && t.CompanyId == updated.CompanyId);
+            var task = await _db.Tasks
+                .FirstOrDefaultAsync(t => t.TaskId == id && t.CompanyId == updated.CompanyId);
 
             if (task == null)
             {
                 return false;
             }
 
-            task.CompanyId = updated.CompanyId;
             task.Name = updated.Name;
             task.Description = updated.Description;
             task.Duration = updated.Duration;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(Guid id, Guid companyId)
+        public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = _db.Tasks.FirstOrDefault(t => t.TaskId == id && t.CompanyId == companyId);
+            var toDelete = await _db.Tasks
+                .FirstOrDefaultAsync(t => t.TaskId == id && t.CompanyId == companyId);
 
             if (toDelete == null)
             {
@@ -63,7 +69,7 @@ namespace PMSCRM.Services
             }
 
             _db.Tasks.Remove(toDelete);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
     }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
+using PMSCRM.Utilities;
+using System.Data;
 
 namespace PMSCRM.Controllers
 {
@@ -8,48 +10,25 @@ namespace PMSCRM.Controllers
     public class ProcessController : Controller
     {
         ProcessService _processService;
+        private readonly CompanyDivider _companyDivider;
 
-        public ProcessController(ProcessService processService)
+        public ProcessController(ProcessService processService, CompanyDivider companyDivider)
         {
             _processService = processService;
+            _companyDivider = companyDivider;
         }
 
-        [HttpGet("GetAll")]
-        public ActionResult<List<Process>> GetAll()
-        {
-            var process = _processService.GetAll();
-            if (process == null || !process.Any())
-            {
-                return NotFound("No process found");
-            }
-
-            return Ok(process);
-        }
-
-        //[HttpPost("Add")]
-        //public ActionResult Add([FromBody] Process process)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _processService.Add(process);
-        //    if (success)
-        //    {
-        //        return Ok("Process was added");
-        //    }
-        //    return BadRequest("Failed to add process");
-        //}
-        [HttpPost("AddProcess")]
-        public IActionResult AddProcess(Process process)
+        [HttpPost]
+        public async Task<IActionResult> AddProcess(Process process)
         {
             if (!ModelState.IsValid)
             {
                 return View(process);
             }
+            process.CompanyId = _companyDivider.GetCompanyId();
 
-            bool success = _processService.Add(process);
+
+            bool success = await _processService.AddAsync(process);
             if (success)
             {
                 return RedirectToAction("ViewProcesses");
@@ -59,26 +38,11 @@ namespace PMSCRM.Controllers
             return View(process);
         }
 
-        //[HttpPut("{id}")]
-        //public ActionResult Update(Guid guid, [FromBody] Process process)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _processService.Update(guid, process);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-        //    return BadRequest("Failed to update process");
-        //}
-        // GET: /Process/EditProcess/{id}
         [HttpGet("EditProcess/{id}")]
-        public IActionResult EditProcess(Guid id)
+        public async Task<IActionResult> EditProcess(Guid id)
         {
-            var process = _processService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var process = _processService.GetByIdAsync(id, companyId);
             if (process == null)
             {
                 return NotFound("Process not found.");
@@ -88,14 +52,15 @@ namespace PMSCRM.Controllers
 
         // POST: /Process/EditProcess/{id}
         [HttpPost("EditProcess/{id}")]
-        public IActionResult EditProcess(Guid id, Process updatedProcess)
+        public async Task<IActionResult> EditProcess(Guid id, Process updatedProcess)
         {
             if (!ModelState.IsValid)
             {
                 return View(updatedProcess);
             }
+            updatedProcess.CompanyId = _companyDivider.GetCompanyId();
 
-            bool success = _processService.Update(id, updatedProcess);
+            bool success = await _processService.UpdateAsync(id, updatedProcess);
             if (success)
             {
                 return RedirectToAction("ViewProcesses");
@@ -105,28 +70,11 @@ namespace PMSCRM.Controllers
             return View(updatedProcess);
         }
 
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(Guid guid)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _processService.Delete(guid);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-
-        //    return BadRequest("Failed to delete process");
-        //}
-
-        // GET: /Process/DeleteProcess/{id}
         [HttpGet("DeleteProcess/{id}")]
-        public IActionResult DeleteProcess(Guid id)
+        public async Task<IActionResult> DeleteProcess(Guid id)
         {
-            var process = _processService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var process = await _processService.GetByIdAsync(id, companyId);
             if (process == null)
             {
                 return NotFound("Process not found.");
@@ -137,15 +85,16 @@ namespace PMSCRM.Controllers
 
         // POST: /Process/DeleteConfirmed/{id}
         [HttpPost("DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var process = _processService.GetById(id);
+            var companyId = _companyDivider.GetCompanyId();
+            var process = await _processService.GetByIdAsync(id, companyId);
             if (process == null)
             {
                 return NotFound("Process not found.");
             }
 
-            bool success = _processService.Delete(id);
+            bool success = await _processService.DeleteAsync(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Process deleted successfully!";
@@ -157,17 +106,13 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewProcesses")]
-        public IActionResult ViewProcesses()
+        public async Task<IActionResult> ViewProcesses()
         {
-            var processes = _processService.GetAll();
-            if (processes == null || processes.Count == 0)
-            {
-                TempData["InfoMessage"] = "No processes available.";
-            }
+            var companyId = _companyDivider.GetCompanyId();
+            var processes = await _processService.GetAllAsync(companyId);
             return View(processes);
         }
 
-        [HttpGet("AddProcess")]
         public IActionResult AddProcess()
         {
             return View();
