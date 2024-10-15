@@ -12,7 +12,7 @@ namespace PMSCRM.Services
             _configuration = configuration;
         }
 
-        public void SendEmail(string toEmail, string subject, string message)
+        public async Task SendEmail(string toEmail, string subject, string message)
         {
             var emailSettings = _configuration.GetSection("EmailSettings");
 
@@ -28,10 +28,10 @@ namespace PMSCRM.Services
 
             using (var smtp = new SmtpClient())
             {
-                smtp.Connect(emailSettings["SmtpServer"], int.Parse(emailSettings["SmtpPort"]), false);
-                smtp.Authenticate(emailSettings["SenderEmail"], emailSettings["SenderPassword"]);
-                smtp.Send(email);
-                smtp.Disconnect(true);
+                await smtp.ConnectAsync(emailSettings["SmtpServer"], int.Parse(emailSettings["SmtpPort"]), false);
+                await smtp.AuthenticateAsync(emailSettings["SenderEmail"], emailSettings["SenderPassword"]);
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
             }
         }
     }

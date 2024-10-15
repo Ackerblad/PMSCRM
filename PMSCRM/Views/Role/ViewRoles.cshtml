@@ -12,7 +12,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Company ID</th>
+                <th>Role Id</th>
                 <th>Name</th>
             </tr>
         </thead>
@@ -20,7 +20,7 @@
             @foreach (var role in Model)
             {
                 <tr>
-                    <td>@role.CompanyId</td>
+                    <td>@role.RoleId</td>
                     <td>@role.Name</td>
                     <td>
                         <a href="/Role/EditRole/@role.RoleId" class="btn btn-primary btn-sm">Edit</a>

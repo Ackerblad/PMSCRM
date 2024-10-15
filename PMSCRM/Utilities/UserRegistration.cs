@@ -20,8 +20,5 @@ namespace PMSCRM.Utilities
 
         [Required]
         public string PhoneNumber { get; set; } = null!;
-
-        [Required]
-        public string Password { get; set; } = null!;
     }
 }

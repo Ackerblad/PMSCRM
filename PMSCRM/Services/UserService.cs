@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
 using PMSCRM.Utilities;
 using System.ComponentModel.Design;
@@ -18,15 +19,19 @@ namespace PMSCRM.Services
             _passwordSecurity = passwordSecurity;
         }
 
-        public List<User> GetUsers(Guid companyId)
+        public async Task<List<User>> GetUsers(Guid companyId)
         {
-
-            return _db.Users.Where(u => u.CompanyId == companyId).ToList();
+            return await _db.Users.Where(u => u.CompanyId == companyId).ToListAsync();
         }
 
-        public bool AddUser(Guid companyId, Guid roleId, string emailAddress, string firstName, string lastName, string phoneNumber, string plainPassword)
+        public async Task<User> GetById(Guid id, Guid companyId)
         {
-            bool userExists = _db.Users.Any(u => u.EmailAddress == emailAddress && u.CompanyId == companyId);
+            return await _db.Users.FirstOrDefaultAsync(u => u.UserId == id && u.CompanyId == companyId);
+        }
+
+        public async Task<bool> AddUser(Guid companyId, Guid roleId, string emailAddress, string firstName, string lastName, string phoneNumber, string plainPassword)
+        {
+            bool userExists = await _db.Users.AnyAsync(u => u.EmailAddress == emailAddress && u.CompanyId == companyId);
 
             if (userExists)
             {
@@ -44,14 +49,14 @@ namespace PMSCRM.Services
                 Password = _passwordSecurity.HashPassword(plainPassword)
             };
 
-            _db.Users.Add(user);
-            _db.SaveChanges();
+            await _db.Users.AddAsync(user);
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool UpdateUser(Guid userId, UserUpdate updatedUser, Guid companyId)
+        public async Task<bool> UpdateUser(Guid userId, UserUpdate updatedUser, Guid companyId)
         {
-            var existingUser = _db.Users.FirstOrDefault(u => u.UserId == userId && u.CompanyId == companyId);
+            var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId && u.CompanyId == companyId);
 
             if (existingUser == null)
             {
@@ -62,29 +67,29 @@ namespace PMSCRM.Services
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
             existingUser.PhoneNumber = updatedUser.PhoneNumber;
-            existingUser.CompanyId = updatedUser.CompanyId;
             existingUser.RoleId = updatedUser.RoleId;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public bool DeleteUser(Guid userId, Guid companyId)
+        public async Task<bool> DeleteUser(Guid userId, Guid companyId)
         {
-            var userToDelete = _db.Users.FirstOrDefault(u => u.UserId == userId && u.CompanyId == companyId);
+            var userToDelete = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId && u.CompanyId == companyId);
 
             if (userToDelete == null)
             {
                 return false;
             }
+
             _db.Users.Remove(userToDelete);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
 
-        public User AuthenticateUser(string emailAddress, string plainPassword)
+        public async Task<User> AuthenticateUser(string emailAddress, string plainPassword)
         {
-            var user = _db.Users.FirstOrDefault(u => u.EmailAddress == emailAddress);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.EmailAddress == emailAddress);
 
             if (user != null && _passwordSecurity.VerifyPassword(plainPassword, user.Password))
             {
@@ -95,12 +100,12 @@ namespace PMSCRM.Services
 
         public string GenerateTemporaryPassword()
         {
-            return Guid.NewGuid().ToString().Substring(0, 8);
+            return _passwordSecurity.GenerateTemporaryPassword();
         }
 
-        public bool GeneratePasswordToken(string emailAddress)
+        public async Task<bool> GeneratePasswordToken(string emailAddress)
         {
-            var user = _db.Users.FirstOrDefault(u => u.EmailAddress == emailAddress);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.EmailAddress == emailAddress);
 
             if (user == null)
             {
@@ -109,31 +114,30 @@ namespace PMSCRM.Services
 
             user.ResetToken = Guid.NewGuid();
             user.ResetTokenExpiryDate = DateTime.UtcNow.AddHours(24);
-            _db.SaveChanges();
+            
+            await _db.SaveChangesAsync();
 
-            var resetLink = $"https://pmscrm.com/reset-password?token={user.ResetToken}";
+            var resetLink = $"https://localhost:7027/User/reset-password?token={user.ResetToken}";
             var message = $"Use the following link to reset your password: {resetLink}";
 
-            _emailService.SendEmail(user.EmailAddress, "Password Reset", message);
+            await _emailService.SendEmail(user.EmailAddress, "Password Reset", message);
             return true;
         }
 
-        public bool ResetPassword(Guid token, string newPassword)
+        public async Task<bool> ResetPassword(Guid token, string newPassword)
         {
-            var user = _db.Users.FirstOrDefault(u => u.ResetToken == token && u.ResetTokenExpiryDate > DateTime.UtcNow);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.ResetToken == token && u.ResetTokenExpiryDate > DateTime.UtcNow);
 
             if (user == null)
             {
                 return false; 
             }
 
-            var hashedPassword = _passwordSecurity.HashPassword(newPassword);
-
-            user.Password = hashedPassword;
+            user.Password = _passwordSecurity.HashPassword(newPassword); ;
             user.ResetToken = Guid.Empty;
             user.ResetTokenExpiryDate = DateTime.UtcNow.AddHours(-24);
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return true;
         }
     }

@@ -67,7 +67,7 @@ body {
     width: 70px;
     min-width: 70px;
     z-index: 1000;
-    transition: all .25s ease-in-out;
+    transition: width .25s ease-in-out;
     background-color: #B7E0FF;
     display: flex;
     flex-direction: column;
