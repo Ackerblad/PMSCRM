@@ -23,18 +23,14 @@ namespace PMSCRM.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            var user = _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
+            var user = await _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
             if (user != null)
             {        
                 var companyId = user.CompanyId;
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Email, user.EmailAddress),
-
-                    new Claim("CompanyId", companyId.ToString())
-
-
-               
+                    new Claim("CompanyId", companyId.ToString())    
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -46,11 +42,11 @@ namespace PMSCRM.Controllers
 
                 if (loginRequest.RememberMe)
                 {
-                    authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(20);
+                    authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
                 }
                 else
                 {
-                    authProperties.ExpiresUtc = DateTime.UtcNow.AddMinutes(20);
+                    authProperties.ExpiresUtc = DateTime.UtcNow.AddHours(10);
                 }
 
                 await HttpContext.SignInAsync(
@@ -65,27 +61,26 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("AddUser")]
-        public ActionResult AddUser(UserRegistration registration)
+        public async Task<IActionResult> AddUser(UserRegistration registration)
         {
             if (!ModelState.IsValid)
             {
                 return View("AddUser");
-
             }
 
             var tempPassword = _userService.GenerateTemporaryPassword();
 
             var companyId = _companyDivider.GetCompanyId();
 
-            bool success = _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
+            bool success = await _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
                                                registration.PhoneNumber, tempPassword);
 
             if (success)
             {
-                bool tokenGenerated = _userService.GeneratePasswordToken(registration.EmailAddress);
+                bool tokenGenerated = await _userService.GeneratePasswordToken(registration.EmailAddress);
                 if (tokenGenerated)
                 {
-                    return RedirectToAction("ViewUsers");
+                    return RedirectToAction("Success");
                 }
             }
             ModelState.AddModelError("", "Failed to add user.");
@@ -93,94 +88,152 @@ namespace PMSCRM.Controllers
         }
 
         [HttpPost("request-password-reset")]
-        public ActionResult RequestPasswordReset([FromBody] PasswordResetRequest request)
+        public async Task<IActionResult> RequestPasswordReset(PasswordResetRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View("ForgotPassword");
             }
 
-            bool success = _userService.GeneratePasswordToken(request.EmailAddress);
+            bool success = await _userService.GeneratePasswordToken(request.EmailAddress);
 
             if (success)
             {
-                return Ok("Password reset link sent to your email.");
+                ViewBag.Message = "Reset link sent to your email, You can now close this page.";
+                ViewBag.IsSuccess = true;
+            }
+            else
+            {
+                ViewBag.Message = "Email not found, try again";
+                ViewBag.IsSuccess = false;
             }
 
-            return BadRequest("Email not found");
+            return View("ForgotPassword");
+        }
+
+        [HttpGet("reset-password")]
+        public IActionResult ResetPassword(Guid token)
+        {
+            var model = new PasswordReset { Token = token };
+            return View(model);
         }
 
         [HttpPost("reset-password")]
-        public ActionResult ResetPassword([FromBody] PasswordReset passwordReset)
+        public async Task<IActionResult> ResetPassword(PasswordReset passwordReset, string confirmPassword)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                ViewBag.Message = "Password is invalid.";
+                ViewBag.IsSuccess = false;
+                return View(passwordReset);
             }
 
-            bool success = _userService.ResetPassword(passwordReset.Token, passwordReset.NewPassword);
+            if (passwordReset.NewPassword != confirmPassword)
+            {
+                ViewBag.Message = "Passwords do not match.";
+                ViewBag.IsSuccess = false;
+                return View(passwordReset);
+            }
+
+            var success = await _userService.ResetPassword(passwordReset.Token, passwordReset.NewPassword);
 
             if (success)
             {
-                return Ok("Password has been reset successfully.");
+                TempData["ResetSuccessMessage"] = "Your password has been reset.";
+                return RedirectToAction("Login", "Login");
             }
 
-            return BadRequest("Invalid or expired token.");
+            ViewBag.Message = "This reset link has expired.";
+            ViewBag.IsSuccess = false;
+            return View(passwordReset);
         }
 
-        [HttpGet]
-        public ActionResult<List<User>> GetUsers() 
+        [HttpGet("ViewUsers")]
+        public async Task<IActionResult> ViewUsers() 
         {
             var companyId = _companyDivider.GetCompanyId();
-            var users = _userService.GetUsers(companyId);
+            var users = await _userService.GetUsers(companyId);
 
             if (users == null || !users.Any())
             {
-                return NotFound("No users found");
+                TempData["InfoMessage"] = "No users available.";
             }
-            return Ok(users);
+            return View(users);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult UpdateUser(Guid id, [FromBody] UserUpdate updatedUser)
+        [HttpGet("EditUser/{id}")]
+        public async Task<IActionResult> EditUser(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var user = await _userService.GetById(id, companyId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            return View(user);
+        }
+
+        [HttpPost("EditUser/{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, UserUpdate updatedUser)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(updatedUser);
             }
 
             var companyId = _companyDivider.GetCompanyId(); 
 
-            bool success = _userService.UpdateUser(id, updatedUser, companyId);
+            bool success = await _userService.UpdateUser(id, updatedUser, companyId);
             if (success)
             {
-                return Ok("User updated successfully");
+                return RedirectToAction("ViewUsers");
             }
 
-            return BadRequest("Failed to update user");
+            ModelState.AddModelError(string.Empty, "Failed to update user.");
+            return View(updatedUser);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult DeleteUser(Guid id)
+        [HttpGet("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
-            if (!ModelState.IsValid)
+            var companyId = _companyDivider.GetCompanyId();
+            var user = await _userService.GetById(id, companyId);
+            if (user == null)
             {
-                return BadRequest(ModelState);
+                return NotFound("User not found.");
+            }
+            return View(user);
+        }
+
+        [HttpPost("DeleteConfirmed/{id}")]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var user = await _userService.GetById(id, companyId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
             }
 
-            var companyId = _companyDivider.GetCompanyId(); 
-
-            bool success = _userService.DeleteUser(id, companyId);
+            bool success = await _userService.DeleteUser(id, companyId);
             if (success)
             {
-                return Ok();
+                TempData["SuccessMessage"] = "User deleted successfully!";
+                return RedirectToAction("ViewUsers");
             }
 
-            return BadRequest("Failed to delete user");
+            ModelState.AddModelError(string.Empty, "Failed to delete user.");
+            return View("DeleteUser", user);
         }
 
         [HttpGet("AddUser")]
         public IActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpGet("Success")]
+        public IActionResult Success()
         {
             return View();
         }
@@ -193,6 +246,12 @@ namespace PMSCRM.Controllers
 
         [HttpGet("DeleteUser")]
         public IActionResult DeleteUser()
+        {
+            return View();
+        }
+
+        [HttpGet("ForgotPassword")]
+        public IActionResult ForgotPassword()
         {
             return View();
         }

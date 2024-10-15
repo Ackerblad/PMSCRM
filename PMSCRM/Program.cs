@@ -20,9 +20,13 @@ namespace PMSCRM
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => 
             {
-                options.LoginPath = "/User/Login"; 
+                options.LoginPath = "/User/Login";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
-                options.SlidingExpiration = true; 
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.IsEssential = true;
             });
 
             builder.Services.AddTransient<UserService>();
