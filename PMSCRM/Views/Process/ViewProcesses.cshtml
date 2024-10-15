@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "View Processes";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Include layout if applicable
 }
 
 <h3 class="fw-bold fs-4 mb-3">Process List</h3>
@@ -24,9 +24,30 @@
             {
                 <tr>
                     <td>@process.ProcessId</td>
-                    <td>@process.Name</td>
+                    <td>
+                        <a href="/Process/Details/@process.ProcessId" class="text-decoration-none">
+                            @process.Name
+                        </a>
+                    </td>
                     <td>@process.Duration</td>
-                    <td>@process.Description</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(process.Description))
+                        {
+                            @if (process.Description.Length > 50)
+                            {
+                                <span>@process.Description.Substring(0, 50)...</span> <!-- Show only first 50 characters -->
+                                <a href="/Process/Details/@process.ProcessId" class="text-decoration-none">Read More</a> <!-- "Read More" link -->
+                            }
+                            else
+                            {
+                                <span>@process.Description</span> <!-- Show full description if it's short -->
+                            }
+                        }
+                        else
+                        {
+                            <span>No description available.</span> <!-- Handle null or empty description -->
+                        }
+                    </td>
                     <td>
                         <a href="/Process/EditProcess/@process.ProcessId" class="btn btn-primary btn-sm">Edit</a>
                         <a href="/Process/DeleteProcess/@process.ProcessId" class="btn btn-danger btn-sm">Delete</a>
@@ -42,4 +63,3 @@ else
 }
 
 <a asp-area="" asp-controller="Process" asp-action="AddProcess" class="btn btn-success">Add new Process</a>
-

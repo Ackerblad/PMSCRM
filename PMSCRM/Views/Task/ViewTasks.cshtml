@@ -24,8 +24,29 @@
             {
                 <tr>
                     <td>@task.TaskId</td>
-                    <td>@task.Name</td>
-                    <td>@task.Description</td>
+                    <td>
+                        <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
+                            @task.Name
+                        </a>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(task.Description))
+                        {
+                            @if (task.Description.Length > 50)
+                            {
+                                <span>@task.Description.Substring(0, 50)...</span> <!-- Show only first 50 characters -->
+                                <a href="/Task/Details/@task.TaskId" class="text-decoration-none">Read More</a> <!-- "Read More" link -->
+                            }
+                            else
+                            {
+                                <span>@task.Description</span> <!-- Show full description if it's short -->
+                            }
+                        }
+                        else
+                        {
+                            <span>No description available.</span> <!-- Handle null or empty description -->
+                        }
+                    </td>
                     <td>@task.Duration</td>
                     <td>
                         <a href="/Task/EditTask/@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
@@ -42,6 +63,3 @@ else
 }
 
 <a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-success">Add new Task</a>
-
-
-

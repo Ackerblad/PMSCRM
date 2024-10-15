@@ -136,6 +136,20 @@ namespace PMSCRM.Controllers
             return View();
         }
 
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var process = await _processService.GetByIdAsync(id, companyId); // Fetch task by ID and company
+
+            if (process == null)
+            {
+                return NotFound("Process not found.");
+            }
+
+            return View(process); // Return the task to the view
+        }
+
 
     }
 }
