@@ -23,7 +23,11 @@
             @foreach (var task in Model)
             {
                 <tr>
-                    <td>@task.TaskId</td>
+                    <td>
+                        <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
+                            @task.TaskId
+                        </a>
+                    </td>
                     <td>
                         <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
                             @task.Name

@@ -10,6 +10,7 @@ using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
+    //[Authorize]
     [Route("[controller]")]
     public class AreaController : Controller
     {
