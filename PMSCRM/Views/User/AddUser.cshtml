@@ -5,34 +5,35 @@
 
 <h3 class="fw-bold fs-4 mb-3">User</h3>
 
-<form class="was-validated" asp-controller="User" asp-action="AddUser" method="post">
-    <div class="mb-3 mt-3">
-        <input type="text" class="form-control" id="roleId" placeholder="Role ID" name="RoleId" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+<div class="card shadow-sm p-4 mb-4">
+    <form class="was-validated" asp-controller="User" asp-action="AddUser" method="post">
+        <div class="mb-3 mt-3">
+            <input type="text" class="form-control" id="roleId" placeholder="Role ID" name="RoleId" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-    <div class="mb-3">
-        <input type="text" class="form-control" id="emailAddress" placeholder="Email" name="EmailAddress" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" id="firstName" placeholder="First Name" name="FirstName" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" id="lastName" placeholder="Last Name" name="LastName" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" name="PhoneNumber" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
-</form>
-
+        <div class="mb-3">
+            <input type="text" class="form-control" id="emailAddress" placeholder="Email" name="EmailAddress" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="firstName" placeholder="First Name" name="FirstName" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="lastName" placeholder="Last Name" name="LastName" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" name="PhoneNumber" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+</div>
 

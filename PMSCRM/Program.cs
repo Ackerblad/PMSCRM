@@ -21,6 +21,7 @@ namespace PMSCRM
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => 
             {
                 options.LoginPath = "/User/Login";
+                options.LogoutPath = "/Login/Logout";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
                 options.SlidingExpiration = true;
                 options.Cookie.HttpOnly = true;
