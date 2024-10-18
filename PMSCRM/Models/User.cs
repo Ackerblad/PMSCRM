@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
 namespace PMSCRM.Models;
 
@@ -29,11 +28,11 @@ public partial class User
 
     public virtual Company? Company { get; set; } = null!;
 
-    public virtual ICollection<Email> Emails { get; set; } = new List<Email>();
+    public virtual ICollection<Email> Emails { get; set; } = [];
 
-    public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = new List<PhoneCall>();
+    public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = [];
 
     public virtual Role? Role { get; set; } = null!;
 
-    public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
+    public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = [];
 }

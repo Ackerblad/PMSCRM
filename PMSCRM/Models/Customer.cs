@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace PMSCRM.Models;
@@ -41,13 +40,13 @@ public partial class Customer
     [Required]
     public DateTime Timestamp { get; set; }
 
-    public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
+    public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = [];
 
     public virtual Company? Company { get; set; } = null!;
 
-    public virtual ICollection<Email> Emails { get; set; } = new List<Email>();
+    public virtual ICollection<Email> Emails { get; set; } = [];
 
-    public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = new List<PhoneCall>();
+    public virtual ICollection<PhoneCall> PhoneCalls { get; set; } = [];
 
-    public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
+    public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = [];
 }

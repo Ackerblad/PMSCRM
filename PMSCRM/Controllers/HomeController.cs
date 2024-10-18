@@ -3,16 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PMSCRM.Controllers
 {
-    //[Authorize] // Restrict access to all actions in this controller
+    [Authorize]
     public class HomeController : Controller
     {
-        
-
         public IActionResult Index()
         {
             return View();
         }
-
-       
     }
 }

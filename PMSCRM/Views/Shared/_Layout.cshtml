@@ -34,7 +34,7 @@
             <ul class="sidebar-nav">
                 <!-- Profile -->
                 <li class="sidebar-item">
-                    <a asp-area="" asp-controller="Profile" asp-action="Index" class="sidebar-link">
+                    <a asp-controller="User" asp-action="Profile" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
@@ -162,7 +162,7 @@
                 <li class="sidebar-item">
                     <a href="User/user.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                        data-bs-target="#taskProcessArea" aria-expanded="false" aria-controls="taskProcessArea">
-                        <i class="lni lni-menu-cheesburger"></i>
+                        <i class="lni lni-crown-3"></i>
                         <span>Task-Process-Area</span>
                     </a>
                     <ul id="taskProcessArea" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
@@ -201,22 +201,24 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
-                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">John John</a>
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                @User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                            </a>
                         </li>
                     </ul>
                 </div>
             </nav>
 
             <!-- Main page content from views -->
-            <main class="content px-3 py-4">
+            <main class="content px-3 py-5">
                 <div class="container-fluid">
                     
                     <!--Buttons-->
-                    <main class="content px-3 py-4">
+                    <main class="content px-3 py-5">
                         <div class="container-fluid">
                             <div class="mb-3">
                                 <ul id="nav-itemss" class="nav nav-justified">
-                                    <li class="nav-item">
+                                   @*  <li class="nav-item">
                                         <a href="Task/addTask.html" type="button" class="btn btn-custom btn-lg rounded-pill">
                                             Tasks <span class="badge bg-danger">4</span>
                                         </a>
@@ -229,7 +231,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <button class="btn btn-custom btn-lg rounded-pill" aria-current="page" href="#">settings</button>
-                                    </li>
+                                    </li> *@
                                 </ul>
 
 

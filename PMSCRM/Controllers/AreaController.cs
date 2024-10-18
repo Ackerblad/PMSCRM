@@ -2,19 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class AreaController : Controller
     {
-        AreaService _areaService;
+        private readonly AreaService _areaService;
         private readonly CompanyDivider _companyDivider;
 
         public AreaController(AreaService areaService, CompanyDivider companyDivider)
@@ -27,7 +23,7 @@ namespace PMSCRM.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAreaAsync(Area area)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(area);
             }

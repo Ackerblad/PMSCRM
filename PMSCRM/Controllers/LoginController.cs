@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PMSCRM.Controllers
@@ -20,9 +21,9 @@ namespace PMSCRM.Controllers
         [HttpGet]
         public IActionResult ForgotPassword()
         {
-            return View(); 
+            return View();
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

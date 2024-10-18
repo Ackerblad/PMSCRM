@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "View Processes";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Include layout if applicable
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
 
 <h3 class="fw-bold fs-4 mb-3">Process List</h3>
@@ -10,9 +10,8 @@
 @if (Model != null && Model.Any())
 {
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
             <tr>
-                <th>Process ID</th>
                 <th>Process Name</th>
                 <th>Duration (hours)</th>
                 <th>Description</th>
@@ -23,7 +22,6 @@
             @foreach (var process in Model)
             {
                 <tr>
-                    <td>@process.ProcessId</td>
                     <td>
                         <a href="/Process/Details/@process.ProcessId" class="text-decoration-none">
                             @process.Name
@@ -35,17 +33,17 @@
                         {
                             @if (process.Description.Length > 50)
                             {
-                                <span>@process.Description.Substring(0, 50)...</span> <!-- Show only first 50 characters -->
-                                <a href="/Process/Details/@process.ProcessId" class="text-decoration-none">Read More</a> <!-- "Read More" link -->
+                                <span>@process.Description.Substring(0, 50)...</span> 
+                                <a href="/Process/Details/@process.ProcessId" class="text-decoration-none">Read More</a> 
                             }
                             else
                             {
-                                <span>@process.Description</span> <!-- Show full description if it's short -->
+                                <span>@process.Description</span>
                             }
                         }
                         else
                         {
-                            <span>No description available.</span> <!-- Handle null or empty description -->
+                            <span>No description available.</span> 
                         }
                     </td>
                     <td>

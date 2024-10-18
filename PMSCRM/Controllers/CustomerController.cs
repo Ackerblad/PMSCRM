@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
-using System;
-using System.Threading.Tasks;
 
 namespace PMSCRM.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class CustomerController : Controller
     {

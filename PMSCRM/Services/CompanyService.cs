@@ -24,7 +24,6 @@ namespace PMSCRM.Services
 
         public List<string> GetCompanyNames(string term)
         {
-            // Query to find company names containing the search term
             return _db.Companies
                            .Where(c => c.Name.Contains(term))
                            .Select(c => c.Name)
@@ -33,7 +32,6 @@ namespace PMSCRM.Services
 
         public Company GetCompanyByName(string companyName)
         {
-            // Find the company by name
             return _db.Companies.FirstOrDefault(c => c.Name == companyName);
         }
 
@@ -61,7 +59,6 @@ namespace PMSCRM.Services
             }
 
             existing.Name = updated.Name;
-
             _db.SaveChanges();
             return true;
         }

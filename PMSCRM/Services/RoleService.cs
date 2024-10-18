@@ -49,7 +49,6 @@ namespace PMSCRM.Services
                 return false;
             }
 
-            
             existing.Name = updatedRole.Name;
 
             await _db.SaveChangesAsync();
@@ -64,7 +63,7 @@ namespace PMSCRM.Services
             if (toDelete == null)
             {
                 return false;
-            } 
+            }
 
             _db.Roles.Remove(toDelete);
             await _db.SaveChangesAsync();

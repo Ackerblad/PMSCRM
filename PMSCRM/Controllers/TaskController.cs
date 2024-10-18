@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PMSCRM.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 
 namespace PMSCRM.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class TaskController : Controller
     {
@@ -53,7 +54,7 @@ namespace PMSCRM.Controllers
         [HttpPost("EditTask/{id}")]
         public async Task<IActionResult> EditTask(Guid id, Models.Task updatedTask)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(updatedTask);
             }
@@ -131,7 +132,7 @@ namespace PMSCRM.Controllers
             return View();
         }
 
-        [HttpGet("DeleteTask")] 
+        [HttpGet("DeleteTask")]
         public IActionResult DeleteTask()
         {
             return View();

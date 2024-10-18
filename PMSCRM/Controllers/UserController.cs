@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using System.Security.Claims;
@@ -25,19 +25,19 @@ namespace PMSCRM.Controllers
         {
             var user = await _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
             if (user != null)
-            {        
+            {
                 var companyId = user.CompanyId;
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Email, user.EmailAddress),
-                    new Claim("CompanyId", companyId.ToString())    
+                    new(ClaimTypes.Email, user.EmailAddress),
+                    new("CompanyId", companyId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = loginRequest.RememberMe, 
+                    IsPersistent = loginRequest.RememberMe,
                 };
 
                 if (loginRequest.RememberMe)
@@ -59,7 +59,7 @@ namespace PMSCRM.Controllers
             ViewBag.Message = "Invalid credentials";
             return View("~/Views/Login/Login.cshtml");
         }
-
+        [Authorize]
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(UserRegistration registration)
         {
@@ -147,20 +147,20 @@ namespace PMSCRM.Controllers
             ViewBag.IsSuccess = false;
             return View(passwordReset);
         }
-
+        [Authorize]
         [HttpGet("ViewUsers")]
-        public async Task<IActionResult> ViewUsers() 
+        public async Task<IActionResult> ViewUsers()
         {
             var companyId = _companyDivider.GetCompanyId();
             var users = await _userService.GetUsers(companyId);
 
-            if (users == null || !users.Any())
+            if (users == null || users.Count == 0)
             {
                 TempData["InfoMessage"] = "No users available.";
             }
             return View(users);
         }
-
+        [Authorize]
         [HttpGet("EditUser/{id}")]
         public async Task<IActionResult> EditUser(Guid id)
         {
@@ -172,7 +172,7 @@ namespace PMSCRM.Controllers
             }
             return View(user);
         }
-
+        [Authorize]
         [HttpPost("EditUser/{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UserUpdate updatedUser)
         {
@@ -181,7 +181,7 @@ namespace PMSCRM.Controllers
                 return View(updatedUser);
             }
 
-            var companyId = _companyDivider.GetCompanyId(); 
+            var companyId = _companyDivider.GetCompanyId();
 
             bool success = await _userService.UpdateUser(id, updatedUser, companyId);
             if (success)
@@ -192,7 +192,7 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to update user.");
             return View(updatedUser);
         }
-
+        [Authorize]
         [HttpGet("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
@@ -204,7 +204,7 @@ namespace PMSCRM.Controllers
             }
             return View(user);
         }
-
+        [Authorize]
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
@@ -225,25 +225,25 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to delete user.");
             return View("DeleteUser", user);
         }
-
+        [Authorize]
         [HttpGet("AddUser")]
         public IActionResult AddUser()
         {
             return View();
         }
-
+        [Authorize]
         [HttpGet("Success")]
         public IActionResult Success()
         {
             return View();
         }
-
+        [Authorize]
         [HttpGet("EditUser")]
         public IActionResult EditUser()
         {
             return View();
         }
-
+        [Authorize]
         [HttpGet("DeleteUser")]
         public IActionResult DeleteUser()
         {

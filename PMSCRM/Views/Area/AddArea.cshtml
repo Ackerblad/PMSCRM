@@ -3,9 +3,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Areas</h3>
+<div class="card shadow-sm p-4 mb-4">
+    <h3 class="fw-bold fs-4 mb-3">Areas</h3>
 
-<form class="was-validated" asp-controller="Area" asp-action="AddArea" method="post">
+    <form class="was-validated" asp-controller="Area" asp-action="AddArea" method="post">
 
     <div class="mb-3">
         <input type="text" class="form-control" id="areaName" placeholder="Area Name" name="Name" required>
@@ -18,3 +19,5 @@
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 
 </form>
+
+</div>

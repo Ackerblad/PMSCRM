@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace PMSCRM.Models;
 
 public partial class TaskProcessAreaUserCustomer

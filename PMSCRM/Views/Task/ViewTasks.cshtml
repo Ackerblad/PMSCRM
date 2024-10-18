@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "View Tasks";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Include layout if applicable
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h3 class="fw-bold fs-4 mb-3">Tasks List</h3>
@@ -10,9 +10,9 @@
 @if (Model != null && Model.Any())
 {
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
             <tr>
-                <th>Task ID</th>
+                @* <th>Task ID</th> *@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Duration</th>
@@ -25,11 +25,6 @@
                 <tr>
                     <td>
                         <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
-                            @task.TaskId
-                        </a>
-                    </td>
-                    <td>
-                        <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
                             @task.Name
                         </a>
                     </td>
@@ -38,17 +33,17 @@
                         {
                             @if (task.Description.Length > 50)
                             {
-                                <span>@task.Description.Substring(0, 50)...</span> <!-- Show only first 50 characters -->
-                                <a href="/Task/Details/@task.TaskId" class="text-decoration-none">Read More</a> <!-- "Read More" link -->
+                                <span>@task.Description.Substring(0, 50)...</span>
+                                <a href="/Task/Details/@task.TaskId" class="text-decoration-none">Read More</a>
                             }
                             else
                             {
-                                <span>@task.Description</span> <!-- Show full description if it's short -->
+                                <span>@task.Description</span>
                             }
                         }
                         else
                         {
-                            <span>No description available.</span> <!-- Handle null or empty description -->
+                            <span>No description available.</span>
                         }
                     </td>
                     <td>@task.Duration</td>
@@ -67,3 +62,5 @@ else
 }
 
 <a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-success">Add new Task</a>
+
+

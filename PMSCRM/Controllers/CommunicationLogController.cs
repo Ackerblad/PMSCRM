@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 
 namespace PMSCRM.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class CommunicationLogController : Controller
     {
-        CommunicationLogService _communicationLogService;
+        private readonly CommunicationLogService _communicationLogService;
 
         public CommunicationLogController(CommunicationLogService communicationLogService)
         {
@@ -18,7 +20,7 @@ namespace PMSCRM.Controllers
         public ActionResult<List<CommunicationLog>> GetAll()
         {
             var comLog = _communicationLogService.GetAll();
-            if (comLog == null || !comLog.Any())
+            if (comLog == null || comLog.Count == 0)
             {
                 return NotFound("Nothing found");
             }

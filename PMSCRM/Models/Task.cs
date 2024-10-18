@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace PMSCRM.Models;
@@ -24,9 +23,9 @@ public partial class Task
 
     public DateTime Timestamp { get; set; }
 
-    public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
+    public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = [];
 
     public virtual Company? Company { get; set; } = null!;
 
-    public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
+    public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = [];
 }

@@ -18,11 +18,11 @@ namespace PMSCRM
             builder.Services.AddDbContext<PmscrmContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = "/User/Login";
                 options.LogoutPath = "/Login/Logout";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.SlidingExpiration = true;
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -43,8 +43,8 @@ namespace PMSCRM
             builder.Services.AddTransient<EmailService>();
             builder.Services.AddTransient<PasswordSecurity>();
 
-            builder.Services.AddHttpContextAccessor();  
-            builder.Services.AddScoped<CompanyDivider>();  
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<CompanyDivider>();
 
             var app = builder.Build();
 
@@ -61,7 +61,7 @@ namespace PMSCRM
 
             app.UseRouting();
 
-            app.UseAuthentication(); 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
