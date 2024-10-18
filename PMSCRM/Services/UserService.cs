@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
 using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
 using PMSCRM.Utilities;
-using System.ComponentModel.Design;
+
 
 namespace PMSCRM.Services
 {
@@ -114,7 +114,7 @@ namespace PMSCRM.Services
 
             user.ResetToken = Guid.NewGuid();
             user.ResetTokenExpiryDate = DateTime.UtcNow.AddHours(24);
-            
+
             await _db.SaveChangesAsync();
 
             var resetLink = $"https://localhost:7027/User/reset-password?token={user.ResetToken}";
@@ -130,7 +130,7 @@ namespace PMSCRM.Services
 
             if (user == null)
             {
-                return false; 
+                return false;
             }
 
             user.Password = _passwordSecurity.HashPassword(newPassword); ;

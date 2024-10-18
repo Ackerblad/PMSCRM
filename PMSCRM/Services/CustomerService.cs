@@ -1,9 +1,5 @@
-﻿using PMSCRM.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using PMSCRM.Models;
 
 namespace PMSCRM.Services
 {
@@ -16,7 +12,6 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        // Get all customers for the specified company (Async)
         public async Task<List<Customer>> GetAllAsync(Guid companyId)
         {
             return await _db.Customers
@@ -24,14 +19,12 @@ namespace PMSCRM.Services
                 .ToListAsync();
         }
 
-        // Get customer by ID and company (Async)
         public async Task<Customer?> GetByIdAsync(Guid id, Guid companyId)
         {
             return await _db.Customers
                 .FirstOrDefaultAsync(c => c.CustomerId == id && c.CompanyId == companyId);
         }
 
-        // Add a new customer (Async)
         public async Task<bool> AddAsync(Customer customer)
         {
             bool exists = await _db.Customers
@@ -47,7 +40,6 @@ namespace PMSCRM.Services
             return true;
         }
 
-        // Update an existing customer (Async)
         public async Task<bool> UpdateAsync(Guid id, Customer updatedCustomer)
         {
             var existing = await _db.Customers
@@ -58,7 +50,6 @@ namespace PMSCRM.Services
                 return false;
             }
 
-            // Update customer properties
             existing.Name = updatedCustomer.Name;
             existing.PhoneNumber = updatedCustomer.PhoneNumber;
             existing.EmailAddress = updatedCustomer.EmailAddress;
@@ -70,7 +61,6 @@ namespace PMSCRM.Services
             return true;
         }
 
-        // Delete a customer (Async)
         public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
             var toDelete = await _db.Customers

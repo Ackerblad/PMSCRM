@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
-using System.Data;
 
 namespace PMSCRM.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class ProcessController : Controller
     {
-        ProcessService _processService;
+        private readonly ProcessService _processService;
         private readonly CompanyDivider _companyDivider;
 
         public ProcessController(ProcessService processService, CompanyDivider companyDivider)

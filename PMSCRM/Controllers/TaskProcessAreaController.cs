@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PMSCRM.Models;
 using PMSCRM.Services;
@@ -7,10 +8,11 @@ using PMSCRM.ViewModels;
 
 namespace PMSCRM.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class TaskProcessAreaController : Controller
     {
-        TaskProcessAreaService _taskProcessAreaService;
+        private readonly TaskProcessAreaService _taskProcessAreaService;
         private readonly CompanyDivider _companyDivider;
         private readonly TaskService _taskService;
         private readonly ProcessService _processService;
@@ -72,10 +74,10 @@ namespace PMSCRM.Controllers
 
             var taskProcessArea = new TaskProcessArea
             {
-                TaskId = model.TaskId, 
-                ProcessId = model.ProcessId, 
-                AreaId = model.AreaId, 
-                CompanyId = companyId, 
+                TaskId = model.TaskId,
+                ProcessId = model.ProcessId,
+                AreaId = model.AreaId,
+                CompanyId = companyId,
             };
 
             bool success = await _taskProcessAreaService.AddAsync(taskProcessArea);
@@ -120,19 +122,19 @@ namespace PMSCRM.Controllers
                 {
                     Value = t.TaskId.ToString(),
                     Text = t.Name,
-                    Selected = t.TaskId == taskProcessArea.TaskId 
+                    Selected = t.TaskId == taskProcessArea.TaskId
                 }),
                 Processes = processes.Select(p => new SelectListItem
                 {
                     Value = p.ProcessId.ToString(),
                     Text = p.Name,
-                    Selected = p.ProcessId == taskProcessArea.ProcessId 
+                    Selected = p.ProcessId == taskProcessArea.ProcessId
                 }),
                 Areas = areas.Select(a => new SelectListItem
                 {
                     Value = a.AreaId.ToString(),
                     Text = a.Name,
-                    Selected = a.AreaId == taskProcessArea.AreaId 
+                    Selected = a.AreaId == taskProcessArea.AreaId
                 })
             };
 
@@ -153,13 +155,13 @@ namespace PMSCRM.Controllers
                 TaskId = model.TaskId,
                 ProcessId = model.ProcessId,
                 AreaId = model.AreaId,
-                CompanyId = _companyDivider.GetCompanyId(), 
+                CompanyId = _companyDivider.GetCompanyId(),
             };
 
             bool success = await _taskProcessAreaService.UpdateAsync(taskProcessArea);
             if (success)
             {
-                return RedirectToAction("ViewTaskProcessAreas"); 
+                return RedirectToAction("ViewTaskProcessAreas");
             }
 
             ModelState.AddModelError(string.Empty, "Failed to update Task Process Area.");
@@ -170,14 +172,14 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> DeleteTaskProcessArea(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var taskProcessArea = await _taskProcessAreaService.GetByIdAsync(id, companyId); 
+            var taskProcessArea = await _taskProcessAreaService.GetByIdAsync(id, companyId);
 
             if (taskProcessArea == null)
             {
                 return NotFound("Task Process Area not found.");
             }
 
-            var model = new TaskProcessAreaDisplayViewModel 
+            var model = new TaskProcessAreaDisplayViewModel
             {
                 TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
                 TaskName = taskProcessArea.Task?.Name,
@@ -193,14 +195,14 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var taskProcessArea = await _taskProcessAreaService.GetByIdAsync(id, companyId); 
+            var taskProcessArea = await _taskProcessAreaService.GetByIdAsync(id, companyId);
 
             if (taskProcessArea == null)
             {
                 return NotFound("Task Process Area not found.");
             }
 
-            bool success = await _taskProcessAreaService.DeleteAsync(id, companyId); 
+            bool success = await _taskProcessAreaService.DeleteAsync(id, companyId);
             if (success)
             {
                 TempData["SuccessMessage"] = "Task Process Area deleted successfully!";

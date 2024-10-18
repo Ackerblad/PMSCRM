@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
 using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
-using PMSCRM.ViewModels;
-using System.Threading.Tasks;
+
 
 namespace PMSCRM.Services
 {
@@ -63,7 +62,6 @@ namespace PMSCRM.Services
             return true;
         }
 
-
         public async Task<TaskProcessArea?> GetByIdAsync(Guid id, Guid companyId)
         {
             return await _db.TaskProcessAreas
@@ -78,7 +76,7 @@ namespace PMSCRM.Services
             var taskProcessArea = await _db.TaskProcessAreas.FindAsync(id);
             if (taskProcessArea == null || taskProcessArea.CompanyId != companyId)
             {
-                return false; 
+                return false;
             }
 
             _db.TaskProcessAreas.Remove(taskProcessArea);

@@ -9,25 +9,23 @@
 
 @if (Model != null && Model.Any())
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
-                <th>Area ID</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Actions</th>
+                <th class="text-end px-3"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var area in Model)
             {
                 <tr>
-                    <td>@area.AreaId</td>
                     <td>@area.Name</td>
                     <td>@area.Description</td>
-                    <td>
-                        <a href="/Area/EditArea/@area.AreaId" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="/Area/DeleteArea/@area.AreaId" class="btn btn-danger btn-sm">Delete</a>
+                    <td class="text-end">
+                        <a href="/Area/EditArea/@area.AreaId" class="btn btn-primary btn-sm custom">Edit</a>
+                        <a href="/Area/DeleteArea/@area.AreaId" class="btn btn-danger btn-sm custom">Delete</a>
                     </td>
                 </tr>
             }
@@ -48,3 +46,8 @@ else
     });
 </script>
 
+<style>
+    .custom {
+        width: 78px !important;
+    }
+</style>

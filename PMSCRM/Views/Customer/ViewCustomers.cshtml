@@ -10,9 +10,8 @@
 @if (Model != null && Model.Any())
 {
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
             <tr>
-                <th>Customer ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
@@ -23,7 +22,6 @@
             @foreach (var customer in Model)
             {
                 <tr>
-                    <td>@customer.CustomerId</td>
                     <td>@customer.Name</td>
                     <td>@customer.EmailAddress</td>
                     <td>@customer.PhoneNumber</td>

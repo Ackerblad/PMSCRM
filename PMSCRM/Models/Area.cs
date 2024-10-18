@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PMSCRM.Models;
 
@@ -11,7 +8,7 @@ public partial class Area
     [Required]
     public Guid CompanyId { get; set; }
 
-    [Required] 
+    [Required]
     [StringLength(50)]
     public string Name { get; set; } = null!;
 
@@ -22,5 +19,5 @@ public partial class Area
 
     public virtual Company? Company { get; set; } = null!;
 
-    public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
+    public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = [];
 }

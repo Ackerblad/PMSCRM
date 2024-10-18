@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 
 namespace PMSCRM.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     //[ApiController]
     public class CompanyController : Controller
     {
-        CompanyService _companyService;
+        private readonly CompanyService _companyService;
 
         public CompanyController(CompanyService companyService)
         {
@@ -19,7 +21,7 @@ namespace PMSCRM.Controllers
         public ActionResult<List<Company>> GetAll()
         {
             var companies = _companyService.GetAll();
-            if (companies == null || !companies.Any())
+            if (companies == null || companies.Count == 0)
             {
                 return NotFound("No companies found");
             }
