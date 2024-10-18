@@ -81,7 +81,7 @@ namespace PMSCRM.Controllers
             bool success = await _taskProcessAreaService.AddAsync(taskProcessArea);
             if (success)
             {
-                return RedirectToAction("Success");
+                return RedirectToAction("ViewTaskProcessAreas");
             }
 
             ModelState.AddModelError(string.Empty, "Failed to add task-process-area.");

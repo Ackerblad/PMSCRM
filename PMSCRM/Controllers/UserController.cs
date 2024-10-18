@@ -23,6 +23,9 @@ namespace PMSCRM.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
+            loginRequest.EmailAddress = loginRequest.EmailAddress.Trim();
+            loginRequest.Password = loginRequest.Password.Trim();
+
             var user = await _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
             if (user != null)
             {        
@@ -68,8 +71,12 @@ namespace PMSCRM.Controllers
                 return View("AddUser");
             }
 
-            var tempPassword = _userService.GenerateTemporaryPassword();
+            registration.EmailAddress = registration.EmailAddress.Trim();
+            registration.FirstName = registration.FirstName.Trim();
+            registration.LastName = registration.LastName.Trim();
+            registration.PhoneNumber = registration.PhoneNumber.Trim();
 
+            var tempPassword = _userService.GenerateTemporaryPassword();
             var companyId = _companyDivider.GetCompanyId();
 
             bool success = await _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
@@ -94,6 +101,8 @@ namespace PMSCRM.Controllers
             {
                 return View("ForgotPassword");
             }
+
+            request.EmailAddress = request.EmailAddress.Trim();
 
             bool success = await _userService.GeneratePasswordToken(request.EmailAddress);
 
@@ -127,6 +136,9 @@ namespace PMSCRM.Controllers
                 ViewBag.IsSuccess = false;
                 return View(passwordReset);
             }
+
+            passwordReset.NewPassword = passwordReset.NewPassword.Trim();
+            confirmPassword = confirmPassword.Trim();
 
             if (passwordReset.NewPassword != confirmPassword)
             {
@@ -180,6 +192,11 @@ namespace PMSCRM.Controllers
             {
                 return View(updatedUser);
             }
+
+            updatedUser.EmailAddress = updatedUser.EmailAddress.Trim();
+            updatedUser.FirstName = updatedUser.FirstName.Trim();
+            updatedUser.LastName = updatedUser.LastName.Trim();
+            updatedUser.PhoneNumber = updatedUser.PhoneNumber.Trim();
 
             var companyId = _companyDivider.GetCompanyId(); 
 
