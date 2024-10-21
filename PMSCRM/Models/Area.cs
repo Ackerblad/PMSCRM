@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PMSCRM.Models;
 
 public partial class Area
 {
     public Guid AreaId { get; set; }
-    [Required]
+
     public Guid CompanyId { get; set; }
 
     [Required]
@@ -14,10 +16,12 @@ public partial class Area
 
     [StringLength(255)]
     public string? Description { get; set; }
-    [Required]
+
     public DateTime Timestamp { get; set; }
 
     public virtual Company? Company { get; set; } = null!;
 
-    public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = [];
+    public virtual ICollection<Process> Processes { get; set; } = new List<Process>();
+
+    public virtual ICollection<TaskProcessArea> TaskProcessAreas { get; set; } = new List<TaskProcessArea>();
 }

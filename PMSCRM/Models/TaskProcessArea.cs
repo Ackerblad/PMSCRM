@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 
 namespace PMSCRM.Models;
 
@@ -24,5 +25,5 @@ public partial class TaskProcessArea
 
     public virtual Task? Task { get; set; } = null!;
 
-    public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = [];
+    public virtual ICollection<TaskProcessAreaUserCustomer> TaskProcessAreaUserCustomers { get; set; } = new List<TaskProcessAreaUserCustomer>();
 }

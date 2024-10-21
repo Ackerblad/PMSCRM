@@ -64,8 +64,8 @@
   <ItemGroup>
     <Build Include="dbo\Tables\Role.sql" />
     <Build Include="dbo\Tables\Application.sql" />
-    <Build Include="dbo\Tables\Process.sql" />
     <Build Include="dbo\Tables\Company.sql" />
+    <Build Include="dbo\Tables\Process.sql" />
     <Build Include="dbo\Tables\Phone_Call.sql" />
     <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
     <Build Include="dbo\Tables\User.sql" />

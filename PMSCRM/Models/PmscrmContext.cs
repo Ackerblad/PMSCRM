@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace PMSCRM.Models;
@@ -303,6 +304,7 @@ public partial class PmscrmContext : DbContext
             entity.Property(e => e.ProcessId)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("process_id");
+            entity.Property(e => e.AreaId).HasColumnName("area_id");
             entity.Property(e => e.CompanyId).HasColumnName("company_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
@@ -315,6 +317,10 @@ public partial class PmscrmContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("smalldatetime")
                 .HasColumnName("timestamp");
+
+            entity.HasOne(d => d.Area).WithMany(p => p.Processes)
+                .HasForeignKey(d => d.AreaId)
+                .HasConstraintName("FK_Area_Process");
 
             entity.HasOne(d => d.Company).WithMany(p => p.Processes)
                 .HasForeignKey(d => d.CompanyId)

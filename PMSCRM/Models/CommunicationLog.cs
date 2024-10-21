@@ -1,13 +1,12 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
 
 namespace PMSCRM.Models;
 
 public partial class CommunicationLog
 {
     public Guid CommunicationLogId { get; set; }
-
 
     public Guid CompanyId { get; set; }
 
@@ -35,4 +34,5 @@ public partial class CommunicationLog
     public virtual PhoneCall? PhoneCall { get; set; }
 
     public virtual Task? Task { get; set; } = null!;
+}
 }

@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 
 namespace PMSCRM.Models;
 
@@ -28,7 +29,7 @@ public partial class PhoneCall
 
     public DateTime Timestamp { get; set; }
 
-    public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = [];
+    public virtual ICollection<CommunicationLog> CommunicationLogs { get; set; } = new List<CommunicationLog>();
 
     public virtual Company? Company { get; set; } = null!;
 
