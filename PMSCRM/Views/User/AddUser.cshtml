@@ -1,16 +1,25 @@
-﻿@{
+﻿@model PMSCRM.Utilities.UserRegistration
+
+@{
     ViewData["Title"] = "Add User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3 class="fw-bold fs-4 mb-3">User</h3>
+<h3 class="fw-bold fs-4 mb-3">Add User</h3>
 
 <div class="card shadow-sm p-4 mb-4">
     <form class="was-validated" asp-controller="User" asp-action="AddUser" method="post">
         <div class="mb-3 mt-3">
-            <input type="text" class="form-control" id="roleId" placeholder="Role ID" name="RoleId" required>
+            <label for="roleId" class="form-label">Role</label>
+            <select class="form-select" asp-for="RoleId" required>
+                <option value="">Select a role...</option>
+                @foreach (var role in ViewBag.Roles as List<SelectListItem>)
+                {
+                    <option value="@role.Value">@role.Text</option>
+                }
+            </select>
             <div class="valid-feedback">Valid.</div>
-            <div class="invalid-feedback">Please fill out this field.</div>
+            <div class="invalid-feedback">Please select a role.</div>
         </div>
 
         <div class="mb-3">

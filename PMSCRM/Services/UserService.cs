@@ -19,6 +19,11 @@ namespace PMSCRM.Services
             _passwordSecurity = passwordSecurity;
         }
 
+        public async Task<List<Role>> GetRolesByCompanyIdAsync(Guid companyId)
+        {
+            return await _db.Roles.Where(r=> r.CompanyId == companyId).ToListAsync();
+        }
+
         public async Task<List<User>> GetUsers(Guid companyId)
         {
             return await _db.Users.Where(u => u.CompanyId == companyId).ToListAsync();

@@ -54,6 +54,7 @@ namespace PMSCRM.Controllers
                     Value = p.ProcessId.ToString(),
                     Text = p.Name
                 }),
+                Areas = new List<SelectListItem>()
                 //Areas = areas.Select(a => new SelectListItem
                 //{
                 //    Value = a.AreaId.ToString(),
@@ -72,11 +73,13 @@ namespace PMSCRM.Controllers
             //}
             var companyId = _companyDivider.GetCompanyId();
 
+            var process = await _processService.GetByIdAsync(model.ProcessId, companyId);
+
             var taskProcessArea = new TaskProcessArea
             {
                 TaskId = model.TaskId,
                 ProcessId = model.ProcessId,
-                //AreaId = model.AreaId,
+                AreaId = process.AreaId,
                 CompanyId = companyId,
             };
 
@@ -88,10 +91,13 @@ namespace PMSCRM.Controllers
 
             ModelState.AddModelError(string.Empty, "Failed to add task-process-area.");
 
+
             model.Tasks = (await _taskService.GetAllAsync(companyId))
         .Select(t => new SelectListItem { Value = t.TaskId.ToString(), Text = t.Name });
+
             model.Processes = (await _processService.GetAllAsync(companyId))
                 .Select(p => new SelectListItem { Value = p.ProcessId.ToString(), Text = p.Name });
+
             //model.Areas = (await _areaService.GetAllAsync(companyId))
             //    .Select(a => new SelectListItem { Value = a.AreaId.ToString(), Text = a.Name });
             return View(model);
