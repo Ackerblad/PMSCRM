@@ -249,6 +249,14 @@ namespace PMSCRM.Controllers
         //    return View(model);
         //}
 
+        [HttpGet("ViewTaskProcessAreaUserCustomer")]
+        public async Task<IActionResult> ViewTaskProcessAreaUserCustomer()
+        {
+            var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
+
+            return View(tpauc);
+        }
+
 
         public IActionResult AddTaskProcessAreas()
         {
