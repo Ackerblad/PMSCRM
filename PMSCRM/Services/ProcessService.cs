@@ -15,20 +15,29 @@ namespace PMSCRM.Services
 
         public async Task<List<Process>> GetAllAsync(Guid companyId)
         {
-            return await _db.Processes
+            var processes = await _db.Processes
+                .Include(p => p.Area)  // Include Area to avoid null references
                 .Where(p => p.CompanyId == companyId)
                 .ToListAsync();
+
+            foreach (var process in processes)
+            {
+                Console.WriteLine($"Process ID: {process.ProcessId}, Area ID: {process.AreaId}, Area Name: {process.Area?.Name}");
+            }
+
+            return processes;
         }
 
         public async Task<Process?> GetByIdAsync(Guid id, Guid companyId)
         {
             return await _db.Processes
-                 .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == companyId);
+                .Include(p => p.Area)  // Ensure Area is included
+                .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == companyId);
         }
 
         public async Task<bool> AddAsync(Process process)
         {
-            bool exist = await _db.Customers
+            bool exist = await _db.Processes
                 .AnyAsync(p => p.Name == process.Name && p.CompanyId == process.CompanyId);
 
             if (exist)
@@ -54,6 +63,7 @@ namespace PMSCRM.Services
             existing.Name = updatedProcess.Name;
             existing.Description = updatedProcess.Description;
             existing.Duration = updatedProcess.Duration;
+            existing.AreaId = updatedProcess.AreaId;
 
             await _db.SaveChangesAsync();
             return true;

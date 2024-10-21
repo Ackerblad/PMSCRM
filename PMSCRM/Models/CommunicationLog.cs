@@ -35,4 +35,4 @@ public partial class CommunicationLog
 
     public virtual Task? Task { get; set; } = null!;
 }
-}
+

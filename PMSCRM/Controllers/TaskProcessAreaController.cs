@@ -40,7 +40,7 @@ namespace PMSCRM.Controllers
 
             var tasks = await _taskService.GetAllAsync(companyId);
             var processes = await _processService.GetAllAsync(companyId);
-            var areas = await _areaService.GetAllAsync(companyId);
+            //var areas = await _areaService.GetAllAsync(companyId);
 
             var model = new TaskProcessAreaViewModel
             {
@@ -54,11 +54,11 @@ namespace PMSCRM.Controllers
                     Value = p.ProcessId.ToString(),
                     Text = p.Name
                 }),
-                Areas = areas.Select(a => new SelectListItem
-                {
-                    Value = a.AreaId.ToString(),
-                    Text = a.Name
-                })
+                //Areas = areas.Select(a => new SelectListItem
+                //{
+                //    Value = a.AreaId.ToString(),
+                //    Text = a.Name
+                //})
             };
             return View(model);
         }
@@ -76,7 +76,7 @@ namespace PMSCRM.Controllers
             {
                 TaskId = model.TaskId,
                 ProcessId = model.ProcessId,
-                AreaId = model.AreaId,
+                //AreaId = model.AreaId,
                 CompanyId = companyId,
             };
 
@@ -92,8 +92,8 @@ namespace PMSCRM.Controllers
         .Select(t => new SelectListItem { Value = t.TaskId.ToString(), Text = t.Name });
             model.Processes = (await _processService.GetAllAsync(companyId))
                 .Select(p => new SelectListItem { Value = p.ProcessId.ToString(), Text = p.Name });
-            model.Areas = (await _areaService.GetAllAsync(companyId))
-                .Select(a => new SelectListItem { Value = a.AreaId.ToString(), Text = a.Name });
+            //model.Areas = (await _areaService.GetAllAsync(companyId))
+            //    .Select(a => new SelectListItem { Value = a.AreaId.ToString(), Text = a.Name });
             return View(model);
         }
 
@@ -110,14 +110,14 @@ namespace PMSCRM.Controllers
 
             var tasks = await _taskService.GetAllAsync(companyId);
             var processes = await _processService.GetAllAsync(companyId);
-            var areas = await _areaService.GetAllAsync(companyId);
+            //var areas = await _areaService.GetAllAsync(companyId);
 
             var model = new TaskProcessAreaViewModel
             {
                 TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
                 TaskId = taskProcessArea.TaskId,
                 ProcessId = taskProcessArea.ProcessId,
-                AreaId = taskProcessArea.AreaId,
+                //AreaId = taskProcessArea.AreaId,
                 Tasks = tasks.Select(t => new SelectListItem
                 {
                     Value = t.TaskId.ToString(),
@@ -130,12 +130,12 @@ namespace PMSCRM.Controllers
                     Text = p.Name,
                     Selected = p.ProcessId == taskProcessArea.ProcessId
                 }),
-                Areas = areas.Select(a => new SelectListItem
-                {
-                    Value = a.AreaId.ToString(),
-                    Text = a.Name,
-                    Selected = a.AreaId == taskProcessArea.AreaId
-                })
+                //Areas = areas.Select(a => new SelectListItem
+                //{
+                //    Value = a.AreaId.ToString(),
+                //    Text = a.Name,
+                //    Selected = a.AreaId == taskProcessArea.AreaId
+                //})
             };
 
             return View(model);
@@ -154,7 +154,7 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = model.TaskProcessAreaId,
                 TaskId = model.TaskId,
                 ProcessId = model.ProcessId,
-                AreaId = model.AreaId,
+                //AreaId = model.AreaId,
                 CompanyId = _companyDivider.GetCompanyId(),
             };
 
@@ -184,7 +184,7 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
                 TaskName = taskProcessArea.Task?.Name,
                 ProcessName = taskProcessArea.Process?.Name,
-                AreaName = taskProcessArea.Area?.Name,
+                //AreaName = taskProcessArea.Area?.Name,
                 Timestamp = taskProcessArea.Timestamp
             };
 
@@ -222,7 +222,7 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = tpa.TaskProcessAreaId,
                 TaskName = tpa.Task?.Name,
                 ProcessName = tpa.Process?.Name,
-                AreaName = tpa.Area?.Name,
+                //AreaName = tpa.Area?.Name,
                 Timestamp = tpa.Timestamp
             }).ToList();
 

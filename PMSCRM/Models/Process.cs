@@ -16,7 +16,6 @@ public partial class Process
     [StringLength(50)]
     public string Name { get; set; } = null!;
 
-    [Required]
     [StringLength(255)]
     public string? Description { get; set; }
 

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
+using PMSCRM.ViewModels;
 
 namespace PMSCRM.Controllers
 {
@@ -12,22 +14,51 @@ namespace PMSCRM.Controllers
     {
         private readonly ProcessService _processService;
         private readonly CompanyDivider _companyDivider;
+        private readonly AreaService _areaService;
 
-        public ProcessController(ProcessService processService, CompanyDivider companyDivider)
+        public ProcessController(ProcessService processService, CompanyDivider companyDivider, AreaService areaService)
         {
             _processService = processService;
             _companyDivider = companyDivider;
+            _areaService = areaService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddProcess()
+        {
+            var companyId = _companyDivider.GetCompanyId();
+
+            var areas = await _areaService.GetAllAsync(companyId);
+
+            var viewModel = new ProcessViewModel
+            {
+                Areas = areas.Select(a => new SelectListItem
+                {
+                    Value = a.AreaId.ToString(),
+                    Text = a.Name
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProcess(Process process)
+        public async Task<IActionResult> AddProcess(ProcessViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(process);
-            }
-            process.CompanyId = _companyDivider.GetCompanyId();
+                var areas = await _areaService.GetAllAsync(_companyDivider.GetCompanyId());
+                viewModel.Areas = areas.Select(a => new SelectListItem
+                {
+                    Value = a.AreaId.ToString(),
+                    Text = a.Name
+                }).ToList();
 
+                return View(viewModel);
+            }
+
+            var process = viewModel.Process;
+            process.CompanyId = _companyDivider.GetCompanyId();
 
             bool success = await _processService.AddAsync(process);
             if (success)
@@ -36,39 +67,68 @@ namespace PMSCRM.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Failed to add process.");
-            return View(process);
+            return View(viewModel); 
         }
 
         [HttpGet("EditProcess/{id}")]
         public async Task<IActionResult> EditProcess(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var process = _processService.GetByIdAsync(id, companyId);
+            var process = await _processService.GetByIdAsync(id, companyId);
+
             if (process == null)
             {
                 return NotFound("Process not found.");
             }
-            return View(process);
+
+            var areas = await _areaService.GetAllAsync(companyId);
+            var areaSelectList = areas.Select(a => new SelectListItem
+            {
+                Value = a.AreaId.ToString(),
+                Text = a.Name
+            }).ToList();
+
+            var viewModel = new ProcessViewModel
+            {
+                Process = process,
+                Areas = areaSelectList
+            };
+
+            return View(viewModel);
         }
 
-        // POST: /Process/EditProcess/{id}
         [HttpPost("EditProcess/{id}")]
-        public async Task<IActionResult> EditProcess(Guid id, Process updatedProcess)
+        public async Task<IActionResult> EditProcess(Guid id, ProcessViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(updatedProcess);
-            }
-            updatedProcess.CompanyId = _companyDivider.GetCompanyId();
+                var areas = await _areaService.GetAllAsync(_companyDivider.GetCompanyId());
+                viewModel.Areas = areas.Select(a => new SelectListItem
+                {
+                    Value = a.AreaId.ToString(),
+                    Text = a.Name
+                }).ToList();
 
-            bool success = await _processService.UpdateAsync(id, updatedProcess);
+                return View(viewModel);
+            }
+
+            viewModel.Process.CompanyId = _companyDivider.GetCompanyId();
+
+            bool success = await _processService.UpdateAsync(id, viewModel.Process);
             if (success)
             {
                 return RedirectToAction("ViewProcesses");
             }
 
             ModelState.AddModelError(string.Empty, "Failed to update process.");
-            return View(updatedProcess);
+            var areasFailed = await _areaService.GetAllAsync(_companyDivider.GetCompanyId());
+            viewModel.Areas = areasFailed.Select(a => new SelectListItem
+            {
+                Value = a.AreaId.ToString(),
+                Text = a.Name
+            }).ToList();
+
+            return View(viewModel);
         }
 
         [HttpGet("DeleteProcess/{id}")]
@@ -84,12 +144,12 @@ namespace PMSCRM.Controllers
             return View(process);
         }
 
-        // POST: /Process/DeleteConfirmed/{id}
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
             var process = await _processService.GetByIdAsync(id, companyId);
+
             if (process == null)
             {
                 return NotFound("Process not found.");
@@ -106,17 +166,13 @@ namespace PMSCRM.Controllers
             return View("DeleteProcess", process);
         }
 
+
         [HttpGet("ViewProcesses")]
         public async Task<IActionResult> ViewProcesses()
         {
             var companyId = _companyDivider.GetCompanyId();
             var processes = await _processService.GetAllAsync(companyId);
             return View(processes);
-        }
-
-        public IActionResult AddProcess()
-        {
-            return View();
         }
 
         [HttpGet("Success")]
@@ -141,14 +197,14 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var process = await _processService.GetByIdAsync(id, companyId); // Fetch task by ID and company
+            var process = await _processService.GetByIdAsync(id, companyId);
 
             if (process == null)
             {
                 return NotFound("Process not found.");
             }
 
-            return View(process); // Return the task to the view
+            return View(process);
         }
 
 

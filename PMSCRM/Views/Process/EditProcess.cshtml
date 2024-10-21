@@ -1,34 +1,41 @@
-﻿@model PMSCRM.Models.Process
+﻿@model PMSCRM.ViewModels.ProcessViewModel
 
 @{
     ViewData["Title"] = "Edit Process";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
 
 <h3 class="fw-bold fs-4 mb-3">Edit Process</h3>
 
-<!-- Form for editing a process -->
-<form class="was-validated" asp-action="EditProcess" asp-route-id="@Model.ProcessId" method="post">
+<div class="card shadow-sm p-4 mb-4">
+    <form asp-controller="Process" asp-action="EditProcess" method="post">
+        <input type="hidden" asp-for="Process.ProcessId" />
 
-    <div class="mb-3">
-        <label for="processName" class="form-label">Process Name</label>
-        <input type="text" class="form-control" id="processName" name="Name" value="@Model.Name" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+        <div class="mb-3">
+            <label for="AreaId" class="form-label">Select Area</label>
+            <select asp-for="Process.AreaId" asp-items="Model.Areas" class="form-select" required>
+                <option value="">Choose an area...</option>
+            </select>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please select an area.</div>
+        </div>
 
-    <div class="mb-3">
-        <label for="processDuration" class="form-label">Duration (hours)</label>
-        <input type="number" class="form-control" id="processDuration" name="Duration" value="@Model.Duration" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="processName" placeholder="Process Name" asp-for="Process.Name" required />
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-    <div class="mb-3">
-        <label for="processDescription" class="form-label">Description</label>
-        <textarea name="Description" id="processDescription" class="form-control" maxlength="255" rows="5">@Model.Description</textarea>
-    </div>
+        <div class="mb-3">
+            <input type="number" class="form-control" placeholder="Duration in hours" asp-for="Process.Duration" required />
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-    <a href="/Process/ViewProcesses" class="btn btn-secondary mt-3">Cancel</a>
-</form>
+        <textarea asp-for="Process.Description" placeholder="Description" class="form-control" maxlength="255" rows="5"></textarea>
+
+        <button type="submit" class="btn btn-primary mt-3">Update Process</button>
+    </form>
+</div>
+
+<a href="@Url.Action("ViewProcesses", "Process")" class="btn btn-secondary">Back to List</a>

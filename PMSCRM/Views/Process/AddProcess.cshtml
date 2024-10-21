@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PMSCRM.ViewModels.ProcessViewModel
+@{
     ViewData["Title"] = "Add Process";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,19 +8,30 @@
 <div class="card shadow-sm p-4 mb-4">
 <form class="was-validated" asp-controller="Process" asp-action="AddProcess" method="post">
 
-    <div class="mb-3">
-        <input type="text" class="form-control" id="processName" placeholder="Process Name" name="Name" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+        <div class="mb-3">
+            <label for="AreaId" class="form-label">Select Area</label>
+            <select asp-for="Process.AreaId" asp-items="Model.Areas" class="form-select" required>
+                <option value="">Choose an area...</option>
+            </select>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please select an area.</div>
+        </div>
 
-    <div class="mb-3">
-        <input type="number" class="form-control" placeholder="Duration in hours" name="Duration" id="processDuration" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" asp-for="Process.Name" placeholder="Process Name" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-    <textarea name="Description" id="processDescription" placeholder="Description" class="form-control" maxlength="255" rows="5"></textarea>
+        <div class="mb-3">
+            <input type="number" class="form-control" asp-for="Process.Duration" placeholder="Duration in hours" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+
+        <div class="mb-3">
+            <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Description"></textarea>
+        </div>
 
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>
