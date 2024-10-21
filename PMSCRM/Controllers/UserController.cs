@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using System.Security.Claims;
@@ -62,12 +63,45 @@ namespace PMSCRM.Controllers
             ViewBag.Message = "Invalid credentials";
             return View("~/Views/Login/Login.cshtml");
         }
+        // NY
+        [Authorize]
+        [HttpGet("AddUser")]
+        public async Task<IActionResult> AddUser()
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var roles = await _userService.GetRolesByCompanyIdAsync(companyId); // Fetch roles from the service
+
+            var model = new UserRegistration
+            {
+                RoleId = Guid.Empty // Default value or you can leave it uninitialized
+            };
+
+            ViewBag.Roles = roles.Select(r => new SelectListItem
+            {
+                Value = r.RoleId.ToString(),
+                Text = r.Name // Assuming RoleName is a property in your Role model
+            }).ToList();
+
+            return View(model);
+        }
+
         [Authorize]
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(UserRegistration registration)
         {
+            var companyId = _companyDivider.GetCompanyId();
+            var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
             if (!ModelState.IsValid)
             {
+                // Repopulate the roles list in case of validation errors
+                
+                //var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
+                ViewBag.Roles = roles.Select(r => new SelectListItem
+                {
+                    Value = r.RoleId.ToString(),
+                    Text = r.Name
+                }).ToList();
+
                 return View("AddUser");
             }
 
@@ -77,7 +111,7 @@ namespace PMSCRM.Controllers
             registration.PhoneNumber = registration.PhoneNumber.Trim();
 
             var tempPassword = _userService.GenerateTemporaryPassword();
-            var companyId = _companyDivider.GetCompanyId();
+            //var companyId = _companyDivider.GetCompanyId();
 
             bool success = await _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
                                                registration.PhoneNumber, tempPassword);
@@ -91,7 +125,16 @@ namespace PMSCRM.Controllers
                 }
             }
             ModelState.AddModelError("", "Failed to add user.");
-            return View("AddUser");
+
+            // Repopulate the roles list again if there's an error
+            
+            //var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
+            ViewBag.Roles = roles.Select(r => new SelectListItem
+            {
+                Value = r.RoleId.ToString(),
+                Text = r.Name
+            }).ToList();
+            return View("ViewUsers");
         }
 
         [HttpPost("request-password-reset")]
@@ -242,12 +285,12 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to delete user.");
             return View("DeleteUser", user);
         }
-        [Authorize]
-        [HttpGet("AddUser")]
-        public IActionResult AddUser()
-        {
-            return View();
-        }
+        //[Authorize]
+        //[HttpGet("AddUser")]
+        //public IActionResult AddUser()
+        //{
+        //    return View();
+        //}
         [Authorize]
         [HttpGet("Success")]
         public IActionResult Success()
