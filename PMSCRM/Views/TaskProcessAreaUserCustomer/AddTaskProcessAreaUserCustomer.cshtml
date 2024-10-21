@@ -3,34 +3,36 @@
 <div class="card shadow-sm p-4 mb-4">
     <!-- Existing TaskProcessAreas -->
     <label class="form-label">Select Process</label>
-    <table class="table table-sm table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th class="text-center">Area</th>
-                <th class="text-center">Process</th>
-                <th class="text-center">Task</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.ExistingConnections != null && Model.ExistingConnections.Any())
-            {
-                foreach (var item in Model.ExistingConnections)
+    <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px; border-block-end:solid; border-block-end-width:thin; border-block-end-color:lightgray">
+        <table class="table table-sm table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th class="text-center">Area</th>
+                    <th class="text-center">Process</th>
+                    <th class="text-center">Task</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ExistingConnections != null && Model.ExistingConnections.Any())
                 {
-                    <tr data-task-process-area-id="@item.TaskProcessAreaId" class="selectable-row" style="cursor:pointer;">
-                        <td class="text-center small">@item.AreaName</td>
-                        <td class="text-center small">@item.ProcessName</td>
-                        <td class="text-center small">@item.TaskName</td>
+                    foreach (var item in Model.ExistingConnections)
+                    {
+                        <tr data-task-process-area-id="@item.TaskProcessAreaId" class="selectable-row" style="cursor:pointer;">
+                            <td class="text-center small">@item.AreaName</td>
+                            <td class="text-center small">@item.ProcessName</td>
+                            <td class="text-center small">@item.TaskName</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center small">No Task Process Areas found.</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="4" class="text-center small">No Task Process Areas found.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+   </div>
 
     <form asp-action="AddTaskProcessAreaUserCustomer" method="post">
         <input type="hidden" id="SelectedTaskProcessAreaId" name="TaskProcessAreaId" />
