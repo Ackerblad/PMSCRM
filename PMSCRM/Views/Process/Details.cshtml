@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Process Details";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Include layout if applicable
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
 
 <h3 class="fw-bold fs-4 mb-3">Process Details</h3>
@@ -18,6 +18,10 @@
 
         <p class="card-text">
             <strong>Description:</strong> @Model.Description
+        </p>
+
+        <p class="card-text">
+            <strong>Area:</strong> @Model.Area?.Name ?? "No Area Assigned"
         </p>
 
         <a href="@Url.Action("ViewProcesses", "Process")" class="btn btn-secondary">Back to List</a>
