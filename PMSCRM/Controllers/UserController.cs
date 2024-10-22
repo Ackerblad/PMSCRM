@@ -207,7 +207,7 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> ViewUsers()
         {
             var companyId = _companyDivider.GetCompanyId();
-            var users = await _userService.GetUsers(companyId);
+            var users = await _userService.GetAllAsync(companyId);
 
             if (users == null || users.Count == 0)
             {

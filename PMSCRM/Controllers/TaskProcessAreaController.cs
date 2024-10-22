@@ -61,13 +61,7 @@ namespace PMSCRM.Controllers
         [HttpPost("AddTaskProcessArea")]
         public async Task<IActionResult> AddTaskProcessArea(TaskProcessAreaViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
             var companyId = _companyDivider.GetCompanyId();
-            var process = await _processService.GetByIdAsync(model.ProcessId, companyId);
-
             var process = await _processService.GetByIdAsync(model.ProcessId, companyId);
 
             var taskProcessArea = new TaskProcessArea
@@ -108,14 +102,12 @@ namespace PMSCRM.Controllers
 
             var tasks = await _taskService.GetAllAsync(companyId);
             var processes = await _processService.GetAllAsync(companyId);
-            //var areas = await _areaService.GetAllAsync(companyId);
 
             var model = new TaskProcessAreaViewModel
             {
                 TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
                 TaskId = taskProcessArea.TaskId,
                 ProcessId = taskProcessArea.ProcessId,
-                //AreaId = taskProcessArea.AreaId,
                 Tasks = tasks.Select(t => new SelectListItem
                 {
                     Value = t.TaskId.ToString(),
@@ -128,12 +120,6 @@ namespace PMSCRM.Controllers
                     Text = p.Name,
                     Selected = p.ProcessId == taskProcessArea.ProcessId
                 }),
-                //Areas = areas.Select(a => new SelectListItem
-                //{
-                //    Value = a.AreaId.ToString(),
-                //    Text = a.Name,
-                //    Selected = a.AreaId == taskProcessArea.AreaId
-                //})
             };
 
             return View(model);
@@ -142,17 +128,11 @@ namespace PMSCRM.Controllers
         [HttpPost("EditTaskProcessArea/{id}")]
         public async Task<IActionResult> EditTaskProcessArea(TaskProcessAreaViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
-
             var taskProcessArea = new TaskProcessArea
             {
                 TaskProcessAreaId = model.TaskProcessAreaId,
                 TaskId = model.TaskId,
                 ProcessId = model.ProcessId,
-                //AreaId = model.AreaId,
                 CompanyId = _companyDivider.GetCompanyId(),
             };
 
@@ -182,7 +162,6 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
                 TaskName = taskProcessArea.Task?.Name,
                 ProcessName = taskProcessArea.Process?.Name,
-                //AreaName = taskProcessArea.Area?.Name,
                 Timestamp = taskProcessArea.Timestamp
             };
 
@@ -220,7 +199,6 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = tpa.TaskProcessAreaId,
                 TaskName = tpa.Task?.Name,
                 ProcessName = tpa.Process?.Name,
-                //AreaName = tpa.Area?.Name,
                 Timestamp = tpa.Timestamp
             }).ToList();
 
