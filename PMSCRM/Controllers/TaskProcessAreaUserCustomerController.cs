@@ -46,7 +46,7 @@ namespace PMSCRM.Controllers
             var allTaskProcessAreas = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
             var existingConnections = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
 
-            var users = await _userService.GetUsers(companyId);
+            var users = await _userService.GetAllAsync(companyId);
             var customers = await _customerService.GetAllAsync(companyId);
 
             var model = new TaskProcessAreaUserCustomerViewModel
@@ -107,79 +107,80 @@ namespace PMSCRM.Controllers
             return await AddTaskProcessAreaUserCustomer();
         }
 
+   //     [HttpGet("EditTaskProcessAreaUserCustomer/{id}")]
+   //     public async Task<IActionResult> EditTaskProcessAreaUserCustomer(Guid id)
+   //     {
+   //         var companyId = _companyDivider.GetCompanyId();
+   //         var taskProcessAreaUserCustomer = await _taskProcessAreaUserCustomerService.GetByIdAsync(id, companyId);
 
+   //         if (taskProcessAreaUserCustomer == null)
+   //         {
+   //             return NotFound("Task Process Area User Customer not found");
+   //         }
 
+			//var areas = await _areaService.GetAllAsync(companyId);
+			//var processes = await _processService.GetAllAsync(companyId);
+			//var tasks = await _taskService.GetAllAsync(companyId);
+			//var users = await _userService.GetAllAsync(companyId);
+			//var customers = await _customerService.GetAllAsync(companyId);
 
-        //[HttpGet("EditTaskProcessArea/{id}")]
-        //public async Task<IActionResult> EditTaskProcessArea(Guid id)
-        //{
-        //    var companyId = _companyDivider.GetCompanyId();
-        //    var taskProcessArea = await _taskProcessAreaService.GetByIdAsync(id, companyId);
+			//var model = new TaskProcessAreaViewModel
+   //         {
+   //             TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
+   //             TaskId = taskProcessArea.TaskId,
+   //             ProcessId = taskProcessArea.ProcessId,
+   //             AreaId = taskProcessArea.AreaId,
+			//	Areas = areas.Select(a => new SelectListItem
+			//	{
+			//		Value = a.AreaId.ToString(),
+			//		Text = a.Name,
+			//		Selected = a.AreaId == taskProcessArea.AreaId
+			//	}),
+			//	Processes = processes.Select(p => new SelectListItem
+			//	{
+			//		Value = p.ProcessId.ToString(),
+			//		Text = p.Name,
+			//		Selected = p.ProcessId == taskProcessArea.ProcessId
+			//	}),
+			//	Tasks = tasks.Select(t => new SelectListItem
+   //             {
+   //                 Value = t.TaskId.ToString(),
+   //                 Text = t.Name,
+   //                 Selected = t.TaskId == taskProcessArea.TaskId
+   //             }),
+                
+                
+   //         };
 
-        //    if (taskProcessArea == null)
-        //    {
-        //        return NotFound("Task Process Area not found");
-        //    }
+   //         return View(model);
+   //     }
 
-        //    var tasks = await _taskService.GetAllAsync(companyId);
-        //    var processes = await _processService.GetAllAsync(companyId);
-        //    var areas = await _areaService.GetAllAsync(companyId);
+   //     [HttpPost("EditTaskProcessAreaUserCustomer/{id}")]
+   //     public async Task<IActionResult> EditTaskProcessAreaUserCustomer(TaskProcessAreaUserCustomerViewModel model)
+   //     {
+   //         //if (!ModelState.IsValid)
+   //         //{
+   //         //    return View(model);
+   //         //}
 
-        //    var model = new TaskProcessAreaViewModel
-        //    {
-        //        TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
-        //        TaskId = taskProcessArea.TaskId,
-        //        ProcessId = taskProcessArea.ProcessId,
-        //        AreaId = taskProcessArea.AreaId,
-        //        Tasks = tasks.Select(t => new SelectListItem
-        //        {
-        //            Value = t.TaskId.ToString(),
-        //            Text = t.Name,
-        //            Selected = t.TaskId == taskProcessArea.TaskId
-        //        }),
-        //        Processes = processes.Select(p => new SelectListItem
-        //        {
-        //            Value = p.ProcessId.ToString(),
-        //            Text = p.Name,
-        //            Selected = p.ProcessId == taskProcessArea.ProcessId
-        //        }),
-        //        Areas = areas.Select(a => new SelectListItem
-        //        {
-        //            Value = a.AreaId.ToString(),
-        //            Text = a.Name,
-        //            Selected = a.AreaId == taskProcessArea.AreaId
-        //        })
-        //    };
+   //         var taskProcessArea = new TaskProcessArea
+   //         {
+   //             TaskProcessAreaId = model.TaskProcessAreaId,
+   //             TaskId = model.TaskId,
+   //             ProcessId = model.ProcessId,
+   //             AreaId = model.AreaId,
+   //             CompanyId = _companyDivider.GetCompanyId(),
+   //         };
 
-        //    return View(model);
-        //}
+   //         bool success = await _taskProcessAreaService.UpdateAsync(taskProcessArea);
+   //         if (success)
+   //         {
+   //             return RedirectToAction("ViewTaskProcessAreas");
+   //         }
 
-        //[HttpPost("EditTaskProcessArea/{id}")]
-        //public async Task<IActionResult> EditTaskProcessArea(TaskProcessAreaViewModel model)
-        //{
-        //    //if (!ModelState.IsValid)
-        //    //{
-        //    //    return View(model);
-        //    //}
-
-        //    var taskProcessArea = new TaskProcessArea
-        //    {
-        //        TaskProcessAreaId = model.TaskProcessAreaId,
-        //        TaskId = model.TaskId,
-        //        ProcessId = model.ProcessId,
-        //        AreaId = model.AreaId,
-        //        CompanyId = _companyDivider.GetCompanyId(),
-        //    };
-
-        //    bool success = await _taskProcessAreaService.UpdateAsync(taskProcessArea);
-        //    if (success)
-        //    {
-        //        return RedirectToAction("ViewTaskProcessAreas");
-        //    }
-
-        //    ModelState.AddModelError(string.Empty, "Failed to update Task Process Area.");
-        //    return View(model);
-        //}
+   //         ModelState.AddModelError(string.Empty, "Failed to update Task Process Area.");
+   //         return View(model);
+   //     }
 
         //[HttpGet("DeleteTaskProcessArea/{id}")]
         //public async Task<IActionResult> DeleteTaskProcessArea(Guid id)
@@ -248,6 +249,14 @@ namespace PMSCRM.Controllers
 
         //    return View(model);
         //}
+
+        [HttpGet("ViewTaskProcessAreaUserCustomer")]
+        public async Task<IActionResult> ViewTaskProcessAreaUserCustomer()
+        {
+            var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
+
+            return View(tpauc);
+        }
 
 
         public IActionResult AddTaskProcessAreas()

@@ -24,7 +24,7 @@ namespace PMSCRM.Services
             return await _db.Roles.Where(r=> r.CompanyId == companyId).ToListAsync();
         }
 
-        public async Task<List<User>> GetUsers(Guid companyId)
+        public async Task<List<User>> GetAllAsync(Guid companyId)
         {
             return await _db.Users.Where(u => u.CompanyId == companyId).ToListAsync();
         }

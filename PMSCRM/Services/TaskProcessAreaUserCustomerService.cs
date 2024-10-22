@@ -48,6 +48,32 @@ namespace PMSCRM.Services
                 .ToListAsync();
         }
 
+        public async Task<List<TaskProcessAreaUserCustomerDisplayViewModel>> GetAllWithDetailsToDisplayAsync()
+        {
+            return await _db.TaskProcessAreaUserCustomers
+                .Include(tpauc => tpauc.TaskProcessArea)
+                    .ThenInclude(tpa => tpa.Task)
+                .Include(tpauc => tpauc.TaskProcessArea)
+                    .ThenInclude(tpa => tpa.Process)
+                .Include(tpauc => tpauc.TaskProcessArea)
+                    .ThenInclude(tpa => tpa.Area)
+                .Include(tpauc => tpauc.User)
+                .Include(tpauc => tpauc.Customer)
+                .Select(tpauc => new TaskProcessAreaUserCustomerDisplayViewModel
+                {
+                    TaskProcessAreaUserCustomerId = tpauc.TaskProcessAreaUserCustomerId,
+                    TaskName = tpauc.TaskProcessArea.Task.Name,
+                    ProcessName = tpauc.TaskProcessArea.Process.Name,
+                    AreaName = tpauc.TaskProcessArea.Area.Name,
+                    UserName = tpauc.User.FirstName + " " + tpauc.User.LastName,
+                    CustomerName = tpauc.Customer.Name,
+                    StartDate = tpauc.StartDate,
+                    EndDate = tpauc.EndDate,
+                    Status = tpauc.Status,
+                    Timestamp = tpauc.Timestamp
+                }).ToListAsync();
+        }
+
         public async Task<bool> AddAsync(IEnumerable<TaskProcessAreaUserCustomer> entities)
         {
             try
@@ -58,7 +84,6 @@ namespace PMSCRM.Services
             }
             catch (Exception ex)
             {
-                // Log the exception (not shown here)
                 return false;
             }
         }
