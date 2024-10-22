@@ -21,6 +21,49 @@ namespace PMSCRM.Controllers
             _companyDivider = companyDivider;
         }
 
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login(LoginRequest loginRequest)
+        //{
+        //    loginRequest.EmailAddress = loginRequest.EmailAddress.Trim();
+        //    loginRequest.Password = loginRequest.Password.Trim();
+
+        //    var user = await _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
+        //    if (user != null)
+        //    {
+        //        var companyId = user.CompanyId;
+        //        var claims = new List<Claim>
+        //        {
+        //            new(ClaimTypes.Email, user.EmailAddress),
+        //            new("CompanyId", companyId.ToString())
+        //        };
+
+        //        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        //        var authProperties = new AuthenticationProperties
+        //        {
+        //            IsPersistent = loginRequest.RememberMe,
+        //        };
+
+        //        if (loginRequest.RememberMe)
+        //        {
+        //            authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
+        //        }
+        //        else
+        //        {
+        //            authProperties.ExpiresUtc = DateTime.UtcNow.AddHours(10);
+        //        }
+
+        //        await HttpContext.SignInAsync(
+        //            CookieAuthenticationDefaults.AuthenticationScheme,
+        //            new ClaimsPrincipal(claimsIdentity),
+        //            authProperties);
+
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    ViewBag.Message = "Invalid credentials";
+        //    return View("~/Views/Login/Login.cshtml");
+        //}
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
@@ -31,11 +74,14 @@ namespace PMSCRM.Controllers
             if (user != null)
             {
                 var companyId = user.CompanyId;
+                var roleName = user.Role?.Name ?? "User"; // Use "User" as default if role is null
+
                 var claims = new List<Claim>
-                {
-                    new(ClaimTypes.Email, user.EmailAddress),
-                    new("CompanyId", companyId.ToString())
-                };
+        {
+            new(ClaimTypes.Email, user.EmailAddress),
+            new("CompanyId", companyId.ToString()),
+            new(ClaimTypes.Role, roleName) // Add role to claims
+        };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -44,6 +90,7 @@ namespace PMSCRM.Controllers
                     IsPersistent = loginRequest.RememberMe,
                 };
 
+                // Set expiration based on RememberMe
                 if (loginRequest.RememberMe)
                 {
                     authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
@@ -53,16 +100,32 @@ namespace PMSCRM.Controllers
                     authProperties.ExpiresUtc = DateTime.UtcNow.AddHours(10);
                 }
 
+                // Sign in the user
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
+                //// Redirect based on role
+                //if (roleName == "Admin")
+                //{
+                //    return RedirectToAction("AdminDashboard", "Admin");
+                //}
+                //else if (roleName == "User")
+                //{
+                //    return RedirectToAction("UserDashboard", "User");
+                //}
+
+                // Default redirect (if needed)
                 return RedirectToAction("Index", "Home");
             }
+
+            // If login fails
             ViewBag.Message = "Invalid credentials";
             return View("~/Views/Login/Login.cshtml");
         }
+
+
         // NY
         [Authorize]
         [HttpGet("AddUser")]

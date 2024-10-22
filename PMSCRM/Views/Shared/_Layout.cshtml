@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PMSCRM</title>
 
-    <!-- Lineicons and Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <!-- Custom styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PMSCRM.styles.css" asp-append-version="true" />
 
     @RenderSection("styles", required: false)
 </head>
 <body>
-    <!-- Wrapper around sidebar and main content -->
     <div class="wrapper">
         <!-- Sidebar -->
         <aside id="sidebar">
@@ -30,7 +28,6 @@
                 </div>
             </div>
 
-            <!-- Sidebar Navigation Links -->
             <ul class="sidebar-nav">
                 <!-- Profile -->
                 <li class="sidebar-item">
@@ -40,190 +37,135 @@
                     </a>
                 </li>
 
-                <!-- Task Menu -->
+                <!-- Common Links (Both Admin & User) -->
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                       data-bs-target="#task" aria-expanded="false" aria-controls="task">
-                        <i class="lni lni-agenda"></i>
-                        <span>Task</span>
-                    </a>
-                    <ul id="task" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Task" asp-action="AddTask" class="sidebar-link">Add Task</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Task" asp-action="ViewTasks" class="sidebar-link">View Tasks</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                       data-bs-target="#area" aria-expanded="false" aria-controls="area">
-                        <i class="lni lni-network"></i>
-                        <span>Area</span>
-                    </a>
-                    <ul id="area" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Area" asp-action="AddArea" class="sidebar-link">Add Area</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Area" asp-action="ViewAreas" class="sidebar-link">View Areas</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!--Customers-->
-                <li class="sidebar-item">
-                    <a href="customers.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                       data-bs-target="#customer" aria-expanded="false" aria-controls="customer">
-                        <i class="lni lni-customer"></i>
-                        <span>Customers</span>
-                    </a>
-                    <ul id="customer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Customer" asp-action="AddCustomer" class="sidebar-link">Add Customer</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Customer" asp-action="ViewCustomers" class="sidebar-link">View Customers</a>
-                        </li>
-                    </ul>
-                </li>
-
-            <!--Roles-->
-            <li class="sidebar-item">
-                <a href="Role/roles.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                   data-bs-target="#role" aria-expanded="false" aria-controls="role">
-                    <i class="lni lni-users"></i>
-                    <span>Roles</span>
-                </a>
-                <ul id="role" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Role" asp-action="AddRole" class="sidebar-link">Add Role</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View Roles</a>
-                    </li>
-                </ul>
-            </li>
-
-            <!--Companies-->
-            <li class="sidebar-item">
-                <a href="Company/company.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                   data-bs-target="#company" aria-expanded="false" aria-controls="company">
-                    <i class="lni lni-briefcase"></i>
-                    <span>Companies</span>
-                </a>
-                <ul id="company" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Company" asp-action="AddCompany" class="sidebar-link">Add Company</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a asp-area="" asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View Companies</a>
-                    </li>
-                </ul>
-            </li>
-            
-            <!--Process-->
-            <li class="sidebar-item">
-                <a href="Process/process.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                   data-bs-target="#process" aria-expanded="false" aria-controls="process">
-                    <i class="lni lni-spinner-solid"></i>
-                    <span>Process</span>
-                </a>
-                <ul id="process" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Process" asp-action="AddProcess" class="sidebar-link">Add Process</a>
-                    </li>
-                    <li class="sidebar-item">
-                            <a asp-area="" asp-controller="Process" asp-action="ViewProcesses" class="sidebar-link">View Processes</a>
-                    </li>
-                </ul>
-            </li>
-
-            <!--User-->
-            <li class="sidebar-item">
-                <a href="User/user.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                   data-bs-target="#user" aria-expanded="false" aria-controls="user">
-                    <i class="lni lni-users"></i>
-                    <span>Users</span>
-                </a>
-                <ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li class="sidebar-item">
-                            <a asp-area="" asp-controller="User" asp-action="AddUser" class="sidebar-link">Add User</a>
-                    </li>
-                    <li class="sidebar-item">
-                            <a asp-area="" asp-controller="User" asp-action="ViewUsers" class="sidebar-link">View Users</a>
-                    </li>
-                </ul>
-            </li>
-
-                <!--Task Process Area-->
-                <li class="sidebar-item">
-                    <a href="User/user.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                       data-bs-target="#taskProcessArea" aria-expanded="false" aria-controls="taskProcessArea">
+                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomer" class="sidebar-link">
                         <i class="lni lni-crown-3"></i>
-                        <span>Task-Process-Area</span>
-                    </a>
-                    <ul id="taskProcessArea" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="TaskProcessArea" asp-action="AddTaskProcessArea" class="sidebar-link">Add TaskProcessArea</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="TaskProcessArea" asp-action="ViewTaskProcessAreas" class="sidebar-link">View TaskProcessAreas</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!--Task Process Area User Customer-->
-                <li class="sidebar-item">
-                    <a href="User/user.html" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                       data-bs-target="#taskProcessAreaUserCustomer" aria-expanded="false" aria-controls="taskProcessAreaUserCustomer">
-                        <i class="lni lni-users"></i>
                         <span>Task-Process-Area-User-Customer</span>
                     </a>
-                    <ul id="taskProcessAreaUserCustomer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="TaskProcessAreaUserCustomer" asp-action="AddTaskProcessAreaUserCustomer" class="sidebar-link">Add TaskProcessAreaUserCustomer</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a asp-area="" asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomer" class="sidebar-link">View TaskProcessAreas</a>
-                        </li>
-                        @* <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">Update</a>
-                        </li>
-                        <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">Delete</a>
-                        </li> *@
-                    </ul>
                 </li>
 
+                <!-- Admin-Specific Links -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#task" aria-expanded="false" aria-controls="task">
+                            <i class="lni lni-agenda"></i>
+                            <span>Task</span>
+                        </a>
+                        <ul id="task" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="Task" asp-action="AddTask" class="sidebar-link">Add Task</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="Task" asp-action="ViewTasks" class="sidebar-link">View Tasks</a>
+                            </li>
+                        </ul>
+                    </li>
 
-            
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#area" aria-expanded="false" aria-controls="area">
+                            <i class="lni lni-network"></i>
+                            <span>Area</span>
+                        </a>
+                        <ul id="area" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="Area" asp-action="AddArea" class="sidebar-link">Add Area</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="Area" asp-action="ViewAreas" class="sidebar-link">View Areas</a>
+                            </li>
+                        </ul>
+                    </li>
 
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#customer" aria-expanded="false" aria-controls="customer">
+                            <i class="lni lni-customer"></i>
+                            <span>Customers</span>
+                        </a>
+                        <ul id="customer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="Customer" asp-action="AddCustomer" class="sidebar-link">Add Customer</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="Customer" asp-action="ViewCustomers" class="sidebar-link">View Customers</a>
+                            </li>
+                        </ul>
+                    </li>
 
-                <!-- Settings -->
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#company" aria-expanded="false" aria-controls="company">
+                            <i class="lni lni-briefcase"></i>
+                            <span>Companies</span>
+                        </a>
+                        <ul id="company" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="Company" asp-action="AddCompany" class="sidebar-link">Add Company</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View Companies</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#process" aria-expanded="false" aria-controls="process">
+                            <i class="lni lni-spinner-solid"></i>
+                            <span>Processes</span>
+                        </a>
+                        <ul id="process" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="Process" asp-action="AddProcess" class="sidebar-link">Add Process</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="Process" asp-action="ViewProcesses" class="sidebar-link">View Processes</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#role" aria-expanded="false" aria-controls="role">
+                            <i class="lni lni-users"></i>
+                            <span>Roles</span>
+                        </a>
+                        <ul id="role" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="Role" asp-action="AddRole" class="sidebar-link">Add Role</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View Roles</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#user" aria-expanded="false" aria-controls="user">
+                            <i class="lni lni-users"></i>
+                            <span>Users</span>
+                        </a>
+                        <ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="User" asp-action="AddUser" class="sidebar-link">Add User</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="User" asp-action="ViewUsers" class="sidebar-link">View Users</a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+                <!-- Logout -->
                 <li class="sidebar-item">
-                    <a asp-area="" asp-controller="TaskProcessArea" asp-action="AddTaskProcessAreas" class="sidebar-link">
-                        <i class="lni lni-cog"></i>
-                        <span>Settings</span>
-                        
+                    <a asp-controller="Login" asp-action="Logout" class="sidebar-link">
+                        <i class="lni lni-exit"></i>
+                        <span>Logout</span>
                     </a>
                 </li>
             </ul>
-
-            <!-- Sidebar Footer (Logout) -->
-            <div class="sidebar-footer">
-                <a asp-area="" asp-controller="Login" asp-action="Logout" class="sidebar-link">
-                    <i class="lni lni-exit"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
         </aside>
 
-        <!-- Main content area -->
+        <!-- Main content -->
         <div class="main">
-            <!-- Navbar/Header -->
             <nav class="navbar navbar-expand px-4 py-3">
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
@@ -236,38 +178,9 @@
                 </div>
             </nav>
 
-            <!-- Main page content from views -->
             <main class="content px-3 py-5">
                 <div class="container-fluid">
-                    
-                    <!--Buttons-->
-                    <main class="content px-3 py-5">
-                        <div class="container-fluid">
-                            <div class="mb-3">
-                                <ul id="nav-itemss" class="nav nav-justified">
-                                   @*  <li class="nav-item">
-                                        <a href="Task/addTask.html" type="button" class="btn btn-custom btn-lg rounded-pill">
-                                            Tasks <span class="badge bg-danger">4</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="team.html" class="btn btn-custom btn-lg rounded-pill" href="#">Team</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="btn btn-custom btn-lg rounded-pill" aria-current="page" href="#">Calendar</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="btn btn-custom btn-lg rounded-pill" aria-current="page" href="#">settings</button>
-                                    </li> *@
-                                </ul>
-
-
-                                <!--Main content-->
-                                @RenderBody()
-
-                            </div>
-                        </div>
-                    </main>
+                    @RenderBody()
                 </div>
             </main>
         </div>
@@ -279,8 +192,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <!-- Optional Scripts Section -->
     @RenderSection("Scripts", required: false)
 </body>
 </html>

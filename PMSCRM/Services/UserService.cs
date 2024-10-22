@@ -92,9 +92,21 @@ namespace PMSCRM.Services
             return true;
         }
 
+        //public async Task<User> AuthenticateUser(string emailAddress, string plainPassword)
+        //{
+        //    var user = await _db.Users.FirstOrDefaultAsync(u => u.EmailAddress == emailAddress);
+
+        //    if (user != null && _passwordSecurity.VerifyPassword(plainPassword, user.Password))
+        //    {
+        //        return user;
+        //    }
+        //    return null;
+        //}
         public async Task<User> AuthenticateUser(string emailAddress, string plainPassword)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.EmailAddress == emailAddress);
+            var user = await _db.Users
+                .Include(u => u.Role) // Include the Role entity to get role details
+                .FirstOrDefaultAsync(u => u.EmailAddress == emailAddress);
 
             if (user != null && _passwordSecurity.VerifyPassword(plainPassword, user.Password))
             {
@@ -102,6 +114,7 @@ namespace PMSCRM.Services
             }
             return null;
         }
+
 
         public string GenerateTemporaryPassword()
         {
@@ -144,6 +157,17 @@ namespace PMSCRM.Services
 
             await _db.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<string> GetUserRoleAsync(Guid userId)
+        {
+            var userRole = await _db.Users
+                .Where(u => u.UserId == userId)
+                .Include(u => u.Role)
+                .Select(u => u.Role.Name)
+                .FirstOrDefaultAsync();
+
+            return userRole ?? "User"; // Return "User" if no role is found
         }
     }
 }
