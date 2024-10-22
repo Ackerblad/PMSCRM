@@ -13,25 +13,6 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public async Task<IEnumerable<TaskProcessAreaUserCustomer>> GetTasksForUser(Guid userId)
-        {
-            return await _db.TaskProcessAreaUserCustomers
-                .Include(tpauc => tpauc.TaskProcessArea)
-                    .ThenInclude(tpa => tpa.Task)
-                .Include(tpauc => tpauc.TaskProcessArea)
-                    .ThenInclude(tpa => tpa.Process)
-                .Include(tpauc => tpauc.TaskProcessArea)
-                    .ThenInclude(tpa => tpa.Area)
-                .Include(tpauc => tpauc.Customer)
-                .Where(tpauc => tpauc.UserId == userId)
-                .ToListAsync();
-        }
-
-        public List<TaskProcessAreaUserCustomer> GetAll()
-        {
-            return _db.TaskProcessAreaUserCustomers.ToList();
-        }
-
         public async Task<List<TaskProcessAreaDisplayViewModel>> GetAllWithDetailsAsync()
         {
             return await _db.TaskProcessAreas
@@ -88,41 +69,52 @@ namespace PMSCRM.Services
             }
         }
 
-        public async Task<bool> UpdateAsync(TaskProcessArea taskProcessArea)
-        {
-            var existing = await _db.TaskProcessAreas.FindAsync(taskProcessArea.TaskProcessAreaId);
-            if (existing == null)
-            {
-                return false;
-            }
+		public async Task<bool> UpdateAsync(TaskProcessAreaUserCustomer tpauc)
+		{
+			var existing = await _db.TaskProcessAreaUserCustomers
+									.FirstOrDefaultAsync(t => t.TaskProcessAreaUserCustomerId == tpauc.TaskProcessAreaUserCustomerId);
 
-            existing.TaskId = taskProcessArea.TaskId;
-            existing.ProcessId = taskProcessArea.ProcessId;
-            existing.AreaId = taskProcessArea.AreaId;
+			if (existing == null)
+			{
+				return false;
+			}
+            existing.TaskProcessAreaId = tpauc.TaskProcessAreaId;
+			existing.UserId = tpauc.UserId;
+			existing.CustomerId = tpauc.CustomerId;
+			existing.StartDate = tpauc.StartDate;
+			existing.EndDate = tpauc.EndDate;
+			existing.Status = tpauc.Status;
 
-            await _db.SaveChangesAsync();
-            return true;
-        }
+			await _db.SaveChangesAsync();
+			return true;
+		}
 
-
-        public async Task<TaskProcessArea?> GetByIdAsync(Guid id, Guid companyId)
-        {
-            return await _db.TaskProcessAreas
-                .Include(t => t.Task)
-                .Include(t => t.Process)
-                .Include(t => t.Area)
-                .FirstOrDefaultAsync(tpa => tpa.TaskProcessAreaId == id && tpa.CompanyId == companyId);
-        }
+		public async Task<TaskProcessAreaUserCustomer?> GetByIdAsync(Guid id, Guid companyId)
+		{
+			return await _db.TaskProcessAreaUserCustomers
+				.Include(tpauc => tpauc.TaskProcessArea)
+					.ThenInclude(tpa => tpa.Task)
+				.Include(tpauc => tpauc.TaskProcessArea)
+					.ThenInclude(tpa => tpa.Process)
+				.Include(tpauc => tpauc.TaskProcessArea)
+					.ThenInclude(tpa => tpa.Area)
+				.Include(tpauc => tpauc.User)
+				.Include(tpauc => tpauc.Customer)
+				.FirstOrDefaultAsync(tpauc => tpauc.TaskProcessAreaUserCustomerId == id && tpauc.TaskProcessArea.CompanyId == companyId);
+		}
 
         public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var taskProcessArea = await _db.TaskProcessAreas.FindAsync(id);
-            if (taskProcessArea == null || taskProcessArea.CompanyId != companyId)
+            var tpauc = await _db.TaskProcessAreaUserCustomers
+                .FirstOrDefaultAsync(tpauc => tpauc.TaskProcessAreaUserCustomerId == id
+                                     && tpauc.TaskProcessArea.CompanyId == companyId);
+
+            if (tpauc == null)
             {
                 return false;
             }
 
-            _db.TaskProcessAreas.Remove(taskProcessArea);
+            _db.TaskProcessAreaUserCustomers.Remove(tpauc);
             await _db.SaveChangesAsync();
             return true;
         }
