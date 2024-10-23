@@ -80,7 +80,8 @@ namespace PMSCRM.Controllers
         {
             new(ClaimTypes.Email, user.EmailAddress),
             new("CompanyId", companyId.ToString()),
-            new(ClaimTypes.Role, roleName) // Add role to claims
+            new(ClaimTypes.Role, roleName), // Add role to claims
+            new(ClaimTypes.NameIdentifier, user.UserId.ToString()) // Add userId to claims
         };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

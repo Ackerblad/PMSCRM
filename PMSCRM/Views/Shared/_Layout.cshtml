@@ -37,13 +37,17 @@
                     </a>
                 </li>
 
-                <!-- Common Links (Both Admin & User) -->
-                <li class="sidebar-item">
-                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomer" class="sidebar-link">
-                        <i class="lni lni-crown-3"></i>
-                        <span>Task-Process-Area-User-Customer</span>
-                    </a>
-                </li>
+                <!-- User -->
+                @if (User.IsInRole("User"))
+                {
+                    <li class="sidebar-item">
+                        <a asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomerForUser" class="sidebar-link">
+                            <i class="lni lni-crown-3"></i>
+                            <span>Task-Process-Area-User-Customer</span>
+                        </a>
+                    </li>
+                }
+                
 
                 <!-- Admin-Specific Links -->
                 @if (User.IsInRole("Admin"))
@@ -151,6 +155,21 @@
                                 <a asp-controller="User" asp-action="ViewUsers" class="sidebar-link">View Users</a>
                             </li>
                         </ul>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#taskProcessAreaUserCustomer" aria-expanded="false" aria-controls="taskProcessAreaUserCustomer">
+                                <i class="lni lni-users"></i>
+                            <span>TaskProcessAreaUserCustomer</span>
+                            </a>
+                        <ul id="taskProcessAreaUserCustomer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                                <li class="sidebar-item">
+                                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="AddTaskProcessAreaUserCustomer" class="sidebar-link">Add</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomer" class="sidebar-link">View</a>
+                                </li>
+                            </ul>                   
                     </li>
                 }
 

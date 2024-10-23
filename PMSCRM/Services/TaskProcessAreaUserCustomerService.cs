@@ -126,5 +126,34 @@ namespace PMSCRM.Services
             await _db.SaveChangesAsync();
             return true;
         }
+
+        // For USER
+        public async Task<List<TaskProcessAreaUserCustomerDisplayViewModel>> GetAllWithDetailsToDisplayForUserAsync(Guid userId)
+        {
+            return await _db.TaskProcessAreaUserCustomers
+                .Where(tpauc => tpauc.UserId == userId) // Filter by user ID
+                .Include(tpauc => tpauc.TaskProcessArea)
+                    .ThenInclude(tpa => tpa.Task)
+                .Include(tpauc => tpauc.TaskProcessArea)
+                    .ThenInclude(tpa => tpa.Process)
+                .Include(tpauc => tpauc.TaskProcessArea)
+                    .ThenInclude(tpa => tpa.Area)
+                .Include(tpauc => tpauc.Customer)
+                .Select(tpauc => new TaskProcessAreaUserCustomerDisplayViewModel
+                {
+                    TaskProcessAreaUserCustomerId = tpauc.TaskProcessAreaUserCustomerId,
+                    TaskName = tpauc.TaskProcessArea.Task.Name,
+                    ProcessName = tpauc.TaskProcessArea.Process.Name,
+                    AreaName = tpauc.TaskProcessArea.Area.Name,
+                    CustomerName = tpauc.Customer.Name,
+                    StartDate = tpauc.StartDate,
+                    EndDate = tpauc.EndDate,
+                    Status = tpauc.Status,
+                    Timestamp = tpauc.Timestamp
+                })
+                .ToListAsync();
+        }
+
+
     }
 }
