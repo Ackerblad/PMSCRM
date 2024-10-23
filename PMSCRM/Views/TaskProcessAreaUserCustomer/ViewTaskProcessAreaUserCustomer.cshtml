@@ -2,6 +2,19 @@
 @model IEnumerable<TaskProcessAreaUserCustomerDisplayViewModel>
 
 <div class="card shadow-sm p-4 mb-4">
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
     <table class="table table-sm table-bordered table-hover">
         <thead class="table-light">
             <tr>
@@ -33,7 +46,9 @@
                         <td class="text-center small">@item.Timestamp.ToString("yyyy-MM-dd HH:mm")</td>
                         <td>
                             <a href="@Url.Action("EditTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" class="btn btn-primary btn-sm custom">Edit</a>
-                            <a href="@Url.Action("DeleteTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" class="btn btn-danger btn-sm custom" onclick="return confirm('Are you sure you want to delete this Task Process Area?');">Delete</a>
+                            <form action="@Url.Action("DeleteTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm custom" onclick="return confirm('Are you sure you want to delete this Task Process Area User Customer?');">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 }
