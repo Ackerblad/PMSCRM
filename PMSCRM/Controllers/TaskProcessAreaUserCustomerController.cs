@@ -29,12 +29,35 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("AddTaskProcessAreaUserCustomer")]
-        public async Task<IActionResult> AddTaskProcessAreaUserCustomer()
+        public async Task<IActionResult> AddTaskProcessAreaUserCustomer(string sortBy = "Area", string sortDirection = "asc")
         {
             var companyId = _companyDivider.GetCompanyId();
 
             var allTaskProcessAreas = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
             var existingConnections = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
+
+            // Sorting ExistingConnections based on selected criteria
+            switch (sortBy)
+            {
+                case "Area":
+                    existingConnections = sortDirection == "asc"
+                        ? existingConnections.OrderBy(t => t.AreaName).ToList()
+                        : existingConnections.OrderByDescending(t => t.AreaName).ToList();
+                    break;
+                case "Process":
+                    existingConnections = sortDirection == "asc"
+                        ? existingConnections.OrderBy(t => t.ProcessName).ToList()
+                        : existingConnections.OrderByDescending(t => t.ProcessName).ToList();
+                    break;
+                case "Task":
+                    existingConnections = sortDirection == "asc"
+                        ? existingConnections.OrderBy(t => t.TaskName).ToList()
+                        : existingConnections.OrderByDescending(t => t.TaskName).ToList();
+                    break;
+                default:
+                    existingConnections = existingConnections.OrderBy(t => t.AreaName).ToList(); // Default sorting
+                    break;
+            }
 
             var users = await _userService.GetAllAsync(companyId);
             var customers = await _customerService.GetAllAsync(companyId);
@@ -43,19 +66,20 @@ namespace PMSCRM.Controllers
             {
                 ExistingConnections = existingConnections.ToList(),
                 TaskProcessAreas = allTaskProcessAreas,
-
                 Users = users.Select(u => new SelectListItem
                 {
                     Value = u.UserId.ToString(),
                     Text = u.FirstName + " " + u.LastName
-                }).ToList(),
-
+                })
+                .OrderBy(u => u.Text) // Sort users by full name
+                .ToList(),
                 Customers = customers.Select(c => new SelectListItem
                 {
                     Value = c.CustomerId.ToString(),
                     Text = c.Name
-                }).ToList(),
-
+                })
+                .OrderBy(c => c.Text) // Sort customers by name
+                .ToList(),
                 Statuses = Enum.GetValues(typeof(Utilities.TaskStatus))
                               .Cast<Utilities.TaskStatus>()
                               .Select(s => new SelectListItem
@@ -63,11 +87,18 @@ namespace PMSCRM.Controllers
                                   Value = ((byte)s).ToString(),
                                   Text = s.ToString()
                               })
+                              .OrderBy(s => s.Text) // Sort statuses by name
                               .ToList()
             };
 
+            // Set the current sorting parameters in ViewBag
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
+
             return View(model);
         }
+
+
 
         [HttpPost("AddTaskProcessAreaUserCustomer")]
         public async Task<IActionResult> AddTaskProcessAreaUserCustomer(Guid taskProcessAreaId, TaskProcessAreaUserCustomerViewModel model)
@@ -188,9 +219,39 @@ namespace PMSCRM.Controllers
             return RedirectToAction("ViewTaskProcessAreaUserCustomer"); 
         }
 
+        //[HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
+        //[Authorize(Roles = "User")]
+        //public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser()
+        //{
+        //    // Get the logged-in user's ID from the claims
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        // If for some reason the user ID is null or empty, return an error or redirect.
+        //        return Unauthorized();
+        //    }
+
+        //    // Call the service function with the current user's ID
+        //    var tpaucRecords = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayForUserAsync(Guid.Parse(userId));
+
+        //    // Pass the tpaucRecords to the view for rendering
+        //    return View(tpaucRecords);
+        //}
+
+
+        //[HttpGet("ViewTaskProcessAreaUserCustomer")]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> ViewTaskProcessAreaUserCustomer()
+        //{
+        //    var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
+
+        //    return View("ViewTaskProcessAreaUserCustomer", tpauc);
+        //}
+
         [HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser()
+        public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser(string sortBy, string sortDirection)
         {
             // Get the logged-in user's ID from the claims
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -204,19 +265,127 @@ namespace PMSCRM.Controllers
             // Call the service function with the current user's ID
             var tpaucRecords = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayForUserAsync(Guid.Parse(userId));
 
-            // Pass the tpaucRecords to the view for rendering
+            // Sorting logic
+            ViewBag.CurrentSort = sortBy ?? "Area"; // Default sort by Area
+            ViewBag.CurrentSortDirection = sortDirection ?? "asc"; // Default direction
+
+            switch (ViewBag.CurrentSort)
+            {
+                case "Area":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.AreaName).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.AreaName).ToList();
+                    break;
+                case "Process":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.ProcessName).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.ProcessName).ToList();
+                    break;
+                case "Task":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.TaskName).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.TaskName).ToList();
+                    break;
+                case "Customer":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.CustomerName).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.CustomerName).ToList();
+                    break;
+                case "StartDate":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.StartDate).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.StartDate).ToList();
+                    break;
+                case "EndDate":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.EndDate).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.EndDate).ToList();
+                    break;
+                case "Status":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.Status).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.Status).ToList();
+                    break;
+                case "Timestamp":
+                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                        ? tpaucRecords.OrderBy(r => r.Timestamp).ToList()
+                        : tpaucRecords.OrderByDescending(r => r.Timestamp).ToList();
+                    break;
+                default:
+                    tpaucRecords = tpaucRecords.OrderBy(r => r.AreaName).ToList();
+                    break;
+            }
+
+            // Pass the sorted tpaucRecords to the view for rendering
             return View(tpaucRecords);
         }
 
-
         [HttpGet("ViewTaskProcessAreaUserCustomer")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ViewTaskProcessAreaUserCustomer()
+        public async Task<IActionResult> ViewTaskProcessAreaUserCustomer(string sortBy, string sortDirection)
         {
             var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
 
+            // Sorting logic
+            ViewBag.CurrentSort = sortBy ?? "Area"; // Default sort by Area
+            ViewBag.CurrentSortDirection = sortDirection ?? "asc"; // Default direction
+
+            switch (ViewBag.CurrentSort)
+            {
+                case "Area":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.AreaName).ToList()
+                        : tpauc.OrderByDescending(r => r.AreaName).ToList();
+                    break;
+                case "Process":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.ProcessName).ToList()
+                        : tpauc.OrderByDescending(r => r.ProcessName).ToList();
+                    break;
+                case "Task":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.TaskName).ToList()
+                        : tpauc.OrderByDescending(r => r.TaskName).ToList();
+                    break;
+                case "User":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.UserName).ToList()
+                        : tpauc.OrderByDescending(r => r.UserName).ToList();
+                    break;
+                case "Customer":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.CustomerName).ToList()
+                        : tpauc.OrderByDescending(r => r.CustomerName).ToList();
+                    break;
+                case "StartDate":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.StartDate).ToList()
+                        : tpauc.OrderByDescending(r => r.StartDate).ToList();
+                    break;
+                case "EndDate":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.EndDate).ToList()
+                        : tpauc.OrderByDescending(r => r.EndDate).ToList();
+                    break;
+                case "Status":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.Status).ToList()
+                        : tpauc.OrderByDescending(r => r.Status).ToList();
+                    break;
+                case "Timestamp":
+                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                        ? tpauc.OrderBy(r => r.Timestamp).ToList()
+                        : tpauc.OrderByDescending(r => r.Timestamp).ToList();
+                    break;
+                default:
+                    tpauc = tpauc.OrderBy(r => r.AreaName).ToList();
+                    break;
+            }
+
+            // Pass the sorted tpauc to the view for rendering
             return View("ViewTaskProcessAreaUserCustomer", tpauc);
         }
+
 
         public IActionResult AddTaskProcessAreas()
         {

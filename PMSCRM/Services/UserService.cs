@@ -169,5 +169,23 @@ namespace PMSCRM.Services
 
             return userRole ?? "User"; // Return "User" if no role is found
         }
+
+        public async Task<List<User>> SearchUsersAsync(Guid companyId, string query)
+        {
+            query = query.Trim();
+
+            if (string.IsNullOrEmpty(query))
+            {
+                return await _db.Users
+                    .Where(u => u.CompanyId == companyId)
+                    .ToListAsync();
+            }
+            return await _db.Users
+                .Where(u => u.CompanyId == companyId &&
+                           (u.EmailAddress.ToLower().Contains(query.ToLower()) ||
+                            u.FirstName.ToLower().Contains(query.ToLower()) ||
+                            u.LastName.ToLower().Contains(query.ToLower())))
+                .ToListAsync();
+        }
     }
 }

@@ -127,10 +127,17 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewAreas")]
-        public async Task<IActionResult> ViewAreasAsync()
+        public async Task<IActionResult> ViewAreasAsync(string sortBy, string sortDirection = "asc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var areas = await _areaService.GetAllAsync(companyId);
+
+            areas = areas.SortBy(sortBy, sortDirection).ToList();
+
+            // Pass current sorting info to the view (used for toggling sort direction)
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
+
             return View(areas);
         }
         [HttpGet("EditArea")]

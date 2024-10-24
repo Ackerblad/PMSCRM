@@ -119,10 +119,15 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewTasks")]
-        public async Task<IActionResult> ViewTasks()
+        public async Task<IActionResult> ViewTasks(string sortBy, string sortDirection = "asc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var tasks = await _taskService.GetAllAsync(companyId);
+
+            tasks = tasks.SortBy(sortBy, sortDirection).ToList();
+
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
             return View(tasks);
         }
 

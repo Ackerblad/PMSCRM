@@ -75,5 +75,28 @@ namespace PMSCRM.Services
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Customer>> SearchCustomersAsync(Guid companyId, string query)
+        {
+            query = query.Trim();
+
+            if (string.IsNullOrEmpty(query))
+            {
+                return await _db.Customers
+                    .Where(c => c.CompanyId == companyId)
+                    .ToListAsync();
+            }
+
+            return await _db.Customers
+                .Where(c => c.CompanyId == companyId &&
+                           (c.Name.ToLower().Contains(query.ToLower()) ||
+                            c.EmailAddress.ToLower().Contains(query.ToLower()) ||
+                            c.StreetAddress.ToLower().Contains(query.ToLower()) ||
+                            c.City.ToLower().Contains(query.ToLower()) ||
+                            c.StateOrProvince.ToLower().Contains(query.ToLower()) ||
+                            c.PostalCode.ToLower().Contains(query.ToLower()) ||
+                            c.Country.ToLower().Contains(query.ToLower())))
+                .ToListAsync();
+        }
     }
 }

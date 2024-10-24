@@ -268,10 +268,15 @@ namespace PMSCRM.Controllers
         }
         [Authorize]
         [HttpGet("ViewUsers")]
-        public async Task<IActionResult> ViewUsers()
+        public async Task<IActionResult> ViewUsers(string sortBy, string sortDirection = "asc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var users = await _userService.GetAllAsync(companyId);
+
+            users = users.SortBy(sortBy, sortDirection).ToList();
+
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
 
             if (users == null || users.Count == 0)
             {

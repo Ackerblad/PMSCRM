@@ -72,5 +72,26 @@ namespace PMSCRM.Services
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Area>> SearchAreasAsync(Guid companyId, string query)
+        {
+            query = query?.Trim();
+
+            if (string.IsNullOrEmpty(query))
+            {
+                Console.WriteLine("Query is null or empty. Returning all areas.");
+
+                return await _db.Areas
+                    .Where(a => a.CompanyId == companyId)
+                    .ToListAsync();
+            }
+
+            Console.WriteLine($"Searching for areas with query: {query}");
+
+            return await _db.Areas
+                .Where(a => a.CompanyId == companyId &&
+                           (a.Name.ToLower().Contains(query.ToLower())))
+                .ToListAsync();
+        }
     }
 }
