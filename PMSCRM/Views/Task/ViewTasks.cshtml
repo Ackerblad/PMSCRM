@@ -12,10 +12,33 @@
     <table class="table table-striped">
         <thead class="table-dark">
             <tr>
-                @* <th>Task ID</th> *@
-                <th>Name</th>
+                <th>
+                    <a asp-action="ViewTasks" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
+                        Task Name
+                        @if (ViewBag.CurrentSort == "Name")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
                 <th>Description</th>
-                <th>Duration</th>
+                <th>
+                    <a asp-action="ViewTasks" asp-route-sortBy="Duration" asp-route-sortDirection="@((ViewBag.CurrentSort == "Duration" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
+                        Duration
+                        @if (ViewBag.CurrentSort == "Duration")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>

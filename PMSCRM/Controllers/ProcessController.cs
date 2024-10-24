@@ -28,26 +28,35 @@ namespace PMSCRM.Controllers
         {
             var companyId = _companyDivider.GetCompanyId();
 
+            // Get all areas for the current company
             var areas = await _areaService.GetAllAsync(companyId);
 
+            // Sort the areas alphabetically by name
+            var sortedAreas = areas.OrderBy(a => a.Name).Select(a => new SelectListItem
+            {
+                Value = a.AreaId.ToString(),
+                Text = a.Name
+            }).ToList();
+
+            // Create the view model
             var viewModel = new ProcessViewModel
             {
-                Areas = areas.Select(a => new SelectListItem
-                {
-                    Value = a.AreaId.ToString(),
-                    Text = a.Name
-                }).ToList()
+                Areas = sortedAreas // Use the sorted list
             };
 
             return View(viewModel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddProcess(ProcessViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
+                // Re-populate the areas in case of validation errors
                 var areas = await _areaService.GetAllAsync(_companyDivider.GetCompanyId());
+
+                // No need to sort here again; the dropdown is already sorted in the GET method
                 viewModel.Areas = areas.Select(a => new SelectListItem
                 {
                     Value = a.AreaId.ToString(),
@@ -67,8 +76,9 @@ namespace PMSCRM.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Failed to add process.");
-            return View(viewModel); 
+            return View(viewModel);
         }
+
 
         [HttpGet("EditProcess/{id}")]
         public async Task<IActionResult> EditProcess(Guid id)
@@ -168,10 +178,15 @@ namespace PMSCRM.Controllers
 
 
         [HttpGet("ViewProcesses")]
-        public async Task<IActionResult> ViewProcesses()
+        public async Task<IActionResult> ViewProcesses(string sortBy, string sortDirection ="asc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var processes = await _processService.GetAllAsync(companyId);
+
+            processes = processes.SortBy(sortBy, sortDirection).ToList();
+
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
             return View(processes);
         }
 

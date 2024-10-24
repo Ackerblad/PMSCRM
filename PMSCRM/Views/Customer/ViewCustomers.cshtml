@@ -12,7 +12,20 @@
     <table class="table table-striped">
         <thead class="table-dark">
             <tr>
-                <th>Name</th>
+                <th>
+                    <a asp-action="ViewCustomers" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
+                        Name
+                        @if (ViewBag.CurrentSort == "Name")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Actions</th>

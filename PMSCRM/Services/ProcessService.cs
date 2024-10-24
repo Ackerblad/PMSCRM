@@ -82,5 +82,22 @@ namespace PMSCRM.Services
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Process>> SearchProcessesAsync(Guid companyId, string query)
+        {
+            query = query.Trim();
+
+            if (string.IsNullOrEmpty(query))
+            {
+                return await _db.Processes
+                    .Where(p => p.CompanyId == companyId)
+                    .ToListAsync();
+            }
+
+            return await _db.Processes
+                .Where(t => t.CompanyId == companyId &&
+                           (t.Name.ToLower().Contains(query.ToLower())))
+                .ToListAsync();
+        }
     }
 }

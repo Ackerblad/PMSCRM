@@ -10,13 +10,50 @@
 @if (Model != null && Model.Any())
 {
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
             <tr>
 @*                 <th>User ID</th>
                 <th>Role ID</th> *@
-                <th>Email</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+@*                 <th>Email</th> *@
+                <th>
+                    <a asp-action="ViewUsers" asp-route-sortBy="EmailAddress" asp-route-sortDirection="@((ViewBag.CurrentSort == "EmailAddress" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
+                        Email
+                        @if (ViewBag.CurrentSort == "EmailAddress")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="ViewUsers" asp-route-sortBy="FirstName" asp-route-sortDirection="@((ViewBag.CurrentSort == "FirstName" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
+                        First Name
+                        @if (ViewBag.CurrentSort == "FirstName")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="ViewUsers" asp-route-sortBy="LastName" asp-route-sortDirection="@((ViewBag.CurrentSort == "LastName" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
+                        Last Name
+                        @if (ViewBag.CurrentSort == "LastName")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
                 <th>Phone Number</th>
             </tr>
         </thead>

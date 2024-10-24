@@ -40,6 +40,7 @@ namespace PMSCRM.Controllers
 
             var tasks = await _taskService.GetAllAsync(companyId);
             var processes = await _processService.GetAllAsync(companyId);
+            var areas = await _areaService.GetAllAsync(companyId); // Assuming you want to fetch areas too
 
             var model = new TaskProcessAreaViewModel
             {
@@ -47,16 +48,30 @@ namespace PMSCRM.Controllers
                 {
                     Value = t.TaskId.ToString(),
                     Text = t.Name,
-                }),
+                })
+                .OrderBy(t => t.Text) // Sort tasks by name
+                .ToList(), // Convert to a List for consistency
+
                 Processes = processes.Select(p => new SelectListItem
                 {
                     Value = p.ProcessId.ToString(),
                     Text = p.Name
-                }),
-                Areas = new List<SelectListItem>()
+                })
+                .OrderBy(p => p.Text) // Sort processes by name
+                .ToList(), // Convert to a List for consistency
+
+                Areas = areas.Select(a => new SelectListItem // Ensure areas are also populated
+                {
+                    Value = a.AreaId.ToString(),
+                    Text = a.Name
+                })
+                .OrderBy(a => a.Text) // Sort areas by name
+                .ToList() // Convert to a List for consistency
             };
+
             return View(model);
         }
+
 
         [HttpPost("AddTaskProcessArea")]
         public async Task<IActionResult> AddTaskProcessArea(TaskProcessAreaViewModel model)

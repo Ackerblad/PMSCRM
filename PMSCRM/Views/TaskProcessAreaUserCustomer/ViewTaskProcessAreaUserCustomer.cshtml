@@ -18,15 +18,127 @@
     <table class="table table-sm table-bordered table-hover">
         <thead class="table-light">
             <tr>
-                <th class="text-center">Area</th>
-                <th class="text-center">Process</th>
-                <th class="text-center">Task</th>
-                <th class="text-center">User</th>
-                <th class="text-center">Customer</th>
-                <th class="text-center">Start Date</th>
-                <th class="text-center">End Date</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Date</th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Area
+                        @if (ViewBag.CurrentSort == "Area")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Process
+                        @if (ViewBag.CurrentSort == "Process")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Task
+                        @if (ViewBag.CurrentSort == "Task")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer"
+                       asp-route-sortBy="User"
+                       asp-route-sortDirection="@((ViewBag.CurrentSort == "User" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")"
+                       class="text-dark">
+                        User
+                        @if (ViewBag.CurrentSort == "User")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Customer" asp-route-sortDirection="@((ViewBag.CurrentSort == "Customer" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Customer
+                        @if (ViewBag.CurrentSort == "Customer")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="StartDate" asp-route-sortDirection="@((ViewBag.CurrentSort == "StartDate" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Start Date
+                        @if (ViewBag.CurrentSort == "StartDate")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="EndDate" asp-route-sortDirection="@((ViewBag.CurrentSort == "EndDate" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        End Date
+                        @if (ViewBag.CurrentSort == "EndDate")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Status" asp-route-sortDirection="@((ViewBag.CurrentSort == "Status" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Status
+                        @if (ViewBag.CurrentSort == "Status")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Timestamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "Timestamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        Date
+                        @if (ViewBag.CurrentSort == "Timestamp")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -68,4 +180,3 @@
         width: 78px !important;
     }
 </style>
-

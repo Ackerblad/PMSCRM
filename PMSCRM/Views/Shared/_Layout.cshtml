@@ -13,6 +13,96 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PMSCRM.styles.css" asp-append-version="true" />
 
+    <style>
+        .search-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Style the filter dropdown button */
+        #filterDropdown {
+            background-color: #007bff;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            padding: 8px 20px;
+            font-size: 16px;
+            height: 45px; /* Same height as the search bar and search button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            #filterDropdown:hover {
+                background-color: #0056b3;
+            }
+
+        /* Customize the search button */
+        #searchButton {
+            background-color: #28a745;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: white;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+            #searchButton:hover {
+                background-color: #218838;
+            }
+
+        /* Center the search bar and align items */
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .search-bar-container input {
+                border-radius: 20px;
+                padding: 10px;
+                width: 350px;
+                height: 45px; /* Same height as the buttons */
+                margin-right: 10px;
+            }
+
+        /* Adjust dropdown positioning */
+        .dropdown-menu {
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            white-space: nowrap;
+        }
+
+            /* Style the dropdown items */
+            .dropdown-menu a {
+                text-decoration: none;
+                color: #333;
+                padding: 5px 10px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .dropdown-menu a:hover,
+                .dropdown-menu a.selected {
+                    background-color: #007bff;
+                    color: white;
+                }
+
+            /* Ensure the dropdown width matches content */
+            .dropdown-menu .filter-option {
+                display: block;
+                white-space: nowrap;
+                font-size: 14px;
+            }
+    </style>
+
     @RenderSection("styles", required: false)
 </head>
 <body>
@@ -158,6 +248,21 @@
                     </li>
 
                     <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#taskProcessArea" aria-expanded="false" aria-controls="taskProcessArea">
+                            <i class="lni lni-users"></i>
+                            <span>TaskProcessArea</span>
+                        </a>
+                        <ul id="taskProcessArea" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="taskProcessArea" asp-action="AddTaskProcessArea" class="sidebar-link">Add</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="taskProcessArea" asp-action="ViewTaskProcessAreas" class="sidebar-link">View</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#taskProcessAreaUserCustomer" aria-expanded="false" aria-controls="taskProcessAreaUserCustomer">
                                 <i class="lni lni-users"></i>
                             <span>TaskProcessAreaUserCustomer</span>
@@ -199,6 +304,36 @@
 
             <main class="content px-3 py-5">
                 <div class="container-fluid">
+                    <!-- Search Section -->
+                    <div class="search-section mb-3">
+                        <!-- Search Bar and Button -->
+                        <div class="search-bar-container">
+                            <!-- Search Bar -->
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search..." aria-label="Search">
+
+                            <!-- Filter Dropdown Button -->
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" id="filterDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filter By
+                                </button>
+                                <!-- Dropdown with clickable filter names -->
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li><a href="#" class="filter-option" data-value="area">Area</a></li>
+                                    <li><a href="#" class="filter-option" data-value="task">Task</a></li>
+                                    <li><a href="#" class="filter-option" data-value="process">Process</a></li>
+                                    <li><a href="#" class="filter-option" data-value="user">User</a></li>
+                                    <li><a href="#" class="filter-option" data-value="customer">Customer</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Search Button -->
+                            <button class="btn" id="searchButton">Search</button>
+                        </div>
+                    </div>
+
+
+
+
                     @RenderBody()
                 </div>
             </main>
@@ -211,6 +346,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const selectedFilters = new Set();
+
+        // Handle filter selection
+        document.querySelectorAll('.filter-option').forEach(function (option) {
+            option.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();  // Prevent dropdown from closing
+
+                const filterValue = option.getAttribute('data-value');
+
+                // Toggle the selection
+                if (selectedFilters.has(filterValue)) {
+                    selectedFilters.delete(filterValue);
+                    option.classList.remove('selected');
+                } else {
+                    selectedFilters.add(filterValue);
+                    option.classList.add('selected');
+                }
+
+                console.log('Selected Filters:', Array.from(selectedFilters));
+            });
+        });
+
+        // Handle search action
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const query = document.getElementById('searchInput').value;
+
+            // Construct the URL for the results page
+            const filters = Array.from(selectedFilters).join(',');
+            const resultsPageUrl = `/results?query=${encodeURIComponent(query)}&filters=${encodeURIComponent(filters)}`;
+
+            // Redirect to the results page
+            window.location.href = resultsPageUrl;
+
+            // Optional: If you want to log what you're sending
+            console.log('Search Query:', query);
+            console.log('Selected Filters:', Array.from(selectedFilters));
+        });
+    </script>
+
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

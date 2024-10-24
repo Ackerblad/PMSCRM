@@ -120,10 +120,16 @@ namespace PMSCRM.Controllers
 
         // View Customers (GET)
         [HttpGet("ViewCustomers")]
-        public async Task<IActionResult> ViewCustomers()
+        public async Task<IActionResult> ViewCustomers(string sortBy, string sortDirection = "asc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var customers = await _customerService.GetAllAsync(companyId);
+
+            customers = customers.SortBy(sortBy, sortDirection).ToList();
+
+            // Pass current sorting info to the view (used for toggling sort direction)
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
             return View(customers);
         }
 
