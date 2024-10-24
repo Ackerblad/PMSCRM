@@ -158,6 +158,21 @@
                     </li>
 
                     <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#taskProcessArea" aria-expanded="false" aria-controls="taskProcessArea">
+                            <i class="lni lni-users"></i>
+                            <span>TaskProcessArea</span>
+                        </a>
+                        <ul id="taskProcessArea" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a asp-controller="TaskProcessArea" asp-action="AddTaskProcessArea" class="sidebar-link">Add TPA</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a asp-controller="TaskProcessArea" asp-action="ViewTaskProcessAreas" class="sidebar-link">View TPA</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#taskProcessAreaUserCustomer" aria-expanded="false" aria-controls="taskProcessAreaUserCustomer">
                                 <i class="lni lni-users"></i>
                             <span>TaskProcessAreaUserCustomer</span>

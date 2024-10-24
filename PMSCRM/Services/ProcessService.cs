@@ -16,7 +16,7 @@ namespace PMSCRM.Services
         public async Task<List<Process>> GetAllAsync(Guid companyId)
         {
             var processes = await _db.Processes
-                .Include(p => p.Area)  // Include Area to avoid null references
+                .Include(p => p.Area)  
                 .Where(p => p.CompanyId == companyId)
                 .ToListAsync();
 
@@ -31,7 +31,7 @@ namespace PMSCRM.Services
         public async Task<Process?> GetByIdAsync(Guid id, Guid companyId)
         {
             return await _db.Processes
-                .Include(p => p.Area)  // Ensure Area is included
+                .Include(p => p.Area)  
                 .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == companyId);
         }
 

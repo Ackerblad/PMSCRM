@@ -3,7 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Tasks</h3>
 <div class="card shadow-sm p-4 mb-4">
 <form class="was-validated" asp-controller="Task" asp-action="AddTask" method="post">
 
@@ -14,7 +13,7 @@
     </div>
 
     <div class="mb-3">
-        <input type="number" class="form-control" placeholder="Duration in hours" name="Duration" id="taskDuration" required>
+        <input type="number" class="form-control" placeholder="Duration (min)" name="Duration" id="taskDuration" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
@@ -23,5 +22,4 @@
 
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>
-
     </div>

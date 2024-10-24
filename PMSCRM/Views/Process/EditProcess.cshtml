@@ -21,18 +21,21 @@
         </div>
 
         <div class="mb-3">
-            <input type="text" class="form-control" id="processName" placeholder="Process Name" asp-for="Process.Name" required />
+            <label for="Name" class="form-label">Process Name</label>
+            <input type="text" class="form-control" id="processName" asp-for="Process.Name" required />
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
 
         <div class="mb-3">
-            <input type="number" class="form-control" placeholder="Duration in hours" asp-for="Process.Duration" required />
+            <label for="Duration" class="form-label">Duration (min)</label>
+            <input type="number" class="form-control" asp-for="Process.Duration" required />
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
 
-        <textarea asp-for="Process.Description" placeholder="Description" class="form-control" maxlength="255" rows="5"></textarea>
+        <label for="Description" class="form-label">Description</label>
+        <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5"></textarea>
 
         <button type="submit" class="btn btn-primary mt-3">Update Process</button>
     </form>

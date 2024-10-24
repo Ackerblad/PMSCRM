@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
 
 
@@ -44,6 +43,25 @@ namespace PMSCRM.Services
             await _db.TaskProcessAreas.AddAsync(taskProcessArea);
             await _db.SaveChangesAsync();
             return true;
+        }
+
+        public async System.Threading.Tasks.Task UpdateProcessDurationAsync(Guid processId, Guid companyId)
+        {
+            var taskDurations = await _db.TaskProcessAreas
+                .Where(tpa => tpa.ProcessId == processId && tpa.CompanyId == companyId)
+                .Include(tpa => tpa.Task)
+                .Select(tpa => (int)tpa.Task.Duration) 
+                .ToListAsync();
+
+            var totalDuration = taskDurations.Sum();
+
+            var process = await _db.Processes.FindAsync(processId);
+            if (process != null)
+            {
+                process.Duration = (byte)totalDuration; 
+                _db.Processes.Update(process);
+                await _db.SaveChangesAsync();
+            }
         }
 
         public async Task<bool> UpdateAsync(TaskProcessArea taskProcessArea)

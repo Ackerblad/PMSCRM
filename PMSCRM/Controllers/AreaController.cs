@@ -97,19 +97,21 @@ namespace PMSCRM.Controllers
         {
             var companyId = _companyDivider.GetCompanyId();
             var area = await _areaService.GetByIdAsync(id, companyId);
+
             if (area == null)
             {
-                return NotFound("Area not found.");
+                ViewBag.Message = "Area not found.";
+                return View("DeleteArea", area);
             }
 
             bool success = await _areaService.DeleteAsync(id, companyId);
             if (success)
             {
-                TempData["SuccessMessage"] = "Area deleted successfully!";
+                ViewBag.Message = "Area deleted successfully!";
                 return RedirectToAction("ViewAreas");
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to delete area.");
+            ViewBag.Message = "Failed to delete area. The area contains a process.";
             return View("DeleteArea", area);
         }
 

@@ -5,62 +5,62 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3 class="fw-bold fs-4 mb-3">Tasks List</h3>
-
-@if (Model != null && Model.Any())
-{
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                @* <th>Task ID</th> *@
-                <th>Name</th>
-                <th>Description</th>
-                <th>Duration</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var task in Model)
-            {
+<div class="card shadow-sm p-4 mb-4">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <td>
-                        <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
-                            @task.Name
-                        </a>
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(task.Description))
-                        {
-                            @if (task.Description.Length > 50)
+                    @* <th>Task ID</th> *@
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Duration (min)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var task in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
+                                @task.Name
+                            </a>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(task.Description))
                             {
-                                <span>@task.Description.Substring(0, 50)...</span>
-                                <a href="/Task/Details/@task.TaskId" class="text-decoration-none">Read More</a>
+                                @if (task.Description.Length > 50)
+                                {
+                                    <span>@task.Description.Substring(0, 50)...</span>
+                                    <a href="/Task/Details/@task.TaskId" class="text-decoration-none">Read More</a>
+                                }
+                                else
+                                {
+                                    <span>@task.Description</span>
+                                }
                             }
                             else
                             {
-                                <span>@task.Description</span>
+                                <span>No description available.</span>
                             }
-                        }
-                        else
-                        {
-                            <span>No description available.</span>
-                        }
-                    </td>
-                    <td>@task.Duration</td>
-                    <td>
-                        <a href="/Task/EditTask/@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="/Task/DeleteTask/@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No tasks found.</p>
-}
+                        </td>
+                        <td>@task.Duration</td>
+                        <td>
+                            <a href="/Task/EditTask/@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="/Task/DeleteTask/@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No tasks found.</p>
+    }
 
-<a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-success">Add new Task</a>
+    <a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-success">Add new Task</a>
+</div>
 
 

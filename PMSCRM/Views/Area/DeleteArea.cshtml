@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
 <h3 class="fw-bold fs-4 mb-3 text-danger">Delete Area</h3>
 
 <div class="alert alert-danger">
