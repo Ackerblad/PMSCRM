@@ -1,0 +1,31 @@
+﻿.custom-table {
+    background-color: #f8f9fa; 
+    border: 2px solid #dee2e6; 
+    width: 100%; 
+}
+
+.custom-table thead {
+    background-color: #5C5470; 
+}
+
+.custom-table thead th {
+    padding: 10px;
+    font-weight: bold; 
+    text-align: left; 
+    border-bottom: 2px solid #dee2e6;
+    color: #fff; 
+}
+
+.custom-table thead th a {
+    color: #fff; 
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e2e6ea; 
+}
+
+.custom-table td, .custom-table th {
+    padding: 10px; 
+    border: 1px solid #dee2e6; 
+}
+

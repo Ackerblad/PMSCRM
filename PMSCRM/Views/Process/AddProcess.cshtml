@@ -3,8 +3,8 @@
     ViewData["Title"] = "Add Process";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
-<h3 class="fw-bold fs-4 mb-3">Process</h3>
 <div class="card shadow-sm p-4 mb-4">
 <form class="was-validated" asp-controller="Process" asp-action="AddProcess" method="post">
 
@@ -24,16 +24,9 @@
         </div>
 
         <div class="mb-3">
-            <input type="number" class="form-control" asp-for="Process.Duration" placeholder="Duration in hours" required>
-            <div class="valid-feedback">Valid.</div>
-            <div class="invalid-feedback">Please fill out this field.</div>
-        </div>
-
-        <div class="mb-3">
             <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Description"></textarea>
         </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <button type="submit" class="btn btn-submit">Submit</button>
 </form>
-
 </div>

@@ -8,16 +8,13 @@
 <h3 class="fw-bold fs-4 mb-3">Task Details</h3>
 
 <div>
-    <strong>Task ID:</strong> @Model.TaskId
-</div>
-<div>
     <strong>Task Name:</strong> @Model.Name
 </div>
 <div>
     <strong>Description:</strong> @Model.Description
 </div>
 <div>
-    <strong>Duration:</strong> @Model.Duration
+    <strong>Duration:</strong> @Model.Duration min
 </div>
 
 <a asp-area="" asp-controller="Task" asp-action="ViewTasks" class="btn btn-primary mt-3">Back to Tasks List</a>

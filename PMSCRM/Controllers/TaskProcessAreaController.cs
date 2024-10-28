@@ -90,6 +90,7 @@ namespace PMSCRM.Controllers
             bool success = await _taskProcessAreaService.AddAsync(taskProcessArea);
             if (success)
             {
+                await _taskProcessAreaService.UpdateProcessDurationAsync(model.ProcessId, companyId);
                 return RedirectToAction("ViewTaskProcessAreas");
             }
 
@@ -214,6 +215,7 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = tpa.TaskProcessAreaId,
                 TaskName = tpa.Task?.Name,
                 ProcessName = tpa.Process?.Name,
+                AreaName = tpa.Area?.Name,
                 Timestamp = tpa.Timestamp
             }).ToList();
 

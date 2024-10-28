@@ -1,13 +1,15 @@
 ﻿@model PMSCRM.ViewModels.TaskProcessAreaUserCustomerViewModel
+<link rel="stylesheet" href="~/css/buttons.css">
+<link rel="stylesheet" href="~/css/table.css">
 
 <div class="card shadow-sm p-4 mb-4">
     <label class="form-label">Select Process</label>
     <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px; border-block-end: solid; border-block-end-width: thin; border-block-end-color: lightgray">
-        <table class="table table-sm table-bordered table-hover">
-            <thead class="table-light">
+        <table class="table-striped table-hover custom-table">
+            <thead>
                 <tr>
                     <th class="text-center">
-                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" >
                             Area
                             @if (ViewBag.CurrentSort == "Area")
                             {
@@ -15,12 +17,12 @@
                             }
                             else
                             {
-                                <span>▲</span> <!-- Default arrow for ascending -->
+                                <span>▲</span> 
                             }
                         </a>
                     </th>
                     <th class="text-center">
-                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
                             Process
                             @if (ViewBag.CurrentSort == "Process")
                             {
@@ -28,12 +30,12 @@
                             }
                             else
                             {
-                                <span>▲</span> <!-- Default arrow for ascending -->
+                                <span>▲</span> 
                             }
                         </a>
                     </th>
                     <th class="text-center">
-                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
+                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
                             Task
                             @if (ViewBag.CurrentSort == "Task")
                             {
@@ -41,7 +43,7 @@
                             }
                             else
                             {
-                                <span>▲</span> <!-- Default arrow for ascending -->
+                                <span>▲</span> 
                             }
                         </a>
                     </th>
@@ -75,14 +77,14 @@
         <div class="mb-3">
             <label for="UserId" class="form-label">Select User</label>
             <select asp-for="UserId" asp-items="Model.Users" class="form-select" required>
-                <option value="">Choose a user...</option>
+                <option value="">...</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="CustomerId" class="form-label">Select Customer</label>
             <select asp-for="CustomerId" asp-items="Model.Customers" class="form-select" required>
-                <option value="">Choose a customer...</option>
+                <option value="">...</option>
             </select>
         </div>
 
@@ -99,11 +101,11 @@
         <div class="mb-3">
             <label for="Status" class="form-label">Status</label>
             <select asp-for="Status" asp-items="Model.Statuses" class="form-select" required>
-                <option value="">Choose a status...</option>
+                <option value="">...</option>
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">@(Model.IsEditMode ? "Update" : "Submit")</button>
+        <button type="submit" class="btn btn-submit">@(Model.IsEditMode ? "Update" : "Submit")</button>
     </form>
 
     <script>

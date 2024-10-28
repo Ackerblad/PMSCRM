@@ -4,25 +4,25 @@
     ViewData["Title"] = "Delete Task Process Area";
     Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
-<h3 class="fw-bold fs-4 mb-3">Delete Task Process Area</h3>
+<div class="card shadow-sm p-4 mb-4">
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.Message
+        </div>
+    }
 
-<div class="alert alert-warning">
-    <strong>Warning!</strong> Are you sure you want to delete this Task Process Area?
+    <div class="alert alert-danger">
+        <h4>Are you sure you want to delete this TPA?</h4>
+        <p><strong>Task:</strong> @Model.TaskName</p>
+        <p><strong>Process:</strong> @Model.ProcessName</p>
+        <p><strong>Area:</strong> @Model.AreaName</p>
+    </div>
+
+    <form asp-action="DeleteConfirmed" asp-route-id="@Model.TaskProcessAreaId" method="post">
+        <button type="submit" class="btn btn-delete">Delete</button>
+        <a href="/Area/ViewAreas" class="btn btn-cancel">Cancel</a>
+    </form>
 </div>
-
-<div>
-    <p><strong>Task Name:</strong> @Model.TaskName</p>
-    <p><strong>Process Name:</strong> @Model.ProcessName</p>
-    <p><strong>Timestamp:</strong> @Model.Timestamp.ToString("g")</p>
-</div>
-
-<form asp-action="DeleteConfirmed" asp-route-id="@Model.TaskProcessAreaId" method="post">
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="@Url.Action("ViewTaskProcessAreas", "TaskProcessArea")" class="btn btn-secondary">Cancel</a>
-</form>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
-}

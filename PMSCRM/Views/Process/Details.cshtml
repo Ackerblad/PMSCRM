@@ -10,10 +10,9 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Process ID: @Model.ProcessId</h6>
-
+        
         <p class="card-text">
-            <strong>Duration:</strong> @Model.Duration hours
+            <strong>Duration:</strong> @Model.Duration min
         </p>
 
         <p class="card-text">
@@ -21,7 +20,7 @@
         </p>
 
         <p class="card-text">
-            <strong>Area:</strong> @Model.Area?.Name ?? "No Area Assigned"
+            <strong>Area:</strong> @Model.Area?.Name
         </p>
 
         <a href="@Url.Action("ViewProcesses", "Process")" class="btn btn-secondary">Back to List</a>

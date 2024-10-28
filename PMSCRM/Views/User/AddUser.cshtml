@@ -4,8 +4,7 @@
     ViewData["Title"] = "Add User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h3 class="fw-bold fs-4 mb-3">Add User</h3>
+<link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
     <form class="was-validated" asp-controller="User" asp-action="AddUser" method="post">
@@ -42,7 +41,7 @@
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <button type="submit" class="btn btn-submit">Submit</button>
     </form>
 </div>
 

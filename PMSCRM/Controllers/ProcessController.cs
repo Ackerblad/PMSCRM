@@ -68,6 +68,7 @@ namespace PMSCRM.Controllers
 
             var process = viewModel.Process;
             process.CompanyId = _companyDivider.GetCompanyId();
+            process.Duration = 0;
 
             bool success = await _processService.AddAsync(process);
             if (success)
@@ -176,7 +177,6 @@ namespace PMSCRM.Controllers
             return View("DeleteProcess", process);
         }
 
-
         [HttpGet("ViewProcesses")]
         public async Task<IActionResult> ViewProcesses(string sortBy, string sortDirection ="asc")
         {
@@ -221,7 +221,5 @@ namespace PMSCRM.Controllers
 
             return View(process);
         }
-
-
     }
 }
