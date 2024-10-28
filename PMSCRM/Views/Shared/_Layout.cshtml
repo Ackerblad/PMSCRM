@@ -5,105 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PMSCRM</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PMSCRM.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/header.css">
+    <link rel="stylesheet" href="~/css/sidebar.css">
+    <link rel="stylesheet" href="~/css/search.css">
+    <link rel="stylesheet" href="~/css/buttons.css">
 
-    <style>
-        .search-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
+@RenderSection("styles", required: false)
 
-        /* Style the filter dropdown button */
-        #filterDropdown {
-            background-color: #007bff;
-            border: none;
-            border-radius: 20px;
-            color: white;
-            padding: 8px 20px;
-            font-size: 16px;
-            height: 45px; /* Same height as the search bar and search button */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-            #filterDropdown:hover {
-                background-color: #0056b3;
-            }
-
-        /* Customize the search button */
-        #searchButton {
-            background-color: #28a745;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            color: white;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-
-            #searchButton:hover {
-                background-color: #218838;
-            }
-
-        /* Center the search bar and align items */
-        .search-bar-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-            .search-bar-container input {
-                border-radius: 20px;
-                padding: 10px;
-                width: 350px;
-                height: 45px; /* Same height as the buttons */
-                margin-right: 10px;
-            }
-
-        /* Adjust dropdown positioning */
-        .dropdown-menu {
-            padding: 10px;
-            display: none;
-            flex-direction: column;
-            white-space: nowrap;
-        }
-
-            /* Style the dropdown items */
-            .dropdown-menu a {
-                text-decoration: none;
-                color: #333;
-                padding: 5px 10px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
-                .dropdown-menu a:hover,
-                .dropdown-menu a.selected {
-                    background-color: #007bff;
-                    color: white;
-                }
-
-            /* Ensure the dropdown width matches content */
-            .dropdown-menu .filter-option {
-                display: block;
-                white-space: nowrap;
-                font-size: 14px;
-            }
-    </style>
-
-    @RenderSection("styles", required: false)
 </head>
 <body>
     <div class="wrapper">
@@ -187,7 +100,7 @@
                         </ul>
                     </li>
 
-                    <li class="sidebar-item">
+                   @*  <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#company" aria-expanded="false" aria-controls="company">
                             <i class="lni lni-briefcase"></i>
                             <span>Companies</span>
@@ -200,7 +113,7 @@
                                 <a asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View Companies</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> *@
 
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#process" aria-expanded="false" aria-controls="process">
@@ -217,7 +130,7 @@
                         </ul>
                     </li>
 
-                    <li class="sidebar-item">
+                  @*   <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#role" aria-expanded="false" aria-controls="role">
                             <i class="lni lni-users"></i>
                             <span>Roles</span>
@@ -230,7 +143,7 @@
                                 <a asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View Roles</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> *@
 
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#user" aria-expanded="false" aria-controls="user">
@@ -254,10 +167,10 @@
                         </a>
                         <ul id="taskProcessArea" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             <li class="sidebar-item">
-                                <a asp-controller="taskProcessArea" asp-action="AddTaskProcessArea" class="sidebar-link">Add</a>
+                                <a asp-controller="taskProcessArea" asp-action="AddTaskProcessArea" class="sidebar-link">Add TPA</a>
                             </li>
                             <li class="sidebar-item">
-                                <a asp-controller="taskProcessArea" asp-action="ViewTaskProcessAreas" class="sidebar-link">View</a>
+                                <a asp-controller="taskProcessArea" asp-action="ViewTaskProcessAreas" class="sidebar-link">View TPA</a>
                             </li>
                         </ul>
                     </li>
@@ -269,10 +182,10 @@
                             </a>
                         <ul id="taskProcessAreaUserCustomer" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                                 <li class="sidebar-item">
-                                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="AddTaskProcessAreaUserCustomer" class="sidebar-link">Add</a>
+                                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="AddTaskProcessAreaUserCustomer" class="sidebar-link">Add TPAUC</a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomer" class="sidebar-link">View</a>
+                                    <a asp-controller="TaskProcessAreaUserCustomer" asp-action="ViewTaskProcessAreaUserCustomer" class="sidebar-link">View TPAUC</a>
                                 </li>
                             </ul>                   
                     </li>
@@ -313,8 +226,8 @@
 
                             <!-- Filter Dropdown Button -->
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle" id="filterDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Filter By
+                                <button class="btn btn-filter dropdown-toggle" id="filterDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filter 
                                 </button>
                                 <!-- Dropdown with clickable filter names -->
                                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
@@ -324,10 +237,10 @@
                                     <li><a href="#" class="filter-option" data-value="user">User</a></li>
                                     <li><a href="#" class="filter-option" data-value="customer">Customer</a></li>
                                 </ul>
-                            </div>
 
-                            <!-- Search Button -->
-                            <button class="btn" id="searchButton">Search</button>
+                                <!-- Search Button -->
+                                <button class="btn btn-search" id="searchButton">Search</button>
+                            </div>
                         </div>
                     </div>
 

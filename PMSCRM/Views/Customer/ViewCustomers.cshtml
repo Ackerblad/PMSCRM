@@ -4,53 +4,57 @@
     ViewData["Title"] = "View Customer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
+<link rel="stylesheet" href="~/css/table.css">
 
-<h3 class="fw-bold fs-4 mb-3">Customer List</h3>
-
-@if (Model != null && Model.Any())
-{
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>
-                    <a asp-action="ViewCustomers" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
-                        Name
-                        @if (ViewBag.CurrentSort == "Name")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var customer in Model)
-            {
+<div class="card shadow-sm p-4 mb-4">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table-striped table-hover custom-table">
+            <thead>
                 <tr>
-                    <td>@customer.Name</td>
-                    <td>@customer.EmailAddress</td>
-                    <td>@customer.PhoneNumber</td>
-                    <td>
-                        <a href="/Customer/EditCustomer/@customer.CustomerId" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="/Customer/DeleteCustomer/@customer.CustomerId" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No customers found.</p>
-}
+                    <th>
+                        <a asp-action="ViewCustomers" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Name
+                            @if (ViewBag.CurrentSort == "Name")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
 
-<a asp-area="" asp-controller="Customer" asp-action="AddCustomer" class="btn btn-success">Add new Customer</a>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.Name</td>
+                        <td>@customer.EmailAddress</td>
+                        <td>@customer.PhoneNumber</td>
+                        <td>
+                            <a href="/Customer/EditCustomer/@customer.CustomerId" class="btn btn-edit">Edit</a>
+                            <a href="/Customer/DeleteCustomer/@customer.CustomerId" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No customers found.</p>
+    }
+
+    <div>
+        <a asp-area="" asp-controller="Customer" asp-action="AddCustomer" class="btn btn-add">Add Customer</a>
+    </div>
+</div>
 

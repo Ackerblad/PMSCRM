@@ -2,6 +2,7 @@
     ViewData["Title"] = "Add Task";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
 <form class="was-validated" asp-controller="Task" asp-action="AddTask" method="post">
@@ -20,6 +21,6 @@
 
     <textarea name="Description" id="taskDescription" placeholder="Description" class="form-control" maxlength="255" rows="5"></textarea>
 
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <button type="submit" class="btn btn-submit mt-3">Submit</button>
 </form>
     </div>

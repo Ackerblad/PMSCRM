@@ -215,6 +215,7 @@ namespace PMSCRM.Controllers
                 TaskProcessAreaId = tpa.TaskProcessAreaId,
                 TaskName = tpa.Task?.Name,
                 ProcessName = tpa.Process?.Name,
+                AreaName = tpa.Area?.Name,
                 Timestamp = tpa.Timestamp
             }).ToList();
 

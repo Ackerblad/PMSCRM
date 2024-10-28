@@ -3,8 +3,8 @@
     ViewData["Title"] = "Add Process";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
-<h3 class="fw-bold fs-4 mb-3">Process</h3>
 <div class="card shadow-sm p-4 mb-4">
 <form class="was-validated" asp-controller="Process" asp-action="AddProcess" method="post">
 
@@ -27,7 +27,6 @@
             <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Description"></textarea>
         </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <button type="submit" class="btn btn-submit">Submit</button>
 </form>
-
 </div>

@@ -4,81 +4,83 @@
     ViewData["Title"] = "View Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
+<link rel="stylesheet" href="~/css/table.css">
 
-<h3 class="fw-bold fs-4 mb-3">User List</h3>
-
-@if (Model != null && Model.Any())
-{
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-@*                 <th>User ID</th>
-                <th>Role ID</th> *@
-@*                 <th>Email</th> *@
-                <th>
-                    <a asp-action="ViewUsers" asp-route-sortBy="EmailAddress" asp-route-sortDirection="@((ViewBag.CurrentSort == "EmailAddress" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
-                        Email
-                        @if (ViewBag.CurrentSort == "EmailAddress")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th>
-                    <a asp-action="ViewUsers" asp-route-sortBy="FirstName" asp-route-sortDirection="@((ViewBag.CurrentSort == "FirstName" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
-                        First Name
-                        @if (ViewBag.CurrentSort == "FirstName")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th>
-                    <a asp-action="ViewUsers" asp-route-sortBy="LastName" asp-route-sortDirection="@((ViewBag.CurrentSort == "LastName" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
-                        Last Name
-                        @if (ViewBag.CurrentSort == "LastName")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th>Phone Number</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
+<div class="card shadow-sm p-4 mb-4">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table-striped table-hover custom-table">
+            <thead>
                 <tr>
-@*                     <td>@user.UserId</td>
-                    <td>@user.RoleId</td> *@
-                    <td>@user.EmailAddress</td>
-                    <td>@user.FirstName</td>
-                    <td>@user.LastName</td>
-                    <td>@user.PhoneNumber</td>
-                    <td>
-                        <a href="/User/EditUser/@user.UserId" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="/User/DeleteUser/@user.UserId" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
+                    <th>
+                        <a asp-action="ViewUsers" asp-route-sortBy="EmailAddress" asp-route-sortDirection="@((ViewBag.CurrentSort == "EmailAddress" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Email
+                            @if (ViewBag.CurrentSort == "EmailAddress")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-action="ViewUsers" asp-route-sortBy="FirstName" asp-route-sortDirection="@((ViewBag.CurrentSort == "FirstName" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            First Name
+                            @if (ViewBag.CurrentSort == "FirstName")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-action="ViewUsers" asp-route-sortBy="LastName" asp-route-sortDirection="@((ViewBag.CurrentSort == "LastName" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Last Name
+                            @if (ViewBag.CurrentSort == "LastName")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th>Phone Number</th>
+                    <th class="text-end px-3"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No users found.</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.EmailAddress</td>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>
+                            <a href="/User/EditUser/@user.UserId" class="btn btn-edit">Edit</a>
+                            <a href="/User/DeleteUser/@user.UserId" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No users found.</p>
+    }
 
-<a href="/User/AddUser" class="btn btn-success mt-3">Add New User</a>
+    <div>
+        <a href="/User/AddUser" class="btn btn-add">Add User</a>
+    </div>
+</div>
+
+

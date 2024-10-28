@@ -4,8 +4,8 @@
     ViewData["Title"] = "Add TaskProcessArea";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
-<h3 class="fw-bold fs-4 mb-3">Add Task Process Area</h3>
 <div class="card shadow-sm p-4 mb-4">
 <form class="was-validated" asp-controller="TaskProcessArea" asp-action="AddTaskProcessArea" method="post">
     <div class="mb-3">
@@ -25,17 +25,7 @@
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please select a process.</div>
     </div>
-
-@*     <div class="mb-3">
-        <label for="AreaId" class="form-label">Select Area</label>
-        <select asp-for="AreaId" asp-items="Model.Areas" class="form-select" required>
-            <option value="">Choose an area...</option>
-        </select>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please select an area.</div>
-    </div> *@
-
-    <button type="submit" class="btn btn-primary mt-3">Add Task Process Area</button>
+    <button type="submit" class="btn btn-submit">Add TPA</button>
 </form>
 
 </div>

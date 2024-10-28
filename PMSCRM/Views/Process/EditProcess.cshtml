@@ -4,8 +4,7 @@
     ViewData["Title"] = "Edit Process";
     Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
-
-<h3 class="fw-bold fs-4 mb-3">Edit Process</h3>
+<link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
     <form asp-controller="Process" asp-action="EditProcess" method="post">
@@ -37,8 +36,7 @@
         <label for="Description" class="form-label">Description</label>
         <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5"></textarea>
 
-        <button type="submit" class="btn btn-primary mt-3">Update Process</button>
+        <button class="btn btn-submit mt-3">Save Changes</button>
+        <a href="/Process/ViewProcesses" class="btn btn-cancel mt-3">Cancel</a>
     </form>
 </div>
-
-<a href="@Url.Action("ViewProcesses", "Process")" class="btn btn-secondary">Back to List</a>

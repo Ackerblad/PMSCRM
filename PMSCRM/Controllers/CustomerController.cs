@@ -19,7 +19,6 @@ namespace PMSCRM.Controllers
             _companyDivider = companyDivider;
         }
 
-        // Add Customer (POST)
         [HttpPost]
         public async Task<ActionResult> AddCustomer(Customer customer)
         {
@@ -40,7 +39,6 @@ namespace PMSCRM.Controllers
             return View(customer);
         }
 
-        // Edit Customer (GET)
         [HttpGet("EditCustomer/{id}")]
         public async Task<IActionResult> EditCustomer(Guid id)
         {
@@ -54,7 +52,6 @@ namespace PMSCRM.Controllers
             return View(customer);
         }
 
-        // Edit Customer (POST)
         [HttpPost("EditCustomer/{id}")]
         public async Task<IActionResult> EditCustomer(Guid id, Customer updatedCustomer)
         {
@@ -75,7 +72,6 @@ namespace PMSCRM.Controllers
             return View(updatedCustomer);
         }
 
-        // Delete Customer (GET)
         [HttpGet("DeleteCustomer/{id}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
@@ -90,7 +86,6 @@ namespace PMSCRM.Controllers
             return View(customer);
         }
 
-        // Delete Customer (POST)
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
@@ -118,7 +113,6 @@ namespace PMSCRM.Controllers
             return View();
         }
 
-        // View Customers (GET)
         [HttpGet("ViewCustomers")]
         public async Task<IActionResult> ViewCustomers(string sortBy, string sortDirection = "asc")
         {
@@ -127,20 +121,17 @@ namespace PMSCRM.Controllers
 
             customers = customers.SortBy(sortBy, sortDirection).ToList();
 
-            // Pass current sorting info to the view (used for toggling sort direction)
             ViewBag.CurrentSort = sortBy;
             ViewBag.CurrentSortDirection = sortDirection;
             return View(customers);
         }
 
-        // Success View (GET)
         [HttpGet("Success")]
         public IActionResult Success()
         {
             return View();
         }
 
-        // Unused Views
         [HttpGet("EditCustomer")]
         public IActionResult EditCustomer()
         {

@@ -4,19 +4,18 @@
     ViewData["Title"] = "Delete Customer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
-<h3 class="fw-bold fs-4 mb-3 text-danger">Delete Customer</h3>
+<div class="card shadow-sm p-4 mb-4">
+    <div class="alert alert-danger">
+        <h4>Are you sure you want to delete this customer?</h4>
+        <p><strong>Name:</strong> @Model.Name</p>
+        <p><strong>Email:</strong> @Model.EmailAddress</p>
+        <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+    </div>
 
-<div class="alert alert-danger">
-    <h4>Are you sure you want to delete this company?</h4>
-    <p><strong>Customer Name:</strong> @Model.Name</p>
-    <p><strong>Customer ID:</strong> @Model.CustomerId</p>
-
-
-
+    <form asp-action="DeleteConfirmed" asp-route-id="@Model.CustomerId" method="post">
+        <button type="submit" class="btn btn-delete">Delete</button>
+        <a href="/Customer/ViewCustomers" class="btn btn-cancel">Cancel</a>
+    </form>
 </div>
-
-<form asp-action="DeleteConfirmed" asp-route-id="@Model.CustomerId" method="post">
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="/Customer/ViewCustomers" class="btn btn-secondary">Cancel</a>
-</form>

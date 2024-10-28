@@ -4,87 +4,90 @@
     ViewData["Title"] = "View Tasks";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/table.css">
 
-<h3 class="fw-bold fs-4 mb-3">Tasks List</h3>
-
-@if (Model != null && Model.Any())
-{
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>
-                    <a asp-action="ViewTasks" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
-                        Task Name
-                        @if (ViewBag.CurrentSort == "Name")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th>Description</th>
-                <th>
-                    <a asp-action="ViewTasks" asp-route-sortBy="Duration" asp-route-sortDirection="@((ViewBag.CurrentSort == "Duration" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-light">
-                        Duration
-                        @if (ViewBag.CurrentSort == "Duration")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var task in Model)
-            {
+<div class="card shadow-sm p-4 mb-4">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table-striped table-hover custom-table">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="/Task/Details/@task.TaskId" class="text-decoration-none">
-                            @task.Name
-                        </a>
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(task.Description))
-                        {
-                            @if (task.Description.Length > 50)
+                    <th>
+                        <a asp-action="ViewTasks" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Task Name
+                            @if (ViewBag.CurrentSort == "Name")
                             {
-                                <span>@task.Description.Substring(0, 50)...</span>
-                                <a href="/Task/Details/@task.TaskId" class="text-decoration-none">Read More</a>
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
                             }
                             else
                             {
-                                <span>@task.Description</span>
+                                <span>▲</span> 
                             }
-                        }
-                        else
-                        {
-                            <span>No description available.</span>
-                        }
-                    </td>
-                    <td>@task.Duration</td>
-                    <td>
-                        <a href="/Task/EditTask/@task.TaskId" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="/Task/DeleteTask/@task.TaskId" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
+                        </a>
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        <a asp-action="ViewTasks" asp-route-sortBy="Duration" asp-route-sortDirection="@((ViewBag.CurrentSort == "Duration" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Duration
+                            @if (ViewBag.CurrentSort == "Duration")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span> 
+                            }
+                        </a>
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No tasks found.</p>
-}
-
-    <a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-success">Add new Task</a>
+            </thead>
+            <tbody>
+                @foreach (var task in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="/Task/Details/@task.TaskId">
+                                @task.Name
+                            </a>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(task.Description))
+                            {
+                                @if (task.Description.Length > 50)
+                                {
+                                    <span>@task.Description.Substring(0, 50)...</span>
+                                    <a href="/Task/Details/@task.TaskId">Read More</a>
+                                }
+                                else
+                                {
+                                    <span>@task.Description</span>
+                                }
+                            }
+                            else
+                            {
+                                <span>No description available.</span>
+                            }
+                        </td>
+                        <td>@task.Duration</td>
+                        <td>
+                            <a href="/Task/EditTask/@task.TaskId" class="btn btn-edit">Edit</a>
+                            <a href="/Task/DeleteTask/@task.TaskId" class="btn btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No tasks found.</p>
+    }
+    <div>
+        <a asp-area="" asp-controller="Task" asp-action="AddTask" class="btn btn-add">Add Task</a>
+    </div>
 </div>
 
 
