@@ -19,6 +19,11 @@ namespace PMSCRM.Controllers
             _companyDivider = companyDivider;
         }
 
+        private Guid GetCompanyId()
+        {
+            return _companyDivider.GetCompanyId();
+        }
+
         [HttpGet]
         public IActionResult AddArea()
         {
