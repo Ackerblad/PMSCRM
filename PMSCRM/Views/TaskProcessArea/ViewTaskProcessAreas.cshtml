@@ -11,9 +11,9 @@
     <table class="table-striped table-hover custom-table">
         <thead>
             <tr>
-                <th>Task Name</th>
-                <th>Process Name</th>
-                <th>Area Name</th>
+                <th>Area</th>
+                <th>Process</th>
+                <th>Task</th>
                 <th>Date</th>
                 <th></th>
             </tr>
@@ -24,9 +24,9 @@
                 foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.TaskName</td>
-                        <td>@item.ProcessName</td>
                         <td>@item.AreaName</td>
+                        <td>@item.ProcessName</td>
+                        <td>@item.TaskName</td>
                         <td>@item.Timestamp.ToString("g")</td>
                         <td>
 

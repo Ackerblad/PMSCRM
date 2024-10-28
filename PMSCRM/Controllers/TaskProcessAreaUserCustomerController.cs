@@ -204,20 +204,57 @@ namespace PMSCRM.Controllers
             return View("AddTaskProcessAreaUserCustomer", model);
         }
 
-        [HttpPost("DeleteTaskProcessAreaUserCustomer/{id}")]
+        [HttpGet("DeleteTaskProcessAreaUserCustomer/{id}")]
         public async Task<IActionResult> DeleteTaskProcessAreaUserCustomer(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId(); // Assuming _companyDivider provides the company ID.
+            var tpauc = await _taskProcessAreaUserCustomerService.GetByIdAsync(id, companyId);
+
+            if (tpauc == null)
+            {
+                return NotFound("Task Process Area User Customer not found.");
+            }
+
+            var model = new TaskProcessAreaUserCustomerDisplayViewModel
+            {
+                TaskProcessAreaUserCustomerId = tpauc.TaskProcessAreaUserCustomerId,
+                TaskName = tpauc.TaskProcessArea?.Task?.Name,
+                ProcessName = tpauc.TaskProcessArea?.Process?.Name,
+                AreaName = tpauc.TaskProcessArea?.Area?.Name,
+                UserName = tpauc.User?.FirstName + " " + tpauc.User?.LastName,
+                CustomerName = tpauc.Customer?.Name,
+                StartDate = tpauc.StartDate,
+                EndDate = tpauc.EndDate,
+                Status = tpauc.Status,
+                Timestamp = tpauc.Timestamp
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("DeleteConfirmed/{id}")]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
             var tpauc = await _taskProcessAreaUserCustomerService.GetByIdAsync(id, companyId);
 
             if (tpauc == null)
             {
-                return RedirectToAction("ViewTaskProcessAreaUserCustomer"); 
+                return RedirectToAction("ViewTaskProcessAreaUserCustomer");
             }
 
             bool success = await _taskProcessAreaUserCustomerService.DeleteAsync(id, companyId);
-            return RedirectToAction("ViewTaskProcessAreaUserCustomer"); 
+            if (success)
+            {
+                return RedirectToAction("ViewTaskProcessAreaUserCustomer");
+            }
+            else
+            {
+                ViewBag.Message = "Failed to delete the record.";
+                return View("DeleteTaskProcessAreaUserCustomer", tpauc);
+            }
         }
+
 
         //[HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
         //[Authorize(Roles = "User")]

@@ -15,7 +15,7 @@
                 <tr>
                     <th>
                         <a asp-action="ViewProcesses" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
-                            Process Name
+                            Process
                             @if (ViewBag.CurrentSort == "ProcessName")
                             {
                                 <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
@@ -28,7 +28,7 @@
                     </th>
                     <th>
                         <a asp-action="ViewProcesses" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
-                            Area Name
+                            Area
                             @if (ViewBag.CurrentSort == "AreaName")
                             {
                                 <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>

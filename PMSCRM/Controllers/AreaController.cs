@@ -19,6 +19,12 @@ namespace PMSCRM.Controllers
             _companyDivider = companyDivider;
         }
 
+        [HttpGet]
+        public IActionResult AddArea()
+        {
+            ViewBag.IsEditMode = false;
+            return View(new Area());
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddAreaAsync(Area area)
@@ -55,7 +61,8 @@ namespace PMSCRM.Controllers
             {
                 return NotFound("Area not found");
             }
-            return View(area);
+            ViewBag.IsEditMode = true;
+            return View("AddArea", area);
         }
 
         [HttpPost("EditArea/{id}")]
@@ -113,11 +120,6 @@ namespace PMSCRM.Controllers
 
             ViewBag.Message = "Failed to delete area. The area contains a process.";
             return View("DeleteArea", area);
-        }
-
-        public IActionResult AddArea()
-        {
-            return View();
         }
 
         [HttpGet("Success")]

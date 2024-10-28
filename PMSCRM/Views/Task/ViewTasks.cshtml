@@ -14,7 +14,7 @@
                 <tr>
                     <th>
                         <a asp-action="ViewTasks" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
-                            Task Name
+                            Task
                             @if (ViewBag.CurrentSort == "Name")
                             {
                                 <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>

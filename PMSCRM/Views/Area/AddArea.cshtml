@@ -1,22 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Add Area";
+﻿@model PMSCRM.Models.Area
+@{
+    ViewData["Title"] = ViewBag.IsEditMode ? "Edit Area" : "Add Area";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
-    <h3 class="fw-bold fs-4 mb-3">Areas</h3>
+    <form class="was-validated" asp-controller="Area" asp-action="@(ViewBag.IsEditMode ? "EditArea" : "AddArea")" method="post">
 
-    <form class="was-validated" asp-controller="Area" asp-action="AddArea" method="post">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Area Name</label>
+            <input type="text" class="form-control" id="areaName" placeholder="Name the Area" name="Name" maxlength="50" value="@Model?.Name" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-    <div class="mb-3">
-        <input type="text" class="form-control" id="areaName" placeholder="Area Name" name="Name" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Description</label>
+            <textarea name="Description" id="areaDescription" placeholder="Add a Description (optional)" class="form-control" maxlength="255" rows="5">@Model?.Description</textarea>
+        </div>
 
-    <textarea name="Description" id="areaDescription" placeholder="Description" class="form-control" maxlength="255" rows="5"></textarea>
-
-    <button type="submit" class="btn btn-submit mt-3">Submit</button>
-</form>
+        <button type="submit" class="btn btn-submit">@(ViewBag.IsEditMode ? "Save Changes" : "Submit")</button>
+        <a href="/Area/ViewAreas" class="btn btn-cancel">Cancel</a>
+    </form>
 </div>
