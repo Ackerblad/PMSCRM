@@ -74,14 +74,14 @@ namespace PMSCRM.Controllers
             if (user != null)
             {
                 var companyId = user.CompanyId;
-                var roleName = user.Role?.Name ?? "User"; // Use "User" as default if role is null
+                var roleName = user.Role?.Name ?? "User";
 
                 var claims = new List<Claim>
         {
             new(ClaimTypes.Email, user.EmailAddress),
             new("CompanyId", companyId.ToString()),
-            new(ClaimTypes.Role, roleName), // Add role to claims
-            new(ClaimTypes.NameIdentifier, user.UserId.ToString()) // Add userId to claims
+            new(ClaimTypes.Role, roleName),
+            new(ClaimTypes.NameIdentifier, user.UserId.ToString())
         };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -91,7 +91,6 @@ namespace PMSCRM.Controllers
                     IsPersistent = loginRequest.RememberMe,
                 };
 
-                // Set expiration based on RememberMe
                 if (loginRequest.RememberMe)
                 {
                     authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
@@ -101,27 +100,14 @@ namespace PMSCRM.Controllers
                     authProperties.ExpiresUtc = DateTime.UtcNow.AddHours(10);
                 }
 
-                // Sign in the user
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                //// Redirect based on role
-                //if (roleName == "Admin")
-                //{
-                //    return RedirectToAction("AdminDashboard", "Admin");
-                //}
-                //else if (roleName == "User")
-                //{
-                //    return RedirectToAction("UserDashboard", "User");
-                //}
-
-                // Default redirect (if needed)
                 return RedirectToAction("Index", "Home");
             }
 
-            // If login fails
             ViewBag.Message = "Invalid credentials";
             return View("~/Views/Login/Login.cshtml");
         }
@@ -133,17 +119,17 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> AddUser()
         {
             var companyId = _companyDivider.GetCompanyId();
-            var roles = await _userService.GetRolesByCompanyIdAsync(companyId); // Fetch roles from the service
+            var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
 
             var model = new UserRegistration
             {
-                RoleId = Guid.Empty // Default value or you can leave it uninitialized
+                RoleId = Guid.Empty
             };
 
             ViewBag.Roles = roles.Select(r => new SelectListItem
             {
                 Value = r.RoleId.ToString(),
-                Text = r.Name // Assuming RoleName is a property in your Role model
+                Text = r.Name
             }).ToList();
 
             return View(model);
@@ -157,7 +143,6 @@ namespace PMSCRM.Controllers
             var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
             if (!ModelState.IsValid)
             {
-                // Repopulate the roles list in case of validation errors
                 
                 //var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
                 ViewBag.Roles = roles.Select(r => new SelectListItem
@@ -189,8 +174,6 @@ namespace PMSCRM.Controllers
                 }
             }
             ModelState.AddModelError("", "Failed to add user.");
-
-            // Repopulate the roles list again if there's an error
             
             //var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
             ViewBag.Roles = roles.Select(r => new SelectListItem
@@ -266,6 +249,7 @@ namespace PMSCRM.Controllers
             ViewBag.IsSuccess = false;
             return View(passwordReset);
         }
+
         [Authorize]
         [HttpGet("ViewUsers")]
         public async Task<IActionResult> ViewUsers(string sortBy, string sortDirection = "asc")
@@ -284,6 +268,7 @@ namespace PMSCRM.Controllers
             }
             return View(users);
         }
+
         [Authorize]
         [HttpGet("EditUser/{id}")]
         public async Task<IActionResult> EditUser(Guid id)
@@ -296,6 +281,7 @@ namespace PMSCRM.Controllers
             }
             return View(user);
         }
+
         [Authorize]
         [HttpPost("EditUser/{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UserUpdate updatedUser)
@@ -321,6 +307,7 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to update user.");
             return View(updatedUser);
         }
+
         [Authorize]
         [HttpGet("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
@@ -333,6 +320,7 @@ namespace PMSCRM.Controllers
             }
             return View(user);
         }
+
         [Authorize]
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -354,12 +342,14 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to delete user.");
             return View("DeleteUser", user);
         }
+
         //[Authorize]
         //[HttpGet("AddUser")]
         //public IActionResult AddUser()
         //{
         //    return View();
         //}
+
         [Authorize]
         [HttpGet("Success")]
         public IActionResult Success()

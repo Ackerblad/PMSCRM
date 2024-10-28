@@ -147,14 +147,14 @@ namespace PMSCRM.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
-            var task = await _taskService.GetByIdAsync(id, companyId); // Fetch task by ID and company
+            var task = await _taskService.GetByIdAsync(id, companyId); 
 
             if (task == null)
             {
                 return NotFound("Task not found.");
             }
 
-            return View(task); // Return the task to the view
+            return View(task); 
         }
 
 

@@ -28,20 +28,17 @@ namespace PMSCRM.Controllers
         {
             var companyId = _companyDivider.GetCompanyId();
 
-            // Get all areas for the current company
             var areas = await _areaService.GetAllAsync(companyId);
 
-            // Sort the areas alphabetically by name
             var sortedAreas = areas.OrderBy(a => a.Name).Select(a => new SelectListItem
             {
                 Value = a.AreaId.ToString(),
                 Text = a.Name
             }).ToList();
 
-            // Create the view model
             var viewModel = new ProcessViewModel
             {
-                Areas = sortedAreas // Use the sorted list
+                Areas = sortedAreas 
             };
 
             return View(viewModel);
@@ -53,10 +50,8 @@ namespace PMSCRM.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Re-populate the areas in case of validation errors
                 var areas = await _areaService.GetAllAsync(_companyDivider.GetCompanyId());
 
-                // No need to sort here again; the dropdown is already sorted in the GET method
                 viewModel.Areas = areas.Select(a => new SelectListItem
                 {
                     Value = a.AreaId.ToString(),

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PMSCRM.Models;
@@ -40,7 +41,7 @@ namespace PMSCRM.Controllers
 
             var tasks = await _taskService.GetAllAsync(companyId);
             var processes = await _processService.GetAllAsync(companyId);
-            var areas = await _areaService.GetAllAsync(companyId); // Assuming you want to fetch areas too
+            var areas = await _areaService.GetAllAsync(companyId);
 
             var model = new TaskProcessAreaViewModel
             {
@@ -49,24 +50,24 @@ namespace PMSCRM.Controllers
                     Value = t.TaskId.ToString(),
                     Text = t.Name,
                 })
-                .OrderBy(t => t.Text) // Sort tasks by name
-                .ToList(), // Convert to a List for consistency
+                .OrderBy(t => t.Text)
+                .ToList(),
 
                 Processes = processes.Select(p => new SelectListItem
                 {
                     Value = p.ProcessId.ToString(),
-                    Text = p.Name
+                    Text = p.Name + $" Area: {p.Area.Name}",
                 })
-                .OrderBy(p => p.Text) // Sort processes by name
-                .ToList(), // Convert to a List for consistency
+                .OrderBy(p => p.Text)
+                .ToList(),
 
-                Areas = areas.Select(a => new SelectListItem // Ensure areas are also populated
+                Areas = areas.Select(a => new SelectListItem
                 {
                     Value = a.AreaId.ToString(),
                     Text = a.Name
                 })
-                .OrderBy(a => a.Text) // Sort areas by name
-                .ToList() // Convert to a List for consistency
+                .OrderBy(a => a.Text)
+                .ToList()
             };
 
             return View(model);
@@ -133,7 +134,7 @@ namespace PMSCRM.Controllers
                 Processes = processes.Select(p => new SelectListItem
                 {
                     Value = p.ProcessId.ToString(),
-                    Text = p.Name,
+                    Text = p.Name + $" Area: {p.Area.Name}",
                     Selected = p.ProcessId == taskProcessArea.ProcessId
                 }),
             };
@@ -177,6 +178,7 @@ namespace PMSCRM.Controllers
             {
                 TaskProcessAreaId = taskProcessArea.TaskProcessAreaId,
                 TaskName = taskProcessArea.Task?.Name,
+                AreaName = taskProcessArea.Area?.Name,
                 ProcessName = taskProcessArea.Process?.Name,
                 Timestamp = taskProcessArea.Timestamp
             };

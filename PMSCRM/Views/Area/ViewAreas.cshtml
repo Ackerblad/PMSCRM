@@ -28,17 +28,7 @@
                     </th>
 
                     <th>
-                        <a asp-action="ViewAreas" asp-route-sortBy="Description" asp-route-sortDirection="@((ViewBag.CurrentSort == "Description" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
-                            Description
-                            @if (ViewBag.CurrentSort == "Description")
-                            {
-                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                            }
-                            else
-                            {
-                                <span>▲</span> 
-                            }
-                        </a>
+                        Description
                     </th>
                     <th class="text-end px-3"></th>
                 </tr>

@@ -19,15 +19,17 @@ namespace PMSCRM.Controllers
             _companyDivider = companyDivider;
         }
 
+        private Guid GetCompanyId() 
+        {
+            return _companyDivider.GetCompanyId();
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddCustomer(Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(customer);
-            }
+            if (!ModelState.IsValid) return View(customer);
 
-            customer.CompanyId = _companyDivider.GetCompanyId();
+            customer.CompanyId = GetCompanyId();
 
             bool success = await _customerService.AddAsync(customer);
             if (success)
@@ -42,7 +44,7 @@ namespace PMSCRM.Controllers
         [HttpGet("EditCustomer/{id}")]
         public async Task<IActionResult> EditCustomer(Guid id)
         {
-            var companyId = _companyDivider.GetCompanyId();
+            var companyId = GetCompanyId();
             var customer = await _customerService.GetByIdAsync(id, companyId);
 
             if (customer == null)
@@ -60,7 +62,7 @@ namespace PMSCRM.Controllers
                 return View(updatedCustomer);
             }
 
-            updatedCustomer.CompanyId = _companyDivider.GetCompanyId();
+            updatedCustomer.CompanyId = GetCompanyId();
 
             bool success = await _customerService.UpdateAsync(id, updatedCustomer);
             if (success)
@@ -75,7 +77,7 @@ namespace PMSCRM.Controllers
         [HttpGet("DeleteCustomer/{id}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
-            var companyId = _companyDivider.GetCompanyId();
+            var companyId = GetCompanyId();
             var customer = await _customerService.GetByIdAsync(id, companyId);
 
             if (customer == null)
@@ -89,7 +91,7 @@ namespace PMSCRM.Controllers
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var companyId = _companyDivider.GetCompanyId();
+            var companyId = GetCompanyId();
             var customer = await _customerService.GetByIdAsync(id, companyId);
 
             if (customer == null)
@@ -116,7 +118,7 @@ namespace PMSCRM.Controllers
         [HttpGet("ViewCustomers")]
         public async Task<IActionResult> ViewCustomers(string sortBy, string sortDirection = "asc")
         {
-            var companyId = _companyDivider.GetCompanyId();
+            var companyId = GetCompanyId();
             var customers = await _customerService.GetAllAsync(companyId);
 
             customers = customers.SortBy(sortBy, sortDirection).ToList();

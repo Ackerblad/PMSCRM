@@ -5,11 +5,11 @@
 <div class="card shadow-sm p-4 mb-4">
     <label class="form-label">Select Process</label>
     <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px; border-block-end: solid; border-block-end-width: thin; border-block-end-color: lightgray">
-        <table class="table-striped table-hover custom-table">
-            <thead>
+        <table class="table table-sm table-bordered table-hover">
+            <thead class="table-light">
                 <tr>
                     <th class="text-center">
-                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" >
+                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
                             Area
                             @if (ViewBag.CurrentSort == "Area")
                             {
@@ -17,12 +17,12 @@
                             }
                             else
                             {
-                                <span>▲</span> 
+                                <span>▲</span>
                             }
                         </a>
                     </th>
                     <th class="text-center">
-                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
                             Process
                             @if (ViewBag.CurrentSort == "Process")
                             {
@@ -30,12 +30,12 @@
                             }
                             else
                             {
-                                <span>▲</span> 
+                                <span>▲</span>
                             }
                         </a>
                     </th>
                     <th class="text-center">
-                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                        <a asp-action="AddTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
                             Task
                             @if (ViewBag.CurrentSort == "Task")
                             {
@@ -43,7 +43,7 @@
                             }
                             else
                             {
-                                <span>▲</span> 
+                                <span>▲</span>
                             }
                         </a>
                     </th>
