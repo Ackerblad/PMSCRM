@@ -36,7 +36,6 @@ namespace PMSCRM.Controllers
             var allTaskProcessAreas = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
             var existingConnections = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
 
-            // Sorting ExistingConnections based on selected criteria
             switch (sortBy)
             {
                 case "Area":
@@ -55,7 +54,7 @@ namespace PMSCRM.Controllers
                         : existingConnections.OrderByDescending(t => t.TaskName).ToList();
                     break;
                 default:
-                    existingConnections = existingConnections.OrderBy(t => t.AreaName).ToList(); // Default sorting
+                    existingConnections = existingConnections.OrderBy(t => t.AreaName).ToList();
                     break;
             }
 
@@ -71,14 +70,14 @@ namespace PMSCRM.Controllers
                     Value = u.UserId.ToString(),
                     Text = u.FirstName + " " + u.LastName
                 })
-                .OrderBy(u => u.Text) // Sort users by full name
+                .OrderBy(u => u.Text)
                 .ToList(),
                 Customers = customers.Select(c => new SelectListItem
                 {
                     Value = c.CustomerId.ToString(),
                     Text = c.Name
                 })
-                .OrderBy(c => c.Text) // Sort customers by name
+                .OrderBy(c => c.Text)
                 .ToList(),
                 Statuses = Enum.GetValues(typeof(Utilities.TaskStatus))
                               .Cast<Utilities.TaskStatus>()
@@ -87,11 +86,10 @@ namespace PMSCRM.Controllers
                                   Value = ((byte)s).ToString(),
                                   Text = s.ToString()
                               })
-                              .OrderBy(s => s.Text) // Sort statuses by name
+                              .OrderBy(s => s.Text)
                               .ToList()
             };
 
-            // Set the current sorting parameters in ViewBag
             ViewBag.CurrentSort = sortBy;
             ViewBag.CurrentSortDirection = sortDirection;
 
@@ -290,21 +288,17 @@ namespace PMSCRM.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser(string sortBy, string sortDirection)
         {
-            // Get the logged-in user's ID from the claims
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
             {
-                // If for some reason the user ID is null or empty, return an error or redirect.
                 return Unauthorized();
             }
 
-            // Call the service function with the current user's ID
             var tpaucRecords = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayForUserAsync(Guid.Parse(userId));
 
-            // Sorting logic
-            ViewBag.CurrentSort = sortBy ?? "Area"; // Default sort by Area
-            ViewBag.CurrentSortDirection = sortDirection ?? "asc"; // Default direction
+            ViewBag.CurrentSort = sortBy ?? "Area";
+            ViewBag.CurrentSortDirection = sortDirection ?? "asc";
 
             switch (ViewBag.CurrentSort)
             {
@@ -353,7 +347,6 @@ namespace PMSCRM.Controllers
                     break;
             }
 
-            // Pass the sorted tpaucRecords to the view for rendering
             return View(tpaucRecords);
         }
 
@@ -363,9 +356,8 @@ namespace PMSCRM.Controllers
         {
             var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
 
-            // Sorting logic
-            ViewBag.CurrentSort = sortBy ?? "Area"; // Default sort by Area
-            ViewBag.CurrentSortDirection = sortDirection ?? "asc"; // Default direction
+            ViewBag.CurrentSort = sortBy ?? "Area";
+            ViewBag.CurrentSortDirection = sortDirection ?? "asc";
 
             switch (ViewBag.CurrentSort)
             {
@@ -419,7 +411,6 @@ namespace PMSCRM.Controllers
                     break;
             }
 
-            // Pass the sorted tpauc to the view for rendering
             return View("ViewTaskProcessAreaUserCustomer", tpauc);
         }
 

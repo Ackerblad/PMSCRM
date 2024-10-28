@@ -14,12 +14,15 @@ namespace PMSCRM.Services
 
         public async Task<List<Area>> GetAllAsync(Guid companyId)
         {
-            return await _db.Areas.Where(a => a.CompanyId == companyId).ToListAsync();
+            return await _db.Areas
+                .Where(a => a.CompanyId == companyId)
+                .ToListAsync();
         }
 
         public async Task<Area?> GetByIdAsync(Guid id, Guid companyId)
         {
-            return await _db.Areas.FirstOrDefaultAsync(a => a.AreaId == id && a.CompanyId == companyId);
+            return await _db.Areas
+                .FirstOrDefaultAsync(a => a.AreaId == id && a.CompanyId == companyId);
         }
 
         public async Task<bool> AddAsync(Area area)
@@ -47,28 +50,22 @@ namespace PMSCRM.Services
 
             area.Name = updated.Name;
             area.Description = updated.Description;
-
             await _db.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = await _db.Areas
+            var area = await _db.Areas
                .Include(a => a.Processes) 
                .FirstOrDefaultAsync(a => a.AreaId == id && a.CompanyId == companyId);
 
-            if (toDelete == null)
+            if (area == null || (area.Processes != null && area.Processes.Any()))
             {
                 return false;
             }
 
-            if (toDelete.Processes != null && toDelete.Processes.Any())
-            {
-                return false; 
-            }
-
-            _db.Areas.Remove(toDelete);
+            _db.Areas.Remove(area);
             await _db.SaveChangesAsync();
             return true;
         }

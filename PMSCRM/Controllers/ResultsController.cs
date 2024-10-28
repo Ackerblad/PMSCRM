@@ -125,7 +125,7 @@ namespace PMSCRM.Controllers
 
 
 
-        [HttpPost]
+        [HttpGet("SortResults")]
         public async Task<IActionResult> SortResults(SearchResultsViewModel model, string sortBy, string sortDirection = "asc")
         {
             //if (string.IsNullOrEmpty(model.Query))
@@ -143,11 +143,11 @@ namespace PMSCRM.Controllers
                     return BadRequest("Company not found.");
                 }
 
-                //// Re-fetch the data based on the current filters and query
+                // Re-fetch the data based on the current filters and query
                 //var query = model.Query; // Assuming you store the query in the model
                 //var filters = model.FilterArray; // Assuming you store filters in the model
 
-                //// Initialize filtered results
+                // Initialize filtered results
                 //var filteredAreas = await _areaService.SearchAreasAsync(companyId, model.Query);
 
                 //// Update the model with the fetched data

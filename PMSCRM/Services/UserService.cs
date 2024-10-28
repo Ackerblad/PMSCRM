@@ -72,7 +72,7 @@ namespace PMSCRM.Services
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
             existingUser.PhoneNumber = updatedUser.PhoneNumber;
-            existingUser.RoleId = updatedUser.RoleId;
+            //existingUser.RoleId = updatedUser.RoleId;
 
             await _db.SaveChangesAsync();
             return true;

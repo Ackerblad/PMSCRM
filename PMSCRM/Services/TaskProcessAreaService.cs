@@ -83,6 +83,7 @@ namespace PMSCRM.Services
             return await _db.TaskProcessAreas
                 .Include(t => t.Task)
                 .Include(t => t.Process)
+                .Include(t => t.Area)
                 .FirstOrDefaultAsync(tpa => tpa.TaskProcessAreaId == id && tpa.CompanyId == companyId);
         }
 

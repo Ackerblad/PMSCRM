@@ -50,7 +50,6 @@ namespace PMSCRM.Controllers
             return View(role);
         }
 
-        // POST: /Process/EditProcess/{id}
         [HttpPost("EditRole/{id}")]
         public async Task<IActionResult> EditRole(Guid id, Role updatedRole)
         {
@@ -84,7 +83,6 @@ namespace PMSCRM.Controllers
             return View(role);
         }
 
-        // POST: /Process/DeleteConfirmed/{id}
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
