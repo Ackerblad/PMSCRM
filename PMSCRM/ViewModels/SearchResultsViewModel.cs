@@ -14,6 +14,6 @@ namespace PMSCRM.ViewModels
 
         public string? CurrentSort { get; set; }
         public string? CurrentSortDirection { get; set; }
-        public string? Query { get; set; }
+        public string Query { get; set; }
     }
 }
