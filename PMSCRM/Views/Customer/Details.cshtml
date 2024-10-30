@@ -1,0 +1,59 @@
+﻿@model PMSCRM.Models.Customer
+
+@{
+    ViewData["Title"] = "Customer Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/buttons.css">
+
+<div class="card shadow-sm p-4 mb-4">
+
+    <label for="Name" class="form-label">Name</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Name</p>
+    </div>
+
+    <label for="Name" class="form-label">Phone Number</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.PhoneNumber</p>
+    </div>
+
+    <label for="Name" class="form-label">Email</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.EmailAddress</p>
+    </div>
+
+    <label for="Name" class="form-label">Street Address</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.StreetAddress</p>
+    </div>
+
+    <label for="Name" class="form-label">City</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.City</p>
+    </div>
+
+    <label for="Name" class="form-label">State/Province</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.StateOrProvince</p>
+    </div>
+
+    <label for="Name" class="form-label">Postal Code</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.PostalCode</p>
+    </div>
+
+    <label for="Name" class="form-label">Country</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Country</p>
+    </div>
+
+    <label for="Name" class="form-label">Created</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Timestamp</p>
+    </div>
+
+    <div>
+        <a href="/Customer/ViewCustomers" class="btn btn-cancel">Back to List</a>
+    </div>
+</div>

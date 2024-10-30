@@ -63,9 +63,11 @@ namespace PMSCRM.Services
             }
         }
 
-        public async Task<bool> UpdateAsync(TaskProcessArea taskProcessArea)
+        public async Task<bool> UpdateAsync(Guid id, TaskProcessArea taskProcessArea)
         {
-            var existing = await _db.TaskProcessAreas.FindAsync(taskProcessArea.TaskProcessAreaId);
+            var existing = await _db.TaskProcessAreas
+                 .FirstOrDefaultAsync(t => t.TaskProcessAreaId == id && t.CompanyId == taskProcessArea.CompanyId);
+
             if (existing == null)
             {
                 return false;

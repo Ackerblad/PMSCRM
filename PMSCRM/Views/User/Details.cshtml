@@ -1,0 +1,44 @@
+﻿@model PMSCRM.Models.User
+
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/buttons.css">
+
+<div class="card shadow-sm p-4 mb-4">
+
+    <label for="Name" class="form-label">Role</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Role.Name</p>
+    </div>
+
+    <label for="Name" class="form-label">Email</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.EmailAddress</p>
+    </div>
+
+    <label for="Name" class="form-label">First Name</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.FirstName</p>
+    </div>
+
+    <label for="Name" class="form-label">Last Name</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.LastName min</p>
+    </div>
+
+    <label for="Name" class="form-label">Phone Number</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.PhoneNumber min</p>
+    </div>
+
+    <label for="Name" class="form-label">Created</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Timestamp</p>
+    </div>
+
+    <div>
+        <a href="/User/ViewUsers" class="btn btn-cancel">Back to List</a>
+    </div>
+</div>

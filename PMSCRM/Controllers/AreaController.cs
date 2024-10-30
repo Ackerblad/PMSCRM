@@ -24,22 +24,23 @@ namespace PMSCRM.Controllers
             return _companyDivider.GetCompanyId();
         }
 
-        [HttpGet]
-        public IActionResult AddArea()
-        {
-            ViewBag.IsEditMode = false;
-            return View(new Area());
-        }
-
         private async Task<Area?> GetAreaAsync(Guid id)
         {
             var companyId = GetCompanyId();
             return companyId == Guid.Empty ? null : await _areaService.GetByIdAsync(id, companyId); 
         }
 
+        [HttpGet]
+        public IActionResult AddArea()
+        {
+            ViewBag.IsEditMode = false;
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddAreaAsync(Area area)
         {
+            ViewBag.IsEditMode = false;
             if (!ModelState.IsValid) return View(area);
 
             area.CompanyId = GetCompanyId();
@@ -48,11 +49,14 @@ namespace PMSCRM.Controllers
             var success = await _areaService.AddAsync(area);
             if (!success)
             {
-                ModelState.AddModelError("", "Failed to add area.");
+                ViewBag.Message = "Failed to add area. Please try again.";
+                ViewBag.MessageType = "error";
                 return View(area);
             }
 
-            return RedirectToAction("Success");
+            ViewBag.Message = "Area added successfully!";
+            ViewBag.MessageType = "success";
+            return View("AddArea", area);
         }
 
         [HttpGet("EditArea/{id}")]
@@ -110,8 +114,20 @@ namespace PMSCRM.Controllers
             return success ? RedirectToAction("ViewAreas") : View("DeleteArea", area);
         }
 
-        [HttpGet("Success")]
-        public IActionResult Success() => View();
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var companyId = GetCompanyId();
+            var area = await _areaService.GetByIdAsync(id, companyId);
+
+            if (area == null)
+            {
+                ViewBag.Message = "Area not found.";
+                return View("ViewAreas", area);
+            }
+
+            return View(area);
+        }
 
         [HttpGet("ViewAreas")]
         public async Task<IActionResult> ViewAreasAsync(string sortBy, string sortDirection = "asc")

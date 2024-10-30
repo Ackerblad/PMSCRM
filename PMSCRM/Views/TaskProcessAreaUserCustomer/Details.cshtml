@@ -1,0 +1,59 @@
+﻿@model PMSCRM.Models.TaskProcessAreaUserCustomer
+
+@{
+    ViewData["Title"] = "TaskProcessAreaUserCustomer Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/buttons.css">
+
+<div class="card shadow-sm p-4 mb-4">
+
+    <label for="Name" class="form-label">Area</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.TaskProcessArea.Area.Name</p>
+    </div>
+
+    <label for="Name" class="form-label">Process</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.TaskProcessArea.Process.Name</p>
+    </div>
+
+    <label for="Name" class="form-label">Task</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.TaskProcessArea.Task.Name</p>
+    </div>
+
+    <label for="Name" class="form-label">User</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.User.FirstName @Model.User.LastName (@Model.User.EmailAddress) </p>
+    </div>
+
+    <label for="Name" class="form-label">Customer</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Customer.Name </p>
+    </div>
+
+    <label for="Name" class="form-label">Start Date</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.StartDate </p>
+    </div>
+
+    <label for="Name" class="form-label">End Date</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.EndDate </p>
+    </div>
+
+    <label for="Name" class="form-label">Status</label>
+    <div class="card p-4 mb-4">
+            <p>@((PMSCRM.Utilities.TaskStatus)@Model.Status)</p>
+    </div>
+
+    <label for="Name" class="form-label">Created</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Timestamp</p>
+    </div>
+
+    <div>
+        <a href="/TaskProcessAreaUserCustomer/ViewTaskProcessAreaUserCustomer" class="btn btn-cancel">Back to List</a>
+    </div>
+</div>

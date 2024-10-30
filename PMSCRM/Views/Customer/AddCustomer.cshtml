@@ -1,54 +1,77 @@
-﻿@{
-    ViewData["Title"] = "Add Customer";
+﻿@model PMSCRM.Models.Customer
+@{
+    ViewData["Title"] = ViewBag.IsEditMode ? "Edit Customer" : "Add Customer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
-<form class="was-validated" asp-controller="Customer" asp-action="AddCustomer" method="post">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert @(ViewBag.MessageType == "success" ? "alert-success" : "alert-danger")" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+
+    <form class="was-validated" asp-controller="Customer" asp-action="@(ViewBag.IsEditMode ? "EditCustomer" : "AddCustomer")" method="post">
 
     <div class="mb-3">
-        <input type="text" class="form-control" id="customerName" placeholder="Customer Name" name="Name" required>
+        <label for="Name" class="form-label">Customer Name</label>
+            <input type="text" class="form-control" id="customerName" placeholder="Enter customer's full name" name="Name" value="@Model?.Name" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
+
     <div class="mb-3">
-        <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" name="PhoneNumber" required>
+        <label for="Name" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter customer's phone number" name="PhoneNumber" value="@Model?.PhoneNumber" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
+
     <div class="mb-3">
-        <input type="text" class="form-control" id="emailAddress" placeholder="Email" name="EmailAddress" required>
+        <label for="Name" class="form-label">Email</label>
+            <input type="text" class="form-control" id="emailAddress" placeholder="Enter customer's email address" name="EmailAddress" value="@Model?.EmailAddress" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
+
     <div class="mb-3">
-        <input type="text" class="form-control" id="streetAddress" placeholder="Street Address" name="StreetAddress" required>
+        <label for="Name" class="form-label">Street Address</label>
+            <input type="text" class="form-control" id="streetAddress" placeholder="Enter customer's street address" name="StreetAddress" value="@Model?.StreetAddress" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
+
     <div class="mb-3">
-        <input type="text" class="form-control" id="city" placeholder="City" name="City" required>
+        <label for="Name" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" placeholder="Enter customer's city" name="City" value="@Model?.City" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
    
     <div class="mb-3">
-        <input type="text" class="form-control" id="stateOrProvince" placeholder="State Or Province" name="StateOrProvince" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" id="postalCode" placeholder="Postal Code" name="PostalCode" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
-    <div class="mb-3">
-        <input type="text" class="form-control" id="country" placeholder="Country" name="Country" required>
+        <label for="Name" class="form-label">State/Province</label>
+            <input type="text" class="form-control" id="stateOrProvince" placeholder="Enter customer's state or province" name="StateOrProvince" value="@Model?.StateOrProvince" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
     </div>
 
-    <button type="submit" class="btn btn-submit">Submit</button>
+    <div class="mb-3">
+        <label for="Name" class="form-label">Postal Code</label>
+            <input type="text" class="form-control" id="postalCode" placeholder="Enter customer's postal code" name="PostalCode" value="@Model?.PostalCode" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Country</label>
+            <input type="text" class="form-control" id="country" placeholder="Enter customer's country" name="Country" value="@Model?.Country" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+
+        <button type="submit" class="btn btn-submit">@(ViewBag.IsEditMode ? "Save Changes" : "Submit")</button>
+        <a href="/Customer/ViewCustomers" class="btn btn-cancel">Cancel</a>
 </form>
 </div>

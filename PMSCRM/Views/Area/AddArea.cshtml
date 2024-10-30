@@ -3,10 +3,15 @@
     ViewData["Title"] = ViewBag.IsEditMode ? "Edit Area" : "Add Area";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert @(ViewBag.MessageType == "success" ? "alert-success" : "alert-danger")" role="alert">
+            @ViewBag.Message
+        </div>
+    }
     <form class="was-validated" asp-controller="Area" asp-action="@(ViewBag.IsEditMode ? "EditArea" : "AddArea")" method="post">
 
         <div class="mb-3">

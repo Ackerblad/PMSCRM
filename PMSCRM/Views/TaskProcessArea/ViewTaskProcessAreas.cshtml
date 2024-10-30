@@ -21,17 +21,17 @@
         <tbody>
             @if (Model != null && Model.Any())
             {
-                foreach (var item in Model)
+                foreach (var taskProcessArea in Model)
                 {
                     <tr>
-                        <td>@item.AreaName</td>
-                        <td>@item.ProcessName</td>
-                        <td>@item.TaskName</td>
-                        <td>@item.Timestamp.ToString("g")</td>
+                        <td>@taskProcessArea.AreaName</td>
+                        <td>@taskProcessArea.ProcessName</td>
+                        <td>@taskProcessArea.TaskName</td>
+                        <td>@taskProcessArea.Timestamp.ToString("g")</td>
                         <td>
 
-                            <a href="@Url.Action("EditTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-edit">Edit</a>
-                            <a href="@Url.Action("DeleteTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-delete">Delete</a>
+                            <a href="/TaskProcessArea/EditTaskProcessArea/@taskProcessArea.TaskProcessAreaId" class="btn btn-edit">Edit</a>
+                            <a href="/TaskProcessArea/DeleteTaskProcessArea/@taskProcessArea.TaskProcessAreaId" class="btn btn-delete">Delete</a>
                         </td>
                     </tr>
                 }

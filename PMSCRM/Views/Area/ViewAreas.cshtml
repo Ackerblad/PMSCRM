@@ -22,14 +22,11 @@
                             }
                             else
                             {
-                                <span>▲</span> 
+                                <span>▲</span>
                             }
                         </a>
                     </th>
-
-                    <th>
-                        Description
-                    </th>
+                    <th>Description</th>
                     <th class="text-end px-3"></th>
                 </tr>
             </thead>
@@ -37,8 +34,12 @@
                 @foreach (var area in Model)
                 {
                     <tr>
-                        <td>@area.Name</td>
-                        <td>@area.Description</td>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/Area/Details/@area.AreaId" style="color: black; text-decoration: none;">@area.Name</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 300px;">
+                            <a href="/Area/Details/@area.AreaId" style="color: black; text-decoration: none;">@area.Description</a>
+                        </td>
                         <td class="text-end">
                             <a href="/Area/EditArea/@area.AreaId" class="btn btn-edit">Edit</a>
                             <a href="/Area/DeleteArea/@area.AreaId" class="btn btn-delete">Delete</a>
@@ -56,9 +57,3 @@
         <a asp-area="" asp-controller="Area" asp-action="AddArea" class="btn btn-add">Add Area</a>
     </div>
 </div>
-
-<script>
-    $(function () {
-        $('[data-bs-toggle="tooltip"]').tooltip();
-    });
-</script>
