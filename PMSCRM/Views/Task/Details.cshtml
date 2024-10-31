@@ -4,17 +4,31 @@
     ViewData["Title"] = "Task Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/css/buttons.css">
 
-<h3 class="fw-bold fs-4 mb-3">Task Details</h3>
+<div class="card shadow-sm p-4 mb-4">
 
-<div>
-    <strong>Task Name:</strong> @Model.Name
-</div>
-<div>
-    <strong>Description:</strong> @Model.Description
-</div>
-<div>
-    <strong>Duration:</strong> @Model.Duration min
-</div>
+    <label for="Name" class="form-label">Name</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Name</p>
+    </div>
 
-<a asp-area="" asp-controller="Task" asp-action="ViewTasks" class="btn btn-primary mt-3">Back to Tasks List</a>
+    <label for="Name" class="form-label">Duration</label>
+    <div class ="card p-4 mb-4">
+        <p>@Model.Duration min</p>
+    </div>
+
+    <label for="Name" class="form-label">Description</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Description</p>
+    </div>
+
+    <label for="Name" class="form-label">Created</label>
+    <div class="card p-4 mb-4">
+        <p>@Model.Timestamp</p>
+    </div>
+
+    <div>
+        <a href="/Task/ViewTasks" class="btn btn-cancel">Back to List</a>
+    </div>
+</div>

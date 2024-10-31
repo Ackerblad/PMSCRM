@@ -1,12 +1,19 @@
 ﻿@model PMSCRM.ViewModels.ProcessViewModel
 @{
-    ViewData["Title"] = "Add Process";
+    ViewData["Title"] = ViewBag.IsEditMode ? "Edit Process" : "Add Process";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
-<form class="was-validated" asp-controller="Process" asp-action="AddProcess" method="post">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert @(ViewBag.MessageType == "success" ? "alert-success" : "alert-danger")" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+
+    <form class="was-validated" asp-controller="Process" asp-action="@(ViewBag.IsEditMode ? "EditProcess" : "AddProcess")" method="post">
 
         <div class="mb-3">
             <label for="AreaId" class="form-label">Select Area</label>
@@ -18,15 +25,19 @@
         </div>
 
         <div class="mb-3">
-            <input type="text" class="form-control" asp-for="Process.Name" placeholder="Process Name" maxlength="50" required>
+            <label for="Name" class="form-label">Process Name</label>
+            <input type="text" class="form-control" asp-for="Process.Name" placeholder="Name the Process" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
 
         <div class="mb-3">
-            <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Description" required></textarea>
+            <label for="Name" class="form-label">Description</label>
+            <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Add a Description"></textarea>
         </div>
 
-    <button type="submit" class="btn btn-submit">Submit</button>
+        <button type="submit" class="btn btn-submit">@(ViewBag.IsEditMode ? "Save Changes" : "Submit")</button>
+        <a href="/Process/ViewProcesses" class="btn btn-cancel">Cancel</a>
 </form>
 </div>
+

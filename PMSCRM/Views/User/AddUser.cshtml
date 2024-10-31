@@ -1,20 +1,35 @@
 ﻿@model PMSCRM.Utilities.UserRegistration
 
 @{
-    ViewData["Title"] = "Add User";
+    ViewData["Title"] = ViewBag.IsEditMode ? "Edit User" : "Add User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
-    <form class="was-validated" asp-controller="User" asp-action="AddUser" method="post">
-        <div class="mb-3 mt-3">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert @(ViewBag.MessageType == "success" ? "alert-success" : "alert-danger")" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+
+    <form class="was-validated" asp-controller="User" asp-action="@(ViewBag.IsEditMode ? "EditUser" : "AddUser")" method="post">
+
+        <div class="mb-3">
             <label for="roleId" class="form-label">Role</label>
             <select class="form-select" asp-for="RoleId" required>
                 <option value="">Select a role...</option>
-                @foreach (var role in ViewBag.Roles as List<SelectListItem>)
+                @if (ViewBag.Roles != null)
                 {
-                    <option value="@role.Value">@role.Text</option>
+                    foreach (var role in ViewBag.Roles as List<SelectListItem>)
+                    {
+                        <option value="@role.Value">@role.Text</option>
+                    }
+                }
+                else
+                {
+                    <option value="">No roles available</option>
                 }
             </select>
             <div class="valid-feedback">Valid.</div>
@@ -22,26 +37,32 @@
         </div>
 
         <div class="mb-3">
-            <input type="text" class="form-control" id="emailAddress" placeholder="Email" maxlength="100" name="EmailAddress" required>
+            <label for="Name" class="form-label">Email</label>
+            <input type="text" class="form-control" id="emailAddress" placeholder="Enter user's email address" name="EmailAddress" value="@Model?.EmailAddress" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
         <div class="mb-3">
-            <input type="text" class="form-control" id="firstName" placeholder="First Name" maxlength="100" name="FirstName" required>
+            <label for="Name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="Enter user's first name" name="FirstName" value="@Model?.FirstName" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
         <div class="mb-3">
-            <input type="text" class="form-control" id="lastName" placeholder="Last Name" maxlength="100" name="LastName" required>
+            <label for="Name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Enter user's last name" name="LastName" value="@Model?.LastName" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
         <div class="mb-3">
-            <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" maxlength="100" name="PhoneNumber" required>
+            <label for="Name" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter user's phone number" name="PhoneNumber" value="@Model?.PhoneNumber" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
-        <button type="submit" class="btn btn-submit">Submit</button>
+
+        <button type="submit" class="btn btn-submit">@(ViewBag.IsEditMode ? "Save Changes" : "Submit")</button>
+        <a href="/User/ViewUsers" class="btn btn-cancel">Cancel</a>
     </form>
 </div>
 

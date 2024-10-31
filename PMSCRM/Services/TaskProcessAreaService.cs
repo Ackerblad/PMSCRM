@@ -32,7 +32,6 @@ namespace PMSCRM.Services
             bool exists = await _db.TaskProcessAreas
                 .AnyAsync(t => t.TaskId == taskProcessArea.TaskId &&
                           t.ProcessId == taskProcessArea.ProcessId &&
-                          //t.AreaId == taskProcessArea.AreaId &&
                           t.CompanyId == taskProcessArea.CompanyId);
 
             if (exists)
@@ -64,9 +63,11 @@ namespace PMSCRM.Services
             }
         }
 
-        public async Task<bool> UpdateAsync(TaskProcessArea taskProcessArea)
+        public async Task<bool> UpdateAsync(Guid id, TaskProcessArea taskProcessArea)
         {
-            var existing = await _db.TaskProcessAreas.FindAsync(taskProcessArea.TaskProcessAreaId);
+            var existing = await _db.TaskProcessAreas
+                 .FirstOrDefaultAsync(t => t.TaskProcessAreaId == id && t.CompanyId == taskProcessArea.CompanyId);
+
             if (existing == null)
             {
                 return false;
@@ -74,7 +75,6 @@ namespace PMSCRM.Services
 
             existing.TaskId = taskProcessArea.TaskId;
             existing.ProcessId = taskProcessArea.ProcessId;
-            //existing.AreaId = taskProcessArea.AreaId;
 
             await _db.SaveChangesAsync();
             return true;
@@ -101,6 +101,5 @@ namespace PMSCRM.Services
             await _db.SaveChangesAsync();
             return true;
         }
-
     }
 }

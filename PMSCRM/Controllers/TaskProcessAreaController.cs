@@ -6,6 +6,7 @@ using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using PMSCRM.ViewModels;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace PMSCRM.Controllers
@@ -38,8 +39,8 @@ namespace PMSCRM.Controllers
         [HttpGet("AddTaskProcessArea")]
         public async Task<IActionResult> AddTaskProcessArea()
         {
+            ViewBag.IsEditMode = false;
             var companyId = _companyDivider.GetCompanyId();
-
             var tasks = await _taskService.GetAllAsync(companyId);
             var processes = await _processService.GetAllAsync(companyId);
             var areas = await _areaService.GetAllAsync(companyId);
@@ -78,6 +79,7 @@ namespace PMSCRM.Controllers
         [HttpPost("AddTaskProcessArea")]
         public async Task<IActionResult> AddTaskProcessArea(TaskProcessAreaViewModel model)
         {
+            ViewBag.IsEditMode = false;
             var companyId = _companyDivider.GetCompanyId();
             var process = await _processService.GetByIdAsync(model.ProcessId, companyId);
 
@@ -93,17 +95,19 @@ namespace PMSCRM.Controllers
             if (success)
             {
                 await _taskProcessAreaService.UpdateProcessDurationAsync(model.ProcessId, companyId);
-                return RedirectToAction("ViewTaskProcessAreas");
+                ViewBag.Message = "TPA added successfully!";
+                ViewBag.MessageType = "success";
+                return View("AddTaskProcessArea", model);
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to add task-process-area.");
-
-
             model.Tasks = (await _taskService.GetAllAsync(companyId))
-        .Select(t => new SelectListItem { Value = t.TaskId.ToString(), Text = t.Name });
+                .Select(t => new SelectListItem { Value = t.TaskId.ToString(), Text = t.Name });
 
             model.Processes = (await _processService.GetAllAsync(companyId))
                 .Select(p => new SelectListItem { Value = p.ProcessId.ToString(), Text = p.Name });
+
+            ViewBag.Message = "Failed to add TPA. Please try again.";
+            ViewBag.MessageType = "error";
             return View(model);
         }
 
@@ -139,13 +143,14 @@ namespace PMSCRM.Controllers
                     Selected = p.ProcessId == taskProcessArea.ProcessId
                 }),
             };
-
-            return View(model);
+            ViewBag.IsEditMode = true;
+            return View("AddTaskProcessArea", model);
         }
 
         [HttpPost("EditTaskProcessArea/{id}")]
-        public async Task<IActionResult> EditTaskProcessArea(TaskProcessAreaViewModel model)
+        public async Task<IActionResult> EditTaskProcessArea(Guid id, TaskProcessAreaViewModel model)
         {
+            ViewBag.IsEditMode = true;
             var taskProcessArea = new TaskProcessArea
             {
                 TaskProcessAreaId = model.TaskProcessAreaId,
@@ -154,14 +159,13 @@ namespace PMSCRM.Controllers
                 CompanyId = _companyDivider.GetCompanyId(),
             };
 
-            bool success = await _taskProcessAreaService.UpdateAsync(taskProcessArea);
+            bool success = await _taskProcessAreaService.UpdateAsync(id, taskProcessArea);
             if (success)
             {
                 return RedirectToAction("ViewTaskProcessAreas");
             }
-
             ModelState.AddModelError(string.Empty, "Failed to update Task Process Area.");
-            return View(model);
+            return View("AddTaskProcessArea", model);
         }
 
         [HttpGet("DeleteTaskProcessArea/{id}")]
@@ -209,6 +213,21 @@ namespace PMSCRM.Controllers
             return View("DeleteTaskProcessArea", taskProcessArea);
         }
 
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var taskProcessArea = await _taskProcessAreaService.GetByIdAsync(id, companyId);
+
+            if (taskProcessArea == null)
+            {
+                ViewBag.Message = "TPA not found.";
+                return View("ViewTaskProcessAreas", taskProcessArea);
+            }
+
+            return View(taskProcessArea);
+        }
+
         [HttpGet("ViewTaskProcessAreas")]
         public async Task<IActionResult> ViewTaskProcessAreas(string sortBy, string sortDirection)
         {
@@ -251,29 +270,6 @@ namespace PMSCRM.Controllers
             }).ToList();
 
             return View(model);
-        }
-
-        public IActionResult AddTaskProcessAreas()
-        {
-            return View();
-        }
-
-        [HttpGet("Success")]
-        public IActionResult Success()
-        {
-            return View();
-        }
-
-        [HttpGet("EditTaskProcessArea")]
-        public IActionResult EditTaskProcessArea()
-        {
-            return View();
-        }
-
-        [HttpGet("DeleteTaskProcessArea")]
-        public IActionResult DeleteTaskProcessArea()
-        {
-            return View();
         }
     }
 }

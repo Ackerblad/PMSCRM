@@ -29,3 +29,19 @@
     border: 1px solid #dee2e6; 
 }
 
+.status-pending {
+    background-color: red;
+    color: white;
+}
+
+.status-ongoing {
+    background-color: yellow;
+    color: black;
+}
+
+.status-completed {
+    background-color: green;
+    color: white;
+}
+
+

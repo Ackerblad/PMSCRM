@@ -9,7 +9,7 @@
         public string UserName { get; set; }
         public string CustomerName { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; } 
         public byte Status { get; set; }
         public DateTime Timestamp { get; set; }
     }

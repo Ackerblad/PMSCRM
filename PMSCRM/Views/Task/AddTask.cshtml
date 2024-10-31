@@ -1,26 +1,40 @@
-﻿@{
-    ViewData["Title"] = "Add Task";
+﻿@model PMSCRM.Models.Task
+@{
+    ViewData["Title"] = ViewBag.IsEditMode ? "Edit Task" : "Add Task";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/buttons.css">
 
 <div class="card shadow-sm p-4 mb-4">
-<form class="was-validated" asp-controller="Task" asp-action="AddTask" method="post">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert @(ViewBag.MessageType == "success" ? "alert-success" : "alert-danger")" role="alert">
+            @ViewBag.Message
+        </div>
+    }
 
-    <div class="mb-3">
-        <input type="text" class="form-control" id="taskName" placeholder="Task Name" name="Name" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+    <form class="was-validated" asp-controller="Task" asp-action="@(ViewBag.IsEditMode ? "EditTask" : "AddTask")" method="post">
 
-    <div class="mb-3">
-        <input type="number" class="form-control" placeholder="Duration (min)" name="Duration" id="taskDuration" required>
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Task Name</label>
+            <input type="text" class="form-control" id="taskName" placeholder="Name the Task" name="Name" maxlength="50" value="@Model?.Name" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-        <textarea name="Description" id="taskDescription" placeholder="Description" class="form-control" maxlength="255" rows="5" required></textarea>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Duration (min)</label>
+            <input type="number" class="form-control" placeholder="Add a Duration (min)" name="Duration" id="taskDuration" value="@Model?.Duration" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
 
-    <button type="submit" class="btn btn-submit mt-3">Submit</button>
-</form>
-    </div>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Description</label>
+            <textarea name="Description" id="taskDescription" placeholder="Add a Description" class="form-control" maxlength="255" rows="5">@Model?.Description</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-submit">@(ViewBag.IsEditMode ? "Save Changes" : "Submit")</button>
+        <a href="/Task/ViewTasks" class="btn btn-cancel">Cancel</a>
+    </form>
+</div>

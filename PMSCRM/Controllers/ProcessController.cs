@@ -5,6 +5,7 @@ using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using PMSCRM.ViewModels;
+using System.Threading.Tasks;
 
 namespace PMSCRM.Controllers
 {
@@ -26,6 +27,8 @@ namespace PMSCRM.Controllers
         [HttpGet]
         public async Task<IActionResult> AddProcess()
         {
+            ViewBag.IsEditMode = false;
+
             var companyId = _companyDivider.GetCompanyId();
 
             var areas = await _areaService.GetAllAsync(companyId);
@@ -48,6 +51,8 @@ namespace PMSCRM.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProcess(ProcessViewModel viewModel)
         {
+            ViewBag.IsEditMode = false;
+
             if (!ModelState.IsValid)
             {
                 var areas = await _areaService.GetAllAsync(_companyDivider.GetCompanyId());
@@ -66,13 +71,16 @@ namespace PMSCRM.Controllers
             process.Duration = 0;
 
             bool success = await _processService.AddAsync(process);
-            if (success)
+            if (!success)
             {
-                return RedirectToAction("ViewProcesses");
+                ViewBag.Message = "Failed to add process. Please try again.";
+                ViewBag.MessageType = "error";
+                return View(viewModel);
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to add process.");
-            return View(viewModel);
+            ViewBag.Message = "Process added successfully!";
+            ViewBag.MessageType = "success";
+            return View("AddProcess", viewModel);
         }
 
 
@@ -99,8 +107,8 @@ namespace PMSCRM.Controllers
                 Process = process,
                 Areas = areaSelectList
             };
-
-            return View(viewModel);
+            ViewBag.IsEditMode = true;
+            return View("AddProcess", viewModel);
         }
 
         [HttpPost("EditProcess/{id}")]
@@ -172,6 +180,21 @@ namespace PMSCRM.Controllers
             return View("DeleteProcess", process);
         }
 
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var process = await _processService.GetByIdAsync(id, companyId);
+
+            if (process == null)
+            {
+                ViewBag.Message = "Process not found.";
+                return View("ViewProcesses", process);
+            }
+
+            return View(process);
+        }
+
         [HttpGet("ViewProcesses")]
         public async Task<IActionResult> ViewProcesses(string sortBy, string sortDirection ="asc")
         {
@@ -183,38 +206,6 @@ namespace PMSCRM.Controllers
             ViewBag.CurrentSort = sortBy;
             ViewBag.CurrentSortDirection = sortDirection;
             return View(processes);
-        }
-
-        [HttpGet("Success")]
-        public IActionResult Success()
-        {
-            return View();
-        }
-
-        [HttpGet("EditProcess")]
-        public IActionResult EditProcess()
-        {
-            return View();
-        }
-
-        [HttpGet("DeleteProcess")]
-        public IActionResult DeleteProcess()
-        {
-            return View();
-        }
-
-        [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var companyId = _companyDivider.GetCompanyId();
-            var process = await _processService.GetByIdAsync(id, companyId);
-
-            if (process == null)
-            {
-                return NotFound("Process not found.");
-            }
-
-            return View(process);
-        }
+        }      
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
+using System.Threading.Tasks;
 
 namespace PMSCRM.Controllers
 {
@@ -24,21 +25,33 @@ namespace PMSCRM.Controllers
             return _companyDivider.GetCompanyId();
         }
 
+        [HttpGet]
+        public IActionResult AddCustomer()
+        {
+            ViewBag.IsEditMode = false;
+            return View();
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddCustomer(Customer customer)
         {
+            ViewBag.IsEditMode = false;
             if (!ModelState.IsValid) return View(customer);
 
             customer.CompanyId = GetCompanyId();
+            if (customer.CompanyId == Guid.Empty) return View(customer);
 
             bool success = await _customerService.AddAsync(customer);
-            if (success)
+            if (!success)
             {
-                return RedirectToAction("Success");
+                ViewBag.Message = "Failed to add customer. Please try again.";
+                ViewBag.MessageType = "error";
+                return View(customer);
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to add customer.");
-            return View(customer);
+            ViewBag.Message = "Customer added successfully!";
+            ViewBag.MessageType = "success";
+            return View("AddCustomer", customer);
         }
 
         [HttpGet("EditCustomer/{id}")]
@@ -51,7 +64,8 @@ namespace PMSCRM.Controllers
             {
                 return NotFound("Customer not found");
             }
-            return View(customer);
+            ViewBag.IsEditMode = true;
+            return View("AddCustomer", customer);
         }
 
         [HttpPost("EditCustomer/{id}")]
@@ -110,11 +124,6 @@ namespace PMSCRM.Controllers
             return View("DeleteCustomer", customer);
         }
 
-        public IActionResult AddCustomer()
-        {
-            return View();
-        }
-
         [HttpGet("ViewCustomers")]
         public async Task<IActionResult> ViewCustomers(string sortBy, string sortDirection = "asc")
         {
@@ -128,22 +137,19 @@ namespace PMSCRM.Controllers
             return View(customers);
         }
 
-        [HttpGet("Success")]
-        public IActionResult Success()
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
         {
-            return View();
-        }
+            var companyId = GetCompanyId();
+            var customer = await _customerService.GetByIdAsync(id, companyId);
 
-        [HttpGet("EditCustomer")]
-        public IActionResult EditCustomer()
-        {
-            return View();
-        }
+            if (customer == null)
+            {
+                ViewBag.Message = "Customer not found.";
+                return View("ViewCustomers", customer);
+            }
 
-        [HttpGet("DeleteCustomer")]
-        public IActionResult DeleteCustomer()
-        {
-            return View();
+            return View(customer);
         }
     }
 }

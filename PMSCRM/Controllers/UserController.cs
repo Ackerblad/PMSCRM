@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using System.Security.Claims;
@@ -20,49 +21,6 @@ namespace PMSCRM.Controllers
             _userService = userService;
             _companyDivider = companyDivider;
         }
-
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login(LoginRequest loginRequest)
-        //{
-        //    loginRequest.EmailAddress = loginRequest.EmailAddress.Trim();
-        //    loginRequest.Password = loginRequest.Password.Trim();
-
-        //    var user = await _userService.AuthenticateUser(loginRequest.EmailAddress, loginRequest.Password);
-        //    if (user != null)
-        //    {
-        //        var companyId = user.CompanyId;
-        //        var claims = new List<Claim>
-        //        {
-        //            new(ClaimTypes.Email, user.EmailAddress),
-        //            new("CompanyId", companyId.ToString())
-        //        };
-
-        //        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        //        var authProperties = new AuthenticationProperties
-        //        {
-        //            IsPersistent = loginRequest.RememberMe,
-        //        };
-
-        //        if (loginRequest.RememberMe)
-        //        {
-        //            authProperties.ExpiresUtc = DateTime.UtcNow.AddDays(30);
-        //        }
-        //        else
-        //        {
-        //            authProperties.ExpiresUtc = DateTime.UtcNow.AddHours(10);
-        //        }
-
-        //        await HttpContext.SignInAsync(
-        //            CookieAuthenticationDefaults.AuthenticationScheme,
-        //            new ClaimsPrincipal(claimsIdentity),
-        //            authProperties);
-
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    ViewBag.Message = "Invalid credentials";
-        //    return View("~/Views/Login/Login.cshtml");
-        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
@@ -112,8 +70,6 @@ namespace PMSCRM.Controllers
             return View("~/Views/Login/Login.cshtml");
         }
 
-
-        // NY
         [Authorize]
         [HttpGet("AddUser")]
         public async Task<IActionResult> AddUser()
@@ -121,18 +77,14 @@ namespace PMSCRM.Controllers
             var companyId = _companyDivider.GetCompanyId();
             var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
 
-            var model = new UserRegistration
-            {
-                RoleId = Guid.Empty
-            };
-
-            ViewBag.Roles = roles.Select(r => new SelectListItem
+            ViewBag.Roles = roles?.Select(r => new SelectListItem
             {
                 Value = r.RoleId.ToString(),
                 Text = r.Name
-            }).ToList();
+            }).ToList() ?? new List<SelectListItem>();
 
-            return View(model);
+            ViewBag.IsEditMode = false;
+            return View(new UserRegistration { RoleId = Guid.Empty });
         }
 
         [Authorize]
@@ -141,17 +93,17 @@ namespace PMSCRM.Controllers
         {
             var companyId = _companyDivider.GetCompanyId();
             var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
+
+            ViewBag.IsEditMode = false; 
+            ViewBag.Roles = roles.Select(r => new SelectListItem
+            {
+                Value = r.RoleId.ToString(),
+                Text = r.Name
+            }).ToList();
+
             if (!ModelState.IsValid)
             {
-                
-                //var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
-                ViewBag.Roles = roles.Select(r => new SelectListItem
-                {
-                    Value = r.RoleId.ToString(),
-                    Text = r.Name
-                }).ToList();
-
-                return View("AddUser");
+                return View(registration); 
             }
 
             registration.EmailAddress = registration.EmailAddress.Trim();
@@ -160,28 +112,23 @@ namespace PMSCRM.Controllers
             registration.PhoneNumber = registration.PhoneNumber.Trim();
 
             var tempPassword = _userService.GenerateTemporaryPassword();
-            //var companyId = _companyDivider.GetCompanyId();
 
-            bool success = await _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName,
-                                               registration.PhoneNumber, tempPassword);
+            bool success = await _userService.AddUser(companyId, registration.RoleId, registration.EmailAddress, registration.FirstName, registration.LastName, registration.PhoneNumber, tempPassword);
 
             if (success)
             {
                 bool tokenGenerated = await _userService.GeneratePasswordToken(registration.EmailAddress);
                 if (tokenGenerated)
                 {
-                    return RedirectToAction("Success");
+                    ViewBag.Message = "Success! An email has been sent to the user.";
+                    ViewBag.MessageType = "success";
+                    return View("AddUser", registration);
                 }
             }
-            ModelState.AddModelError("", "Failed to add user.");
-            
-            //var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
-            ViewBag.Roles = roles.Select(r => new SelectListItem
-            {
-                Value = r.RoleId.ToString(),
-                Text = r.Name
-            }).ToList();
-            return View("ViewUsers");
+
+            ViewBag.Message = "Failed to add user. Please try again.";
+            ViewBag.MessageType = "error";
+            return View(registration);
         }
 
         [HttpPost("request-password-reset")]
@@ -281,16 +228,43 @@ namespace PMSCRM.Controllers
             {
                 return NotFound("User not found.");
             }
-            return View(user);
+
+            var userRegistration = new UserRegistration
+            {
+                RoleId = user.RoleId,
+                EmailAddress = user.EmailAddress,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
+            ViewBag.Roles = roles.Select(r => new SelectListItem
+            {
+                Value = r.RoleId.ToString(),
+                Text = r.Name
+            }).ToList();
+
+            ViewBag.IsEditMode = true;
+            return View("AddUser", userRegistration);
         }
 
         [Authorize]
         [HttpPost("EditUser/{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UserUpdate updatedUser)
         {
+            var companyId = _companyDivider.GetCompanyId();
+            ViewBag.IsEditMode = true;
+            var roles = await _userService.GetRolesByCompanyIdAsync(companyId);
+            ViewBag.Roles = roles.Select(r => new SelectListItem
+            {
+                Value = r.RoleId.ToString(),
+                Text = r.Name
+            }).ToList();
+
             if (!ModelState.IsValid)
             {
-                return View(updatedUser);
+                return View("AddUser", updatedUser);
             }
 
             updatedUser.EmailAddress = updatedUser.EmailAddress.Trim();
@@ -298,16 +272,15 @@ namespace PMSCRM.Controllers
             updatedUser.LastName = updatedUser.LastName.Trim();
             updatedUser.PhoneNumber = updatedUser.PhoneNumber.Trim();
 
-            var companyId = _companyDivider.GetCompanyId(); 
-
             bool success = await _userService.UpdateUser(id, updatedUser, companyId);
             if (success)
             {
                 return RedirectToAction("ViewUsers");
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to update user.");
-            return View(updatedUser);
+            ViewBag.Message = "Failed to update user. Please try again.";
+            ViewBag.MessageType = "error";
+            return View("AddUser", updatedUser); 
         }
 
         [Authorize]
@@ -359,30 +332,19 @@ namespace PMSCRM.Controllers
             return View("DeleteUser", user);
         }
 
-        //[Authorize]
-        //[HttpGet("AddUser")]
-        //public IActionResult AddUser()
-        //{
-        //    return View();
-        //}
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var user = await _userService.GetById(id, companyId);
 
-        [Authorize]
-        [HttpGet("Success")]
-        public IActionResult Success()
-        {
-            return View();
-        }
-        [Authorize]
-        [HttpGet("EditUser")]
-        public IActionResult EditUser()
-        {
-            return View();
-        }
-        [Authorize]
-        [HttpGet("DeleteUser")]
-        public IActionResult DeleteUser()
-        {
-            return View();
+            if (user == null)
+            {
+                ViewBag.Message = "User not found.";
+                return View("ViewUsers", user);
+            }
+
+            return View(user);
         }
 
         [HttpGet("ForgotPassword")]

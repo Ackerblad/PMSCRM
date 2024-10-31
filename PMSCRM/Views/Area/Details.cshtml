@@ -1,7 +1,7 @@
-﻿@model PMSCRM.Models.Process
+﻿@model PMSCRM.Models.Area
 
 @{
-    ViewData["Title"] = "Process Details";
+    ViewData["Title"] = "Area Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/buttons.css">
@@ -11,16 +11,6 @@
     <label for="Name" class="form-label">Name</label>
     <div class="card p-4 mb-4">
         <p>@Model.Name</p>
-    </div>
-
-    <label for="Name" class="form-label">Area</label>
-    <div class="card p-4 mb-4">
-        <p>@Model.Area.Name</p>
-    </div>
-
-    <label for="Name" class="form-label">Duration</label>
-    <div class="card p-4 mb-4">
-        <p>@Model.Duration min</p>
     </div>
 
     <label for="Name" class="form-label">Description</label>
@@ -34,6 +24,6 @@
     </div>
 
     <div>
-        <a href="/Process/ViewProcesses" class="btn btn-cancel">Back to List</a>
+        <a href="/Area/ViewAreas" class="btn btn-cancel">Back to List</a>
     </div>
 </div>

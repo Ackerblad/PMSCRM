@@ -1,5 +1,7 @@
 ﻿@using PMSCRM.ViewModels
 @model IEnumerable<TaskProcessAreaUserCustomerDisplayViewModel>
+<link rel="stylesheet" href="~/css/buttons.css">
+<link rel="stylesheet" href="~/css/table.css">
 
 <div class="card shadow-sm p-4 mb-4">
     @if (ViewBag.SuccessMessage != null)
@@ -15,168 +17,193 @@
         </div>
     }
 
-    <table class="table table-sm table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Area
-                        @if (ViewBag.CurrentSort == "Area")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Process
-                        @if (ViewBag.CurrentSort == "Process")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Task
-                        @if (ViewBag.CurrentSort == "Task")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer"
-                       asp-route-sortBy="User"
-                       asp-route-sortDirection="@((ViewBag.CurrentSort == "User" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")"
-                       class="text-dark">
-                        User
-                        @if (ViewBag.CurrentSort == "User")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
+    <div class="table-responsive"> 
+        <table class="table-striped table-hover custom-table">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Area
+                            @if (ViewBag.CurrentSort == "Area")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Process
+                            @if (ViewBag.CurrentSort == "Process")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Task
+                            @if (ViewBag.CurrentSort == "Task")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer"
+                           asp-route-sortBy="User"
+                           asp-route-sortDirection="@((ViewBag.CurrentSort == "User" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            User
+                            @if (ViewBag.CurrentSort == "User")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
 
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Customer" asp-route-sortDirection="@((ViewBag.CurrentSort == "Customer" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Customer
-                        @if (ViewBag.CurrentSort == "Customer")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="StartDate" asp-route-sortDirection="@((ViewBag.CurrentSort == "StartDate" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Start Date
-                        @if (ViewBag.CurrentSort == "StartDate")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="EndDate" asp-route-sortDirection="@((ViewBag.CurrentSort == "EndDate" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        End Date
-                        @if (ViewBag.CurrentSort == "EndDate")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Status" asp-route-sortDirection="@((ViewBag.CurrentSort == "Status" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Status
-                        @if (ViewBag.CurrentSort == "Status")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-                <th class="text-center">
-                    <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Timestamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "Timestamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")" class="text-dark">
-                        Created
-                        @if (ViewBag.CurrentSort == "Timestamp")
-                        {
-                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                        }
-                        else
-                        {
-                            <span>▲</span> <!-- Default arrow for ascending -->
-                        }
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Customer" asp-route-sortDirection="@((ViewBag.CurrentSort == "Customer" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Customer
+                            @if (ViewBag.CurrentSort == "Customer")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="StartDate" asp-route-sortDirection="@((ViewBag.CurrentSort == "StartDate" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Start Date
+                            @if (ViewBag.CurrentSort == "StartDate")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="EndDate" asp-route-sortDirection="@((ViewBag.CurrentSort == "EndDate" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            End Date
+                            @if (ViewBag.CurrentSort == "EndDate")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Status" asp-route-sortDirection="@((ViewBag.CurrentSort == "Status" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Status
+                            @if (ViewBag.CurrentSort == "Status")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th class="text-center">
+                        <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Timestamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "Timestamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Date
+                            @if (ViewBag.CurrentSort == "Timestamp")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.AreaName</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.ProcessName</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.TaskName</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.UserName</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.CustomerName</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.StartDate.ToString("yyyy-MM-dd HH:mm")</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.EndDate.ToString("yyyy-MM-dd HH:mm")</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@((PMSCRM.Utilities.TaskStatus)item.Status)</a>
+                            </td>
+
+                            <td class="text-truncate" style="max-width: 100px;">
+                                <a href="/TaskProcessAreaUserCustomer/Details/@item.TaskProcessAreaUserCustomerId" style="color: black; text-decoration: none;">@item.Timestamp.ToString("yyyy-MM-dd HH:mm")</a>
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("EditTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" class="btn btn-edit">Edit</a>
+                                <a href="@Url.Action("DeleteTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" class="btn btn-delete">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td class="text-center small">@item.AreaName</td>
-                        <td class="text-center small">@item.ProcessName</td>
-                        <td class="text-center small">@item.TaskName</td>
-                        <td class="text-center small">@item.UserName</td>
-                        <td class="text-center small">@item.CustomerName</td>
-                        <td class="text-center small">@item.StartDate.ToString("yyyy-MM-dd")</td>
-                        <td class="text-center small">@item.EndDate.ToString("yyyy-MM-dd")</td>
-                        <td class="text-center small">@((PMSCRM.Utilities.TaskStatus)item.Status)</td>
-                        <td class="text-center small">@item.Timestamp.ToString("yyyy-MM-dd HH:mm")</td>
-                        <td>
-                            <a href="@Url.Action("EditTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" class="btn btn-primary btn-sm custom">Edit</a>
-                            <form action="@Url.Action("DeleteTaskProcessAreaUserCustomer", "TaskProcessAreaUserCustomer", new { id = item.TaskProcessAreaUserCustomerId })" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm custom" onclick="return confirm('Are you sure you want to delete this Task Process Area User Customer?');">Delete</button>
-                            </form>
-                        </td>
+                        <td colspan="9" class="text-center small">No Task Process Area User Customer found.</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="9" class="text-center small">No Task Process Area User Customer found.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+  
+    <div>
+        <a asp-area="" asp-controller="TaskProcessAreaUserCustomer" asp-action="AddTaskProcessAreaUserCustomer" class="btn btn-add">Add TPAUC</a>
+    </div>
 </div>
-
-<style>
-    .custom {
-        width: 78px !important;
-    }
-</style>

@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/table.css">
+<link rel="stylesheet" href="~/css/table.css">
 
 <div class="card shadow-sm p-4 mb-4">
     @if (Model != null && Model.Any())
@@ -14,7 +15,7 @@
                 <tr>
                     <th>
                         <a asp-action="ViewTasks" asp-route-sortBy="Name" asp-route-sortDirection="@((ViewBag.CurrentSort == "Name" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
-                            Task Name
+                            Task
                             @if (ViewBag.CurrentSort == "Name")
                             {
                                 <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
@@ -61,28 +62,14 @@
                 @foreach (var task in Model)
                 {
                     <tr>
-                        <td>
-                            <a href="/Task/Details/@task.TaskId">
-                                @task.Name
-                            </a>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/Task/Details/@task.TaskId" style="color: black; text-decoration: none;">@task.Name</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 300px;">
+                            <a href="/Task/Details/@task.TaskId" style="color: black; text-decoration: none;">@task.Description</a>
                         </td>
                         <td>
-                            @if (!string.IsNullOrEmpty(task.Description))
-                            {
-                                @if (task.Description.Length > 50)
-                                {
-                                    <span>@task.Description.Substring(0, 50)...</span>
-                                    <a href="/Task/Details/@task.TaskId">Read More</a>
-                                }
-                                else
-                                {
-                                    <span>@task.Description</span>
-                                }
-                            }
-                            else
-                            {
-                                <span>No description available.</span>
-                            }
+                            <a href="/Task/Details/@task.TaskId" style="color: black; text-decoration: none;">@task.Duration</a>
                         </td>
                         <td>@task.Duration</td>
                         <td>@task.Timestamp</td>

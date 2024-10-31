@@ -31,7 +31,9 @@ namespace PMSCRM.Services
 
         public async Task<User> GetById(Guid id, Guid companyId)
         {
-            return await _db.Users.FirstOrDefaultAsync(u => u.UserId == id && u.CompanyId == companyId);
+            return await _db.Users
+                .Include(u => u.Role) 
+                .FirstOrDefaultAsync(u => u.UserId == id && u.CompanyId == companyId);
         }
 
         public async Task<bool> AddUser(Guid companyId, Guid roleId, string emailAddress, string firstName, string lastName, string phoneNumber, string plainPassword)

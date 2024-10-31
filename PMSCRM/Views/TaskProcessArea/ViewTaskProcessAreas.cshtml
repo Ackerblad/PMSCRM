@@ -2,12 +2,25 @@
 
 @{
     ViewData["Title"] = "View Task Process Areas";
-    Layout = "~/Views/Shared/_Layout.cshtml"; 
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="~/css/buttons.css">
 <link rel="stylesheet" href="~/css/table.css">
 
 <div class="card shadow-sm p-4 mb-4">
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
     <table class="table-striped table-hover custom-table">
         <thead>
             <tr>
@@ -63,16 +76,33 @@
                         }
                     </a>
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.AreaName</td>
-                    <td>@item.ProcessName</td>
-                    <td>@item.TaskName</td>
-                    <td>@item.Timestamp</td>
+                    <td class="text-truncate" style="max-width: 100px;">
+                        <a href="/TaskProcessArea/Details/@item.TaskProcessAreaId" style="color: black; text-decoration: none;">@item.AreaName</a>
+                    </td>
+
+                    <td class="text-truncate" style="max-width: 100px;">
+                        <a href="/TaskProcessArea/Details/@item.TaskProcessAreaId" style="color: black; text-decoration: none;">@item.ProcessName</a>
+                    </td>
+
+                    <td class="text-truncate" style="max-width: 100px;">
+                        <a href="/TaskProcessArea/Details/@item.TaskProcessAreaId" style="color: black; text-decoration: none;">@item.TaskName</a>
+                    </td>
+
+                    <td class="text-truncate" style="max-width: 100px;">
+                        <a href="/TaskProcessArea/Details/@item.TaskProcessAreaId" style="color: black; text-decoration: none;">@item.Timestamp</a>
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("EditTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-edit">Edit</a>
+                        <a href="@Url.Action("DeleteTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-delete">Delete</a>
+                    </td>
                 </tr>
             }
         </tbody>

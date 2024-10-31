@@ -3,6 +3,13 @@
 <link rel="stylesheet" href="~/css/table.css">
 
 <div class="card shadow-sm p-4 mb-4">
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert @(ViewBag.MessageType == "success" ? "alert-success" : "alert-danger")" role="alert">
+            @ViewBag.Message
+        </div>
+    }
+
     <label class="form-label">Select Process</label>
     <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px; border-block-end: solid; border-block-end-width: thin; border-block-end-color: lightgray">
         <table class="table table-sm table-bordered table-hover">
@@ -105,7 +112,8 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-submit">@(Model.IsEditMode ? "Update" : "Submit")</button>
+        <button type="submit" class="btn btn-submit">@(Model.IsEditMode ? "Save Changes" : "Submit")</button>
+        <a href="/TaskProcessAreaUserCustomer/ViewTaskProcessAreaUserCustomer" class="btn btn-cancel">Cancel</a>
     </form>
 
     <script>

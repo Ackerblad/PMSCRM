@@ -73,11 +73,18 @@
                 @foreach (var user in Model)
                 {
                     <tr>
-                        <td>@user.EmailAddress</td>
-                        <td>@user.FirstName</td>
-                        <td>@user.LastName</td>
-                        <td>@user.PhoneNumber</td>
-                        <td>@user.Timestamp</td>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.EmailAddress</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.FirstName</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.LastName</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.PhoneNumber</a>
+                        </td>
                         <td>
                             <a href="/User/EditUser/@user.UserId" class="btn btn-edit">Edit</a>
 
@@ -101,7 +108,7 @@
     }
 
     <div>
-        <a href="/User/AddUser" class="btn btn-add">Add User</a>
+        <a asp-area="" asp-controller="User" asp-action="AddUser" class="btn btn-add">Add User</a>
     </div>
 </div>
 

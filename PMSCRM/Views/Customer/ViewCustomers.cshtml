@@ -49,11 +49,15 @@
                 @foreach (var customer in Model)
                 {
                     <tr>
-                        <td>@customer.Name</td>
-                        <td>@customer.EmailAddress</td>
-                        <td>@customer.PhoneNumber</td>
-                        <td>@customer.Timestamp</td>
-
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/Customer/Details/@customer.CustomerId" style="color: black; text-decoration: none;">@customer.Name</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 300px;">
+                            <a href="/Customer/Details/@customer.CustomerId" style="color: black; text-decoration: none;">@customer.EmailAddress</a>
+                        </td>
+                        <td class="text-truncate" style="max-width: 300px;">
+                            <a href="/Customer/Details/@customer.CustomerId" style="color: black; text-decoration: none;">@customer.PhoneNumber</a>
+                        </td>
                         <td>
                             <a href="/Customer/EditCustomer/@customer.CustomerId" class="btn btn-edit">Edit</a>
                             <a href="/Customer/DeleteCustomer/@customer.CustomerId" class="btn btn-delete">Delete</a>

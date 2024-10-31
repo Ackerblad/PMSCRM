@@ -96,8 +96,6 @@ namespace PMSCRM.Controllers
             return View(model);
         }
 
-
-
         [HttpPost("AddTaskProcessAreaUserCustomer")]
         public async Task<IActionResult> AddTaskProcessAreaUserCustomer(Guid taskProcessAreaId, TaskProcessAreaUserCustomerViewModel model)
         {
@@ -118,11 +116,13 @@ namespace PMSCRM.Controllers
 
             if (success)
             {
-                return RedirectToAction("ViewTaskProcessAreaUserCustomer");
+                ViewBag.Message = "TPA added successfully!";
+                ViewBag.MessageType = "success";
+                return View("AddTaskProcessAreaUserCustomer", model);
             }
 
-            ModelState.AddModelError(string.Empty, "Failed to add task-process-area-user-customer.");
-
+            ViewBag.Message = "Failed to add TPA. Please try again.";
+            ViewBag.MessageType = "error";
             return await AddTaskProcessAreaUserCustomer();
         }
 
@@ -202,20 +202,57 @@ namespace PMSCRM.Controllers
             return View("AddTaskProcessAreaUserCustomer", model);
         }
 
-        [HttpPost("DeleteTaskProcessAreaUserCustomer/{id}")]
+        [HttpGet("DeleteTaskProcessAreaUserCustomer/{id}")]
         public async Task<IActionResult> DeleteTaskProcessAreaUserCustomer(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId(); 
+            var tpauc = await _taskProcessAreaUserCustomerService.GetByIdAsync(id, companyId);
+
+            if (tpauc == null)
+            {
+                return NotFound("Task Process Area User Customer not found.");
+            }
+
+            var model = new TaskProcessAreaUserCustomerDisplayViewModel
+            {
+                TaskProcessAreaUserCustomerId = tpauc.TaskProcessAreaUserCustomerId,
+                TaskName = tpauc.TaskProcessArea?.Task?.Name,
+                ProcessName = tpauc.TaskProcessArea?.Process?.Name,
+                AreaName = tpauc.TaskProcessArea?.Area?.Name,
+                UserName = tpauc.User?.FirstName + " " + tpauc.User?.LastName,
+                CustomerName = tpauc.Customer?.Name,
+                StartDate = tpauc.StartDate,
+                EndDate = tpauc.EndDate,
+                Status = tpauc.Status,
+                Timestamp = tpauc.Timestamp
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("DeleteConfirmed/{id}")]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var companyId = _companyDivider.GetCompanyId();
             var tpauc = await _taskProcessAreaUserCustomerService.GetByIdAsync(id, companyId);
 
             if (tpauc == null)
             {
-                return RedirectToAction("ViewTaskProcessAreaUserCustomer"); 
+                return RedirectToAction("ViewTaskProcessAreaUserCustomer");
             }
 
             bool success = await _taskProcessAreaUserCustomerService.DeleteAsync(id, companyId);
-            return RedirectToAction("ViewTaskProcessAreaUserCustomer"); 
+            if (success)
+            {
+                return RedirectToAction("ViewTaskProcessAreaUserCustomer");
+            }
+            else
+            {
+                ViewBag.Message = "Failed to delete the record.";
+                return View("DeleteTaskProcessAreaUserCustomer", tpauc);
+            }
         }
+
 
         //[HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
         //[Authorize(Roles = "User")]
@@ -246,6 +283,21 @@ namespace PMSCRM.Controllers
 
         //    return View("ViewTaskProcessAreaUserCustomer", tpauc);
         //}
+
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var companyId = _companyDivider.GetCompanyId();
+            var taskProcessAreaUserCustomer = await _taskProcessAreaUserCustomerService.GetByIdAsync(id, companyId);
+
+            if (taskProcessAreaUserCustomer == null)
+            {
+                ViewBag.Message = "TPA not found.";
+                return View("ViewtaskProcessAreaUserCustomer", taskProcessAreaUserCustomer);
+            }
+
+            return View(taskProcessAreaUserCustomer);
+        }
 
         [HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
         [Authorize(Roles = "User")]
@@ -375,12 +427,6 @@ namespace PMSCRM.Controllers
             }
 
             return View("ViewTaskProcessAreaUserCustomer", tpauc);
-        }
-
-
-        public IActionResult AddTaskProcessAreas()
-        {
-            return View();
         }
     }
 }
