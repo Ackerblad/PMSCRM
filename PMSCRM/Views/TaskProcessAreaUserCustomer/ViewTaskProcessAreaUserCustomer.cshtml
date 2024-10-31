@@ -130,7 +130,7 @@
                     </th>
                     <th class="text-center">
                         <a asp-action="ViewTaskProcessAreaUserCustomer" asp-route-sortBy="Timestamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "Timestamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
-                            Date
+                            Created
                             @if (ViewBag.CurrentSort == "Timestamp")
                             {
                                 <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>

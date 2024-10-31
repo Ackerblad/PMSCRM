@@ -31,7 +31,7 @@
 
         <div class="mb-3">
             <label for="Name" class="form-label">Description</label>
-            <textarea name="Description" id="taskDescription" placeholder="Add a Description" class="form-control" maxlength="255" rows="5">@Model?.Description</textarea>
+            <textarea name="Description" id="taskDescription" placeholder="Add a Description" class="form-control" maxlength="255" rows="5" required>@Model?.Description</textarea>
         </div>
 
         <button type="submit" class="btn btn-submit">@(ViewBag.IsEditMode ? "Save Changes" : "Submit")</button>

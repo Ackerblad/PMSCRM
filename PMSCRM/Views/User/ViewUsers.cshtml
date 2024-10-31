@@ -85,12 +85,15 @@
                         <td class="text-truncate" style="max-width: 150px;">
                             <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.PhoneNumber</a>
                         </td>
+                        <td class="text-truncate" style="max-width: 150px;">
+                            <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.Timestamp</a>
+                        </td>
                         <td>
                             <a href="/User/EditUser/@user.UserId" class="btn btn-edit">Edit</a>
 
                             @if (user.UserId.ToString() == ViewBag.CurrentUserId.ToString())
                             {
-                                <span class="btn btn-delete disabled">Delete</span> <!-- Disable delete for current user -->
+                                <span class="btn btn-delete disabled"></span> <!-- Disable delete for current user -->
                             }
                             else
                             {
