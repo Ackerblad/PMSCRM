@@ -233,7 +233,7 @@ namespace PMSCRM.Controllers
         {
             var taskProcessAreas = await _taskProcessAreaService.GetAllWithDetails();
 
-            ViewBag.CurrentSort = sortBy ?? "Area";
+            ViewBag.CurrentSort = sortBy ?? "TimeStamp";
             ViewBag.CurrentSortDirection = sortDirection ?? "asc";
 
             switch (ViewBag.CurrentSort)

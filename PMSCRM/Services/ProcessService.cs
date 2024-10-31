@@ -55,6 +55,14 @@ namespace PMSCRM.Services
             var existing = await _db.Processes
                 .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == updatedProcess.CompanyId);
 
+            var taskProcessAreasToUpdate = _db.TaskProcessAreas
+            .Where(tpa => tpa.ProcessId == id);
+
+            foreach (var tpa in taskProcessAreasToUpdate)
+            {
+                tpa.AreaId = updatedProcess.AreaId;
+            }
+
             if (existing == null)
             {
                 return false;

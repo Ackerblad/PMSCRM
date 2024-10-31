@@ -422,7 +422,7 @@ namespace PMSCRM.Controllers
                         : tpauc.OrderByDescending(r => r.Timestamp).ToList();
                     break;
                 default:
-                    tpauc = tpauc.OrderBy(r => r.AreaName).ToList();
+                    tpauc = tpauc.OrderBy(r => r.Timestamp).ToList();
                     break;
             }
 

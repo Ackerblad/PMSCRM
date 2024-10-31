@@ -65,6 +65,8 @@ namespace PMSCRM.Services
         {
             var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId && u.CompanyId == companyId);
 
+
+
             if (existingUser == null)
             {
                 return false;
