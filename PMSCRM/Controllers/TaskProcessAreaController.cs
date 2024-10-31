@@ -6,6 +6,7 @@ using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using PMSCRM.ViewModels;
+using System.Globalization;
 
 namespace PMSCRM.Controllers
 {
@@ -227,9 +228,35 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewTaskProcessAreas")]
-        public IActionResult ViewTaskProcessAreas()
+        public async Task<IActionResult> ViewTaskProcessAreas(string sortBy, string sortDirection)
         {
-            var taskProcessAreas = _taskProcessAreaService.GetAllWithDetails();
+            var taskProcessAreas = await _taskProcessAreaService.GetAllWithDetails();
+            ViewBag.CurrentSort = sortBy ?? "Area";
+            ViewBag.CurrentSortDirection = sortDirection ?? "asc";
+
+            switch (ViewBag.CurrentSort)
+            {
+                case "Area":
+                    taskProcessAreas = ViewBag.CurrentSortDirection == "asc"
+                        ? taskProcessAreas.OrderBy(a => a.Area?.Name).ToList()
+                        : taskProcessAreas.OrderByDescending(a => a.Area?.Name).ToList();
+                    break;
+                case "Process":
+                    taskProcessAreas = ViewBag.CurrentSortDirection == "asc"
+                        ? taskProcessAreas.OrderBy(a => a.Process?.Name).ToList()
+                        : taskProcessAreas.OrderByDescending(a => a.Process?.Name).ToList();
+                    break;
+                case "Task":
+                    taskProcessAreas = ViewBag.CurrentSortDirection == "asc"
+                        ? taskProcessAreas.OrderBy(a => a.Task?.Name).ToList()
+                        : taskProcessAreas.OrderByDescending(a => a.Task?.Name).ToList();
+                    break;
+                case "Timestamp":
+                    taskProcessAreas = ViewBag.CurrentSortDirection == "asc"
+                        ? taskProcessAreas.OrderBy(a => a.Timestamp).ToList()
+                        : taskProcessAreas.OrderByDescending(a => a.Timestamp).ToList();
+                    break;
+            }
             var model = taskProcessAreas.Select(tpa => new TaskProcessAreaDisplayViewModel
             {
                 TaskProcessAreaId = tpa.TaskProcessAreaId,
