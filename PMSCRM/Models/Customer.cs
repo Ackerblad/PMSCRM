@@ -15,10 +15,12 @@ public partial class Customer
     public string Name { get; set; } = null!;
 
     [Required]
+    [StringLength(100)]
     public string PhoneNumber { get; set; } = null!;
 
     [Required]
     [EmailAddress]
+    [StringLength(100)]
     public string EmailAddress { get; set; } = null!;
 
     [Required]

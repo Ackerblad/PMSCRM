@@ -53,6 +53,19 @@
                         </a>
                     </th>
                     <th>Description</th>
+                    <th>
+                        <a asp-action="ViewProcesses" asp-route-sortBy="TimeStamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "TimeStamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Created
+                            @if (ViewBag.CurrentSort == "TimeStamp")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
                     <th class="text-end"></th>
                 </tr>
             </thead>
@@ -94,6 +107,7 @@
                                 <span>No description available.</span>
                             }
                         </td>
+                        <td>@process.Timestamp</td>
                         <td class="text-end">
 
                             <a href="/Process/EditProcess/@process.ProcessId" class="btn btn-edit">Edit</a>

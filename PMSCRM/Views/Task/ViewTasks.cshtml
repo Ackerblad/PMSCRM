@@ -41,6 +41,19 @@
                             }
                         </a>
                     </th>
+                    <th>
+                        <a asp-action="ViewTasks" asp-route-sortBy="TimeStamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "TimeStamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Created
+                            @if (ViewBag.CurrentSort == "TimeStamp")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -72,6 +85,7 @@
                             }
                         </td>
                         <td>@task.Duration</td>
+                        <td>@task.Timestamp</td>
                         <td>
                             <a href="/Task/EditTask/@task.TaskId" class="btn btn-edit">Edit</a>
                             <a href="/Task/DeleteTask/@task.TaskId" class="btn btn-delete">Delete</a>

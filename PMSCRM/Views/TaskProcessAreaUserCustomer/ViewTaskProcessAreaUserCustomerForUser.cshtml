@@ -7,14 +7,14 @@
     <table class="table-striped table-hover custom-table">
         <thead>
             <tr>
-                <th class="text-center">Area</th>
+                @* <th class="text-center">Area</th> *@
                 <th class="text-center">Process</th>
                 <th class="text-center">Task</th>
                 <th class="text-center">Customer</th>
                 <th class="text-center">Start Date</th>
                 <th class="text-center">End Date</th>
                 <th class="text-center">Status</th>
-                <th class="text-center">Date</th>
+                <th class="text-center">Created</th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="text-center small">@item.AreaName</td>
+                        @* <td class="text-center small">@item.AreaName</td> *@
                         <td class="text-center small">@item.ProcessName</td>
                         <td class="text-center small">@item.TaskName</td>
                         <td class="text-center small">@item.CustomerName</td>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PMSCRM.Models;
 
@@ -11,18 +12,27 @@ public partial class User
 
     public Guid RoleId { get; set; }
 
+    [StringLength(100)]
+    [Required]
     public string EmailAddress { get; set; } = null!;
 
+    [StringLength(64)]
     public string Password { get; set; } = null!;
 
     public Guid ResetToken { get; set; }
 
     public DateTime ResetTokenExpiryDate { get; set; }
 
+    [StringLength(100)]
+    [Required]
     public string FirstName { get; set; } = null!;
 
+    [StringLength(100)]
+    [Required]
     public string LastName { get; set; } = null!;
 
+    [StringLength(100)]
+    [Required]
     public string PhoneNumber { get; set; } = null!;
 
     public DateTime Timestamp { get; set; }

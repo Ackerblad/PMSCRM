@@ -11,39 +11,73 @@
     <table class="table-striped table-hover custom-table">
         <thead>
             <tr>
-                <th>Task Name</th>
-                <th>Process Name</th>
-                <th>Area Name</th>
-                <th>Date</th>
-                <th></th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreas" asp-route-sortBy="Area" asp-route-sortDirection="@((ViewBag.CurrentSort == "Area" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                        Area
+                        @if (ViewBag.CurrentSort == "Area")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span> <!-- Default arrow for ascending -->
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreas" asp-route-sortBy="Process" asp-route-sortDirection="@((ViewBag.CurrentSort == "Process" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                        Process
+                        @if (ViewBag.CurrentSort == "Process")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span>
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreas" asp-route-sortBy="Task" asp-route-sortDirection="@((ViewBag.CurrentSort == "Task" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                        Task
+                        @if (ViewBag.CurrentSort == "Task")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span>
+                        }
+                    </a>
+                </th>
+                <th class="text-center">
+                    <a asp-action="ViewTaskProcessAreas" asp-route-sortBy="Timestamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "Timestamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                        Created
+                        @if (ViewBag.CurrentSort == "Timestamp")
+                        {
+                            <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                        }
+                        else
+                        {
+                            <span>▲</span>
+                        }
+                    </a>
+                </th>
             </tr>
         </thead>
         <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.TaskName</td>
-                        <td>@item.ProcessName</td>
-                        <td>@item.AreaName</td>
-                        <td>@item.Timestamp.ToString("g")</td>
-                        <td>
-
-                            <a href="@Url.Action("EditTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-edit">Edit</a>
-                            <a href="@Url.Action("DeleteTaskProcessArea", "TaskProcessArea", new { id = item.TaskProcessAreaId })" class="btn btn-delete">Delete</a>
-                        </td>
-                    </tr>
-                }
-            }
-            else
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td colspan="4" class="text-center">No Task Process Areas found.</td>
+                    <td>@item.AreaName</td>
+                    <td>@item.ProcessName</td>
+                    <td>@item.TaskName</td>
+                    <td>@item.Timestamp</td>
                 </tr>
             }
         </tbody>
     </table>
+
     <div>
         <a asp-area="" asp-controller="TaskProcessArea" asp-action="AddTaskProcessArea" class="btn btn-add">Add TPA</a>
     </div>

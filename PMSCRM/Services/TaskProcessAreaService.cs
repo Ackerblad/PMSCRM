@@ -13,13 +13,13 @@ namespace PMSCRM.Services
             _db = db;
         }
 
-        public List<TaskProcessArea> GetAllWithDetails()
+        public async Task<List<TaskProcessArea>> GetAllWithDetails()
         {
-            return _db.TaskProcessAreas
+            return await _db.TaskProcessAreas
                       .Include(tpa => tpa.Task)
                       .Include(tpa => tpa.Process)
                       .Include(tpa => tpa.Area)
-                      .ToList();
+                      .ToListAsync();
         }
 
         public List<TaskProcessArea> GetAll()

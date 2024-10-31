@@ -29,6 +29,19 @@
 
                     <th>Email</th>
                     <th>Phone Number</th>
+                    <th>
+                        <a asp-action="ViewCustomers" asp-route-sortBy="TimeStamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "TimeStamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Created
+                            @if (ViewBag.CurrentSort == "TimeStamp")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,6 +52,8 @@
                         <td>@customer.Name</td>
                         <td>@customer.EmailAddress</td>
                         <td>@customer.PhoneNumber</td>
+                        <td>@customer.Timestamp</td>
+
                         <td>
                             <a href="/Customer/EditCustomer/@customer.CustomerId" class="btn btn-edit">Edit</a>
                             <a href="/Customer/DeleteCustomer/@customer.CustomerId" class="btn btn-delete">Delete</a>

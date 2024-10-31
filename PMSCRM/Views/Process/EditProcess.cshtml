@@ -21,14 +21,14 @@
 
         <div class="mb-3">
             <label for="Name" class="form-label">Process Name</label>
-            <input type="text" class="form-control" id="processName" asp-for="Process.Name" required />
+            <input type="text" class="form-control" id="processName" asp-for="Process.Name" maxlength="50" required />
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
 
         <div class="mb-3">
             <label for="Duration" class="form-label">Duration (min)</label>
-            <input type="number" class="form-control" asp-for="Process.Duration" required />
+            <input type="number" class="form-control" asp-for="Process.Duration" maxlength="255" required />
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>

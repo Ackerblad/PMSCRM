@@ -257,6 +257,8 @@ namespace PMSCRM.Controllers
             var companyId = _companyDivider.GetCompanyId();
             var users = await _userService.GetAllAsync(companyId);
 
+            ViewBag.CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             users = users.SortBy(sortBy, sortDirection).ToList();
 
             ViewBag.CurrentSort = sortBy;
@@ -312,6 +314,13 @@ namespace PMSCRM.Controllers
         [HttpGet("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get current logged-in user's ID
+            if (currentUserId == id.ToString())
+            {
+                TempData["ErrorMessage"] = "You cannot delete your own account.";
+                return RedirectToAction("ViewUsers"); // Redirect back to user list
+            }
+
             var companyId = _companyDivider.GetCompanyId();
             var user = await _userService.GetById(id, companyId);
             if (user == null)
@@ -325,6 +334,13 @@ namespace PMSCRM.Controllers
         [HttpPost("DeleteConfirmed/{id}")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == id.ToString())
+            {
+                TempData["ErrorMessage"] = "You cannot delete your own account.";
+                return RedirectToAction("ViewUsers");
+            }
+
             var companyId = _companyDivider.GetCompanyId();
             var user = await _userService.GetById(id, companyId);
             if (user == null)

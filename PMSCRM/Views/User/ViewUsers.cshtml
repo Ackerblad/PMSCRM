@@ -53,6 +53,19 @@
                         </a>
                     </th>
                     <th>Phone Number</th>
+                    <th>
+                        <a asp-action="ViewUsers" asp-route-sortBy="TimeStamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "TimeStamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Created
+                            @if (ViewBag.CurrentSort == "TimeStamp")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
                     <th class="text-end px-3"></th>
                 </tr>
             </thead>
@@ -64,9 +77,18 @@
                         <td>@user.FirstName</td>
                         <td>@user.LastName</td>
                         <td>@user.PhoneNumber</td>
+                        <td>@user.Timestamp</td>
                         <td>
                             <a href="/User/EditUser/@user.UserId" class="btn btn-edit">Edit</a>
-                            <a href="/User/DeleteUser/@user.UserId" class="btn btn-delete">Delete</a>
+
+                            @if (user.UserId.ToString() == ViewBag.CurrentUserId.ToString())
+                            {
+                                <span class="btn btn-delete disabled">Delete</span> <!-- Disable delete for current user -->
+                            }
+                            else
+                            {
+                                <a href="/User/DeleteUser/@user.UserId" class="btn btn-delete">Delete</a>
+                            }
                         </td>
                     </tr>
                 }

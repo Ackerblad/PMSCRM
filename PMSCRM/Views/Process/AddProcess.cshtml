@@ -18,13 +18,13 @@
         </div>
 
         <div class="mb-3">
-            <input type="text" class="form-control" asp-for="Process.Name" placeholder="Process Name" required>
+            <input type="text" class="form-control" asp-for="Process.Name" placeholder="Process Name" maxlength="50" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
         </div>
 
         <div class="mb-3">
-            <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Description"></textarea>
+            <textarea asp-for="Process.Description" class="form-control" maxlength="255" rows="5" placeholder="Description" required></textarea>
         </div>
 
     <button type="submit" class="btn btn-submit">Submit</button>

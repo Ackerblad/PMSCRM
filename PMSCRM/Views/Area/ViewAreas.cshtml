@@ -30,6 +30,19 @@
                     <th>
                         Description
                     </th>
+                    <th>
+                        <a asp-action="ViewAreas" asp-route-sortBy="TimeStamp" asp-route-sortDirection="@((ViewBag.CurrentSort == "TimeStamp" && ViewBag.CurrentSortDirection == "asc") ? "desc" : "asc")">
+                            Created
+                            @if (ViewBag.CurrentSort == "TimeStamp")
+                            {
+                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
+                            }
+                            else
+                            {
+                                <span>▲</span>
+                            }
+                        </a>
+                    </th>
                     <th class="text-end px-3"></th>
                 </tr>
             </thead>
