@@ -81,17 +81,10 @@
     <form asp-action="@(Model.IsEditMode ? "EditTaskProcessAreaUserCustomer" : "AddTaskProcessAreaUserCustomer")" method="post">
         <input type="hidden" id="SelectedTaskProcessAreaId" name="TaskProcessAreaId" value="@Model.TaskProcessAreaId" />
 
-@*         <div class="mb-3">
-            <label for="UserId" class="form-label">Select User</label>
-            <select asp-for="UserId" asp-items="Model.Users" class="form-select" required>
-                <option value="">...</option>
-            </select>
-        </div> *@
-
         <div class="mb-3">
             <label for="UserId" class="form-label">Select Users</label>
             <select asp-for="SelectedUserIds" asp-items="Model.Users" class="form-select" multiple required>
-                <option value="">...</option>
+                <option value=""></option>
             </select>
         </div>
 

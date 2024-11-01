@@ -206,7 +206,7 @@ namespace PMSCRM.Controllers
 
             var success = await _taskProcessAreaService.DeleteAsync(id, companyId);
             ViewBag.Message = success ? "TPA deleted successfully!" : "This TPA is connected to one or more TPAUCs. Go to TPAUC and change TPA of the connected TPAUC.";
-            return success ? RedirectToAction("ViewTaskProcessArea") : View("DeleteTaskProcessArea", taskProcessArea);
+            return success ? RedirectToAction("ViewTaskProcessAreas") : View("DeleteTaskProcessArea", taskProcessArea);
         }
 
         [HttpGet("Details/{id}")]
