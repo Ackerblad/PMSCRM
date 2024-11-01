@@ -225,12 +225,12 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewTaskProcessAreas")]
-        public async Task<IActionResult> ViewTaskProcessAreas(string sortBy, string sortDirection)
+        public async Task<IActionResult> ViewTaskProcessAreas(string sortBy = "Timestamp", string sortDirection = "desc")
         {
             var taskProcessAreas = await _taskProcessAreaService.GetAllWithDetails();
 
-            ViewBag.CurrentSort = sortBy ?? "TimeStamp";
-            ViewBag.CurrentSortDirection = sortDirection ?? "asc";
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
 
             switch (ViewBag.CurrentSort)
             {
@@ -250,7 +250,7 @@ namespace PMSCRM.Controllers
                         : taskProcessAreas.OrderByDescending(a => a.Task?.Name).ToList();
                     break;
                 case "Timestamp":
-                    taskProcessAreas = ViewBag.CurrentSortDirection == "asc"
+                    taskProcessAreas = ViewBag.CurrentSortDirection == "desc"
                         ? taskProcessAreas.OrderBy(a => a.Timestamp).ToList()
                         : taskProcessAreas.OrderByDescending(a => a.Timestamp).ToList();
                     break;

@@ -189,7 +189,7 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewProcesses")]
-        public async Task<IActionResult> ViewProcesses(string sortBy, string sortDirection ="asc")
+        public async Task<IActionResult> ViewProcesses(string sortBy = "TimeStamp", string sortDirection = "desc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var processes = await _processService.GetAllAsync(companyId);

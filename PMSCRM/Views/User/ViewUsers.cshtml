@@ -88,7 +88,7 @@
                         <td class="text-truncate" style="max-width: 150px;">
                             <a href="/User/Details/@user.UserId" style="color: black; text-decoration: none;">@user.Timestamp</a>
                         </td>
-                        <td>
+                        <td class="text-end">
                             <a href="/User/EditUser/@user.UserId" class="btn btn-edit">Edit</a>
 
                             @if (user.UserId.ToString() == ViewBag.CurrentUserId.ToString())

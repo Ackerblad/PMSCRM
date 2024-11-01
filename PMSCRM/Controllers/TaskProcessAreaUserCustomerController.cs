@@ -28,6 +28,79 @@ namespace PMSCRM.Controllers
             _customerService = customerService;
         }
 
+        //[HttpGet("AddTaskProcessAreaUserCustomer")]
+        //public async Task<IActionResult> AddTaskProcessAreaUserCustomer(string sortBy = "Area", string sortDirection = "asc")
+        //{
+        //    var companyId = _companyDivider.GetCompanyId();
+
+        //    var allTaskProcessAreas = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
+        //    var existingConnections = await _taskProcessAreaUserCustomerService.GetAllWithDetailsAsync();
+
+        //    switch (sortBy)
+        //    {
+        //        case "Area":
+        //            existingConnections = sortDirection == "asc"
+        //                ? existingConnections.OrderBy(t => t.AreaName).ToList()
+        //                : existingConnections.OrderByDescending(t => t.AreaName).ToList();
+        //            break;
+        //        case "Process":
+        //            existingConnections = sortDirection == "asc"
+        //                ? existingConnections.OrderBy(t => t.ProcessName).ToList()
+        //                : existingConnections.OrderByDescending(t => t.ProcessName).ToList();
+        //            break;
+        //        case "Task":
+        //            existingConnections = sortDirection == "asc"
+        //                ? existingConnections.OrderBy(t => t.TaskName).ToList()
+        //                : existingConnections.OrderByDescending(t => t.TaskName).ToList();
+        //            break;
+        //        case "Timestamp":
+        //            existingConnections = sortDirection == "desc"
+        //                ? existingConnections.OrderBy(t => t.Timestamp).ToList()
+        //                : existingConnections.OrderByDescending(t => t.Timestamp).ToList();
+        //            break;
+        //        default:
+        //            existingConnections = existingConnections.OrderBy(t => t.AreaName).ToList();
+        //            break;
+        //    }
+
+        //    var users = await _userService.GetAllAsync(companyId);
+        //    var customers = await _customerService.GetAllAsync(companyId);
+
+        //    var model = new TaskProcessAreaUserCustomerViewModel
+        //    {
+        //        ExistingConnections = existingConnections.ToList(),
+        //        TaskProcessAreas = allTaskProcessAreas,
+        //        Users = users.Select(u => new SelectListItem
+        //        {
+        //            Value = u.UserId.ToString(),
+        //            Text = u.FirstName + " " + u.LastName
+        //        })
+        //        .OrderBy(u => u.Text)
+        //        .ToList(),
+        //        Customers = customers.Select(c => new SelectListItem
+        //        {
+        //            Value = c.CustomerId.ToString(),
+        //            Text = c.Name
+        //        })
+        //        .OrderBy(c => c.Text)
+        //        .ToList(),
+        //        Statuses = Enum.GetValues(typeof(Utilities.TaskStatus))
+        //                      .Cast<Utilities.TaskStatus>()
+        //                      .Select(s => new SelectListItem
+        //                      {
+        //                          Value = ((byte)s).ToString(),
+        //                          Text = s.ToString()
+        //                      })
+        //                      .OrderBy(s => s.Text)
+        //                      .ToList()
+        //    };
+
+        //    ViewBag.CurrentSort = sortBy;
+        //    ViewBag.CurrentSortDirection = sortDirection;
+
+        //    return View(model);
+        //}
+
         [HttpGet("AddTaskProcessAreaUserCustomer")]
         public async Task<IActionResult> AddTaskProcessAreaUserCustomer(string sortBy = "Area", string sortDirection = "asc")
         {
@@ -53,6 +126,11 @@ namespace PMSCRM.Controllers
                         ? existingConnections.OrderBy(t => t.TaskName).ToList()
                         : existingConnections.OrderByDescending(t => t.TaskName).ToList();
                     break;
+                case "Timestamp":
+                    existingConnections = sortDirection == "desc"
+                        ? existingConnections.OrderBy(t => t.Timestamp).ToList()
+                        : existingConnections.OrderByDescending(t => t.Timestamp).ToList();
+                    break;
                 default:
                     existingConnections = existingConnections.OrderBy(t => t.AreaName).ToList();
                     break;
@@ -68,7 +146,7 @@ namespace PMSCRM.Controllers
                 Users = users.Select(u => new SelectListItem
                 {
                     Value = u.UserId.ToString(),
-                    Text = u.FirstName + " " + u.LastName
+                    Text = $"{u.FirstName} {u.LastName}"
                 })
                 .OrderBy(u => u.Text)
                 .ToList(),
@@ -96,35 +174,69 @@ namespace PMSCRM.Controllers
             return View(model);
         }
 
+
+        //[HttpPost("AddTaskProcessAreaUserCustomer")]
+        //public async Task<IActionResult> AddTaskProcessAreaUserCustomer(Guid taskProcessAreaId, TaskProcessAreaUserCustomerViewModel model)
+        //{
+        //    var companyId = _companyDivider.GetCompanyId();
+
+        //    var newConnection = new TaskProcessAreaUserCustomer
+        //    {
+        //        TaskProcessAreaId = taskProcessAreaId,
+        //        UserId = model.UserId,
+        //        CustomerId = model.CustomerId,
+        //        StartDate = model.StartDate,
+        //        EndDate = model.EndDate,
+        //        Status = (byte)model.Status,
+        //        CompanyId = companyId
+        //    };
+
+        //    bool success = await _taskProcessAreaUserCustomerService.AddAsync(new List<TaskProcessAreaUserCustomer> { newConnection });
+
+        //    if (success)
+        //    {
+        //        ViewBag.Message = "TPA added successfully!";
+        //        ViewBag.MessageType = "success";
+        //        return View("AddTaskProcessAreaUserCustomer", model);
+        //    }
+
+        //    ViewBag.Message = "Failed to add TPA. Please try again.";
+        //    ViewBag.MessageType = "error";
+        //    return await AddTaskProcessAreaUserCustomer();
+        //}
+
         [HttpPost("AddTaskProcessAreaUserCustomer")]
         public async Task<IActionResult> AddTaskProcessAreaUserCustomer(Guid taskProcessAreaId, TaskProcessAreaUserCustomerViewModel model)
         {
             var companyId = _companyDivider.GetCompanyId();
 
-            var newConnection = new TaskProcessAreaUserCustomer
+            // Create a new list to store connections for each selected user
+            var connectionsToAdd = model.SelectedUserIds.Select(userId => new TaskProcessAreaUserCustomer
             {
                 TaskProcessAreaId = taskProcessAreaId,
-                UserId = model.UserId,
+                UserId = userId,  // Use each selected user ID
                 CustomerId = model.CustomerId,
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 Status = (byte)model.Status,
                 CompanyId = companyId
-            };
+            }).ToList();
 
-            bool success = await _taskProcessAreaUserCustomerService.AddAsync(new List<TaskProcessAreaUserCustomer> { newConnection });
+            // Save all connections at once
+            bool success = await _taskProcessAreaUserCustomerService.AddAsync(connectionsToAdd);
 
             if (success)
             {
-                ViewBag.Message = "TPA added successfully!";
+                ViewBag.Message = "Task Process Area added successfully!";
                 ViewBag.MessageType = "success";
                 return View("AddTaskProcessAreaUserCustomer", model);
             }
 
-            ViewBag.Message = "Failed to add TPA. Please try again.";
+            ViewBag.Message = "Failed to add Task Process Area. Please try again.";
             ViewBag.MessageType = "error";
             return await AddTaskProcessAreaUserCustomer();
         }
+
 
         [HttpGet("EditTaskProcessAreaUserCustomer/{id}")]
         public async Task<IActionResult> EditTaskProcessAreaUserCustomer(Guid id)
@@ -270,7 +382,7 @@ namespace PMSCRM.Controllers
 
         [HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser(string sortBy, string sortDirection)
+        public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser(string sortBy = "Timestamp", string sortDirection = "desc")
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -281,8 +393,8 @@ namespace PMSCRM.Controllers
 
             var tpaucRecords = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayForUserAsync(Guid.Parse(userId));
 
-            ViewBag.CurrentSort = sortBy ?? "Area";
-            ViewBag.CurrentSortDirection = sortDirection ?? "asc";
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
 
             switch (ViewBag.CurrentSort)
             {
@@ -322,12 +434,9 @@ namespace PMSCRM.Controllers
                         : tpaucRecords.OrderByDescending(r => r.Status).ToList();
                     break;
                 case "Timestamp":
-                    tpaucRecords = ViewBag.CurrentSortDirection == "asc"
+                    tpaucRecords = ViewBag.CurrentSortDirection == "desc"
                         ? tpaucRecords.OrderBy(r => r.Timestamp).ToList()
                         : tpaucRecords.OrderByDescending(r => r.Timestamp).ToList();
-                    break;
-                default:
-                    tpaucRecords = tpaucRecords.OrderBy(r => r.AreaName).ToList();
                     break;
             }
 
@@ -336,12 +445,12 @@ namespace PMSCRM.Controllers
 
         [HttpGet("ViewTaskProcessAreaUserCustomer")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ViewTaskProcessAreaUserCustomer(string sortBy, string sortDirection)
+        public async Task<IActionResult> ViewTaskProcessAreaUserCustomer(string sortBy = "Timestamp", string sortDirection = "desc")
         {
             var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
 
-            ViewBag.CurrentSort = sortBy ?? "Area";
-            ViewBag.CurrentSortDirection = sortDirection ?? "asc";
+            ViewBag.CurrentSort = sortBy;
+            ViewBag.CurrentSortDirection = sortDirection;
 
             switch (ViewBag.CurrentSort)
             {
@@ -386,12 +495,9 @@ namespace PMSCRM.Controllers
                         : tpauc.OrderByDescending(r => r.Status).ToList();
                     break;
                 case "Timestamp":
-                    tpauc = ViewBag.CurrentSortDirection == "asc"
+                    tpauc = ViewBag.CurrentSortDirection == "desc"
                         ? tpauc.OrderBy(r => r.Timestamp).ToList()
                         : tpauc.OrderByDescending(r => r.Timestamp).ToList();
-                    break;
-                default:
-                    tpauc = tpauc.OrderBy(r => r.Timestamp).ToList();
                     break;
             }
 
