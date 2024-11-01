@@ -7,7 +7,6 @@ namespace PMSCRM.Controllers
 {
     [Authorize]
     [Route("[controller]")]
-    //[ApiController]
     public class CompanyController : Controller
     {
         private readonly CompanyService _companyService;
@@ -31,26 +30,9 @@ namespace PMSCRM.Controllers
         [HttpGet("GetCompanyNames")]
         public async Task<IActionResult> GetCompanyNames(string term)
         {
-            var companyNames = _companyService.GetCompanyNames(term); // Fetch matching names from DB
+            var companyNames = _companyService.GetCompanyNames(term); 
             return Ok(companyNames);
         }
-
-
-        //[HttpPost("Add")]
-        //public ActionResult Add([FromBody] Company company)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var success = _companyService.Add(company);
-        //    if (success)
-        //    {
-        //        return Ok("Company was added");
-        //    }
-        //    return BadRequest("Failed to add company");
-        //}
 
         [HttpPost]
         public ActionResult AddCompany(Company company)
@@ -69,22 +51,6 @@ namespace PMSCRM.Controllers
             ModelState.AddModelError(string.Empty, "Failed to add company");
             return View(company);
         }
-
-        //[HttpPut("{id}")]
-        //public ActionResult Update(Guid guid, [FromBody] Company company)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _companyService.Update(guid, company);
-        //    if (success)
-        //    {
-        //        return Ok("Company was updated");
-        //    }
-        //    return BadRequest("Failed to update company");
-        //}
 
         [HttpGet("EditCompany/{id}")]
         public IActionResult EditCompany(Guid id)
@@ -115,24 +81,6 @@ namespace PMSCRM.Controllers
             return View("updatedCompany");
         }
 
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(Guid guid)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bool success = _companyService.Delete(guid);
-        //    if (success)
-        //    {
-        //        return Ok();
-        //    }
-
-        //    return BadRequest("Failed to delete company");
-        //}
-
-        // GET: Task/DeleteTask/{id}
         [HttpGet("DeleteCompany/{id}")]
         public IActionResult DeleteCompany(Guid id)
         {

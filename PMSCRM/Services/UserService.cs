@@ -76,7 +76,6 @@ namespace PMSCRM.Services
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
             existingUser.PhoneNumber = updatedUser.PhoneNumber;
-            //existingUser.RoleId = updatedUser.RoleId;
 
             await _db.SaveChangesAsync();
             return true;
@@ -96,16 +95,6 @@ namespace PMSCRM.Services
             return true;
         }
 
-        //public async Task<User> AuthenticateUser(string emailAddress, string plainPassword)
-        //{
-        //    var user = await _db.Users.FirstOrDefaultAsync(u => u.EmailAddress == emailAddress);
-
-        //    if (user != null && _passwordSecurity.VerifyPassword(plainPassword, user.Password))
-        //    {
-        //        return user;
-        //    }
-        //    return null;
-        //}
         public async Task<User> AuthenticateUser(string emailAddress, string plainPassword)
         {
             var user = await _db.Users
@@ -118,7 +107,6 @@ namespace PMSCRM.Services
             }
             return null;
         }
-
 
         public string GenerateTemporaryPassword()
         {
@@ -171,7 +159,7 @@ namespace PMSCRM.Services
                 .Select(u => u.Role.Name)
                 .FirstOrDefaultAsync();
 
-            return userRole ?? "User"; // Return "User" if no role is found
+            return userRole ?? "User"; 
         }
 
         public async Task<List<User>> SearchUsersAsync(Guid companyId, string query)

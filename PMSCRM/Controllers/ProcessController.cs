@@ -47,7 +47,6 @@ namespace PMSCRM.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddProcess(ProcessViewModel viewModel)
         {
@@ -82,7 +81,6 @@ namespace PMSCRM.Controllers
             ViewBag.MessageType = "success";
             return View("AddProcess", viewModel);
         }
-
 
         [HttpGet("EditProcess/{id}")]
         public async Task<IActionResult> EditProcess(Guid id)
@@ -166,18 +164,13 @@ namespace PMSCRM.Controllers
 
             if (process == null)
             {
-                return NotFound("Process not found.");
+                ViewBag.Message = "Process not found.";
+                return View("DeleteProcess", process);
             }
 
-            bool success = await _processService.DeleteAsync(id, companyId);
-            if (success)
-            {
-                TempData["SuccessMessage"] = "Process deleted successfully!";
-                return RedirectToAction("ViewProcesses");
-            }
-
-            ModelState.AddModelError(string.Empty, "Failed to delete process.");
-            return View("DeleteProcess", process);
+            var success = await _processService.DeleteAsync(id, companyId);
+            ViewBag.Message = success ? "Process deleted successfully!" : "This process is connected to one or more TPAs. Go to TPA and change process of the connected TPA.";
+            return success ? RedirectToAction("ViewProcesses") : View("DeleteProcess", process);
         }
 
         [HttpGet("Details/{id}")]

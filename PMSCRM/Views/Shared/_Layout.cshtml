@@ -32,13 +32,13 @@
             </div>
 
             <ul class="sidebar-nav">
-                <!-- Profile -->
+                @* <!-- Profile -->
                 <li class="sidebar-item">
                     <a asp-controller="User" asp-action="Profile" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
-                </li>
+                </li> *@
 
                 <!-- User -->
                 @if (User.IsInRole("User"))
@@ -114,38 +114,6 @@
                             </li>
                         </ul>
                     </li>
-
-                   @*  <li class="sidebar-item">
-                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#company" aria-expanded="false" aria-controls="company">
-                            <i class="lni lni-briefcase"></i>
-                            <span>Companies</span>
-                        </a>
-                        <ul id="company" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                            <li class="sidebar-item">
-                                <a asp-controller="Company" asp-action="AddCompany" class="sidebar-link">Add Company</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a asp-controller="Company" asp-action="ViewCompanies" class="sidebar-link">View Companies</a>
-                            </li>
-                        </ul>
-                    </li> *@
-
-
-
-                  @*   <li class="sidebar-item">
-                        <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#role" aria-expanded="false" aria-controls="role">
-                            <i class="lni lni-users"></i>
-                            <span>Roles</span>
-                        </a>
-                        <ul id="role" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                            <li class="sidebar-item">
-                                <a asp-controller="Role" asp-action="AddRole" class="sidebar-link">Add Role</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a asp-controller="Role" asp-action="ViewRoles" class="sidebar-link">View Roles</a>
-                            </li>
-                        </ul>
-                    </li> *@
 
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#user" aria-expanded="false" aria-controls="user">
@@ -231,7 +199,7 @@
                                 <button class="btn btn-filter dropdown-toggle" id="filterDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Filter 
                                 </button>
-                                <!-- Dropdown with clickable filter names -->
+                                <!-- Dropdown filter names -->
                                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
                                     <li><a href="#" class="filter-option" data-value="area">Area</a></li>
                                     <li><a href="#" class="filter-option" data-value="task">Task</a></li>
@@ -254,8 +222,6 @@
             </main>
         </div>
     </div>
-
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" async></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -285,24 +251,18 @@
             });
         });
 
-        // Handle search action
         document.getElementById('searchButton').addEventListener('click', function () {
             const query = document.getElementById('searchInput').value;
 
-            // Construct the URL for the results page
             const filters = Array.from(selectedFilters).join(',');
             const resultsPageUrl = `/results?query=${encodeURIComponent(query)}&filters=${encodeURIComponent(filters)}`;
 
-            // Redirect to the results page
             window.location.href = resultsPageUrl;
 
-            // Optional: If you want to log what you're sending
             console.log('Search Query:', query);
             console.log('Selected Filters:', Array.from(selectedFilters));
         });
     </script>
-
-
     @RenderSection("Scripts", required: false)
 </body>
 </html>

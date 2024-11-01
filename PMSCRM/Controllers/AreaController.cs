@@ -110,7 +110,7 @@ namespace PMSCRM.Controllers
             }
 
             var success = await _areaService.DeleteAsync(id, companyId);
-            ViewBag.Message = success ? "Area deleted successfully!" : "Failed to delete area. The area contains a process.";
+            ViewBag.Message = success ? "Area deleted successfully!" : "This area contains one or more processes. Go to processes and change area of the connected process.";
             return success ? RedirectToAction("ViewAreas") : View("DeleteArea", area);
         }
 

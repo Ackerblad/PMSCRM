@@ -123,7 +123,7 @@ namespace PMSCRM.Services
         public async Task<List<TaskProcessAreaUserCustomerDisplayViewModel>> GetAllWithDetailsToDisplayForUserAsync(Guid userId)
         {
             return await _db.TaskProcessAreaUserCustomers
-                .Where(tpauc => tpauc.UserId == userId) // Filter by user ID
+                .Where(tpauc => tpauc.UserId == userId) 
                 .Include(tpauc => tpauc.TaskProcessArea)
                     .ThenInclude(tpa => tpa.Task)
                 .Include(tpauc => tpauc.TaskProcessArea)
@@ -145,7 +145,5 @@ namespace PMSCRM.Services
                 })
                 .ToListAsync();
         }
-
-
     }
 }

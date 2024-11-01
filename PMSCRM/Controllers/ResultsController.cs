@@ -44,7 +44,6 @@ namespace PMSCRM.Controllers
                 return BadRequest("Company not found.");
             }
 
-            // Split the filters into an array (if any filters were provided)
             var filterArray = !string
                 .IsNullOrEmpty(filters) ? filters
                 .Split(',')
@@ -52,9 +51,6 @@ namespace PMSCRM.Controllers
                 .ToLower())
                 .ToList() : new List<string>();
 
-
-
-            // Initialize filtered results variables
             List<Area> filteredAreas = new List<Area>();
             List<Customer> filteredCustomers = new List<Customer>();
             List<Process> filteredProcesses = new List<Process>();
@@ -75,12 +71,11 @@ namespace PMSCRM.Controllers
                     Query = query
                 };
 
-                return View(emptyViewModel); // Return an empty view model
+                return View(emptyViewModel); 
             }
 
             bool searchAll = !filterArray.Any();
 
-            // Filtering logic based on selected types (Area, Customer, Process, Task, User)
             if (searchAll || filterArray.Contains("area"))
             {
                 filteredAreas = await _areaService.SearchAreasAsync(companyId, query);
@@ -106,8 +101,6 @@ namespace PMSCRM.Controllers
                 filteredUsers = await _userService.SearchUsersAsync(companyId, query);
             }
 
-
-            // Create view model with the filtered results
             var viewModel = new SearchResultsViewModel
             {
                 Areas = filteredAreas,
@@ -122,19 +115,9 @@ namespace PMSCRM.Controllers
             return View(viewModel);
         }
 
-
-
-
         [HttpGet("SortResults")]
         public async Task<IActionResult> SortResults(SearchResultsViewModel model, string sortBy, string sortDirection = "asc")
         {
-            //if (string.IsNullOrEmpty(model.Query))
-            //{
-            //    // Handle the scenario where the query is null
-            //    return BadRequest("Query is null or empty. Unable to sort results.");
-            //}
-
-
             if (model.Areas == null || !model.Areas.Any())
             {
                 var companyId = _companyDivider.GetCompanyId();
@@ -142,16 +125,6 @@ namespace PMSCRM.Controllers
                 {
                     return BadRequest("Company not found.");
                 }
-
-                // Re-fetch the data based on the current filters and query
-                //var query = model.Query; // Assuming you store the query in the model
-                //var filters = model.FilterArray; // Assuming you store filters in the model
-
-                // Initialize filtered results
-                //var filteredAreas = await _areaService.SearchAreasAsync(companyId, model.Query);
-
-                //// Update the model with the fetched data
-                //model.Areas = filteredAreas;
             }
             // Sort Areas
             if (model.Areas.Any())
@@ -193,14 +166,11 @@ namespace PMSCRM.Controllers
                     : model.Users.OrderByDescending(u => EF.Property<string>(u, sortBy)).ToList();
             }
             
-            // Pass current sorting info to the view (used for toggling sort direction)
             ViewBag.CurrentSort = sortBy;
             ViewBag.CurrentSortDirection = sortDirection;
 
             return View("Index", model);
         }
-
-
     }
 }
 

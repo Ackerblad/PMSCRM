@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMSCRM.Models;
+using System.Diagnostics;
 
 
 namespace PMSCRM.Services
@@ -91,8 +92,11 @@ namespace PMSCRM.Services
 
         public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var taskProcessArea = await _db.TaskProcessAreas.FindAsync(id);
-            if (taskProcessArea == null || taskProcessArea.CompanyId != companyId)
+            var taskProcessArea = await _db.TaskProcessAreas
+                .Include(t => t.TaskProcessAreaUserCustomers)
+                .FirstOrDefaultAsync(t => t.TaskProcessAreaId == id && t.CompanyId == companyId);
+
+            if (taskProcessArea == null || (taskProcessArea.TaskProcessAreaUserCustomers != null && taskProcessArea.TaskProcessAreaUserCustomers.Any()))
             {
                 return false;
             }

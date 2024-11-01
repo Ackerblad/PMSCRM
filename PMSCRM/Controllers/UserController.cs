@@ -287,11 +287,11 @@ namespace PMSCRM.Controllers
         [HttpGet("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get current logged-in user's ID
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId == id.ToString())
             {
                 TempData["ErrorMessage"] = "You cannot delete your own account.";
-                return RedirectToAction("ViewUsers"); // Redirect back to user list
+                return RedirectToAction("ViewUsers"); 
             }
 
             var companyId = _companyDivider.GetCompanyId();

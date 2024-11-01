@@ -79,14 +79,15 @@ namespace PMSCRM.Services
 
         public async Task<bool> DeleteAsync(Guid id, Guid companyId)
         {
-            var toDelete = await _db.Processes
+            var process = await _db.Processes
+                .Include(p => p.TaskProcessAreas)
                 .FirstOrDefaultAsync(p => p.ProcessId == id && p.CompanyId == companyId);
 
-            if (toDelete == null)
+            if (process == null || (process.TaskProcessAreas != null && process.TaskProcessAreas.Any()))
             {
                 return false;
             }
-            _db.Processes.Remove(toDelete);
+            _db.Processes.Remove(process);
             await _db.SaveChangesAsync();
             return true;
         }

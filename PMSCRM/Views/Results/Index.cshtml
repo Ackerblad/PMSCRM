@@ -9,7 +9,6 @@
 
 @if (Model != null)
 {
-    // Display Areas
     if (Model.Areas.Any())
     {
         <h4 class="mt-4">Area List</h4>
@@ -27,16 +26,9 @@
                             }
                             else
                             {
-                                <span>▲</span> <!-- Default arrow for ascending -->
+                                <span>▲</span> 
                             }
                     </a>
-                       @*  <button type="submit" name="sortBy" value="Name" class="btn btn-link">
-                            Area Name
-                            @if (ViewBag.CurrentSort == "Name")
-                            {
-                                <span>@(ViewBag.CurrentSortDirection == "asc" ? "▲" : "▼")</span>
-                            }
-                        </button> *@
                     </th>
                     <th>
                         <button type="submit" name="sortBy" value="Description" class="btn btn-link">
@@ -55,10 +47,6 @@
                     <tr>
                         <td>@area.Name</td>
                         <td>@area.Description</td>
-@*                         <td class="text-end">
-                            <a href="/Area/EditArea/@area.AreaId" class="btn btn-primary btn-sm custom">Edit</a>
-                            <a href="/Area/DeleteArea/@area.AreaId" class="btn btn-danger btn-sm custom">Delete</a>
-                        </td> *@
                     </tr>
                 }
             </tbody>
@@ -193,8 +181,6 @@ else
 {
     <p>No results found.</p>
 }
-
-@* <a asp-action="Index" class="btn btn-success">New Search</a> *@
 
 <script>
     $(function () {

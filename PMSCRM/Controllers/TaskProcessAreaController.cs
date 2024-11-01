@@ -6,6 +6,7 @@ using PMSCRM.Models;
 using PMSCRM.Services;
 using PMSCRM.Utilities;
 using PMSCRM.ViewModels;
+using System.Diagnostics;
 using System.Globalization;
 using System.Security.Claims;
 
@@ -199,18 +200,13 @@ namespace PMSCRM.Controllers
 
             if (taskProcessArea == null)
             {
-                return NotFound("Task Process Area not found.");
+                ViewBag.Message = "TPA not found.";
+                return View("DeleteTaskProcessArea", taskProcessArea);
             }
 
-            bool success = await _taskProcessAreaService.DeleteAsync(id, companyId);
-            if (success)
-            {
-                TempData["SuccessMessage"] = "Task Process Area deleted successfully!";
-                return RedirectToAction("ViewTaskProcessAreas");
-            }
-
-            ModelState.AddModelError(string.Empty, "Failed to delete Task Process Area.");
-            return View("DeleteTaskProcessArea", taskProcessArea);
+            var success = await _taskProcessAreaService.DeleteAsync(id, companyId);
+            ViewBag.Message = success ? "TPA deleted successfully!" : "This TPA is connected to one or more TPAUCs. Go to TPAUC and change TPA of the connected TPAUC.";
+            return success ? RedirectToAction("ViewTaskProcessArea") : View("DeleteTaskProcessArea", taskProcessArea);
         }
 
         [HttpGet("Details/{id}")]

@@ -253,37 +253,6 @@ namespace PMSCRM.Controllers
             }
         }
 
-
-        //[HttpGet("ViewTaskProcessAreaUserCustomerForUser")]
-        //[Authorize(Roles = "User")]
-        //public async Task<IActionResult> ViewTaskProcessAreaUserCustomerForUser()
-        //{
-        //    // Get the logged-in user's ID from the claims
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        //    if (string.IsNullOrEmpty(userId))
-        //    {
-        //        // If for some reason the user ID is null or empty, return an error or redirect.
-        //        return Unauthorized();
-        //    }
-
-        //    // Call the service function with the current user's ID
-        //    var tpaucRecords = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayForUserAsync(Guid.Parse(userId));
-
-        //    // Pass the tpaucRecords to the view for rendering
-        //    return View(tpaucRecords);
-        //}
-
-
-        //[HttpGet("ViewTaskProcessAreaUserCustomer")]
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> ViewTaskProcessAreaUserCustomer()
-        //{
-        //    var tpauc = await _taskProcessAreaUserCustomerService.GetAllWithDetailsToDisplayAsync();
-
-        //    return View("ViewTaskProcessAreaUserCustomer", tpauc);
-        //}
-
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(Guid id)
         {
