@@ -125,7 +125,7 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewCustomers")]
-        public async Task<IActionResult> ViewCustomers(string sortBy, string sortDirection = "asc")
+        public async Task<IActionResult> ViewCustomers(string sortBy = "TimeStamp", string sortDirection = "desc")
         {
             var companyId = GetCompanyId();
             var customers = await _customerService.GetAllAsync(companyId);

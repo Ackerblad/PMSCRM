@@ -199,7 +199,7 @@ namespace PMSCRM.Controllers
 
         [Authorize]
         [HttpGet("ViewUsers")]
-        public async Task<IActionResult> ViewUsers(string sortBy, string sortDirection = "asc")
+        public async Task<IActionResult> ViewUsers(string sortBy = "TimeStamp", string sortDirection = "desc")
         {
             var companyId = _companyDivider.GetCompanyId();
             var users = await _userService.GetAllAsync(companyId);

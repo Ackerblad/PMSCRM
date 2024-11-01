@@ -130,7 +130,7 @@ namespace PMSCRM.Controllers
         }
 
         [HttpGet("ViewAreas")]
-        public async Task<IActionResult> ViewAreasAsync(string sortBy, string sortDirection = "asc")
+        public async Task<IActionResult> ViewAreasAsync(string sortBy = "TimeStamp", string sortDirection = "desc")
         {
             var companyId = GetCompanyId();
             if (companyId == Guid.Empty) return View(new List<Area>());

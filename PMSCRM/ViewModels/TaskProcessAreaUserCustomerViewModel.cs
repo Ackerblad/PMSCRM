@@ -17,6 +17,8 @@ namespace PMSCRM.ViewModels
         public IEnumerable<SelectListItem> Statuses { get; set; }
         public IEnumerable<TaskProcessAreaDisplayViewModel> ExistingConnections { get; set; }
         public IEnumerable<TaskProcessAreaDisplayViewModel> TaskProcessAreas { get; set; }
+
+        public List<Guid> SelectedUserIds { get; set; } = new List<Guid>();
     }
 }
 
